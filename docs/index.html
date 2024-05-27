@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="BIOSCAN-CLIP: Bridging Vision and Genomics \\for Biodiversity Monitoring at Scale">
+  <meta name="keywords" content="BIOSCAN-CLIP, BIOSCAN, DNA barcode, taxonomic classification">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <title>BIOSCAN-CLIP: Bridging Vision and Genomics \\for Biodiversity Monitoring at Scale</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <!-- <link rel="icon" href="./static/images/favicon.svg"> -->
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-143T3B6DBJ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-143T3B6DBJ');
+</script>
+<body>
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">BIOSCAN-CLIP: Bridging Vision and Genomics for Biodiversity Monitoring at Scale</h1>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a href="https://zmgong.github.io/">ZeMing Gong</a><sup>1</sup>,</span>
+              <span class="author-block">
+                <a href="https://atwang16.github.io/">Austin T. Wang</a><sup>1</sup>,</span>
+              <span class="author-block">
+                <a href="https://joakimhaurum.github.io/">Joakim Bruslund Haurum</a><sup>2</sup>,</span>
+              <span class="author-block">
+                <a href="https://scottclowe.com/">Scott C. Lowe</a><sup>3</sup>,</span>
+              <br/>
+              <span class="author-block">
+                <a href="https://www.gwtaylor.ca/">Graham W. Taylor</a><sup>3,4</sup>,</span>
+              <span class="author-block">
+                <a href="https://angelxuanchang.github.io/">Angel X. Chang</a><sup>1,5</sup>
+              </span>
+            </div>
+
+            <div class="is-size-5 publication-authors">
+                <span class="author-block"><sup>1</sup>Simon Fraser University</span>
+                <span class="author-block"><sup>2</sup>Aalborg University</span>
+                <span class="author-block"><sup>3</sup>Vector Institute</span>
+                <span class="author-block"><sup>4</sup>University of Guelph</span>
+                <span class="author-block"><sup>5</sup>Alberta Machine Intelligence Institute (Amii)</span>
+            </div>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block" style="color:#efcc3e">arXiv 2024</span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <!-- PDF Link. -->
+                <span class="link-block">
+                <a href="#"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+                <span class="link-block">
+                  <a href="#" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                    </span>
+                    <span>arXiv</span>
+                  </a>
+                </span>
+                <!-- Code Link. -->
+                <span class="link-block">
+                  <a href="https://github.com/3dlg-hcvc/bioscan-clip"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+                <!-- Dataset Link. -->
+                <!-- <span class="link-block">
+                <a href="#"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>Data</span>
+                  </a>
+              </span> -->
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <div class="column has-text-centered">
+        <img src="./static/images/teaser.png" class="interpolation-image" alt="Teaser." / style="max-width: 83%;">
+      </div>
+    </div>
+  </section> -->
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+                Measuring biodiversity is crucial for understanding ecosystem health. 
+                While prior works have developed machine learning models for taxonomic classification of photographic images and DNA separately, in this work, we introduce a <i>multimodal</i> approach combining both, using CLIP-style contrastive learning to align images, DNA barcodes, and textual data in a unified embedding space. 
+                This allows for accurate classification of both known and unknown insect species without task-specific fine-tuning, leveraging contrastive learning for the first time to fuse DNA and image data. 
+                Our method surpasses previous single-modality approaches in accuracy by over 11\% on zero-shot learning tasks, showcasing its effectiveness in biodiversity studies.            
+            </p>
+          </div>
+        </div>
+      </div>
+      <!--/ Abstract. -->
+    </div>
+  </section>
+
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        
+        <div class="column is-full-width">
+          <div class="content has-text-justified">
+            <h3 class="title is-3">Overview</h3>
+            <img src="./static/images/method.png" class="interpolation-image" alt="BIOSCAN-CLIP method overview" />
+            <p>
+              Our BIOSCAN-CLIP model consists of three encoders for processing images, DNA barcodes, and text. 
+              We start with pretrained encoders and fine-tune them using contrastive loss to align the image, DNA, and text embeddings. 
+              At inference time, we embed a query image and match it to a database of existing image and DNA embeddings (keys). We use cosine similarity to find the closest key embedding and use
+              its taxonomic label to classify the query image.
+            </p>
+          </div>
+          
+          <!-- Reconstruction. -->
+          <div class="content has-text-justified">
+            <h3 class="title is-3">Taxonomic classification and retrieval</h3>
+            <p>
+              We can use our aligned image-DNA embedding space to performance taxonomic classification and do cross-modal retrieval from image to DNA.
+              We use the data from <a href="https://biodiversitygenomics.net/1m_insects/">BIOSCAN-1M</a>, a large dataset of insect images paired with DNA barcode, and establish train/validation/test split such that we set aside a set of species that are
+              <i>unseen</i> during for evaluation.  
+              We use image embeddings as queries to DNA embeddings and show that we are able to perform taxnomic classification.  
+            </p>  
+            <img src="./static/images/retrieval-accuracy-image-dna.png" class="interpolation-image" alt="Accuracy when retrieving from image to DNA" />
+            <p>
+              Examples of retrieving with image query and matching against DNA keys show that even with cross-modal retrieval we can retrieve samples that are visually similar.  
+              The dark green border indicates the retrieved sample had the correct species, while the yellow green border indicates that the genus matches but not the species.
+            </p>
+            <img src="./static/images/retrieval-examples-image-dna.png" class="interpolation-image" alt="Examples of retrieving from image to DNA" />
+            <p>
+              We compare our aligned embedding space with that of <a href="https://imageomics.github.io/bioclip/">>BioCLIP</a>, 
+              a recent model that aligns images with text derived from taxnomic labels.  We show that by aligning with DNA, 
+              we can achieve more accurate taxonomic classification.
+            </p>
+            <img src="./static/images/bioclip-comparison.png" class="interpolation-image" alt="Comparison of BIOSCAN-CLIP vs BioCLIP" />
+          </div>
+        </div>
+        <!--/ Reconstruction. -->
+
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX for BIOSCAN-CLIP</h2>
+      <pre><code>
+      @article{gong2024bioscanclip,
+          author    = {Gong, ZeMing and Wang, Austin T. and Haurum, Joakim Bruslund and Lowe, Scott C. and Taylor, Graham W. and Chang, Angel X.},
+          title     = {{BIOSCAN-CLIP}: Bridging Vision and Genomics \\for Biodiversity Monitoring at Scale},
+          journal   = {arXiv preprint},
+          year      = {2024},
+          eprint={2405.xxxxx},
+          archivePrefix={arXiv},
+          primaryClass={cs.CV}    
+      }
+      </code></pre>
+      <h2 class="title">BibTeX for BIOSCAN-1M</h2>
+      <pre><code>
+        @article{gharaee2024step,
+            title={A Step Towards Worldwide Biodiversity Assessment: The BIOSCAN-1M Insect Dataset},
+            author={Gharaee, Zahra and Gong, ZeMing and Pellegrino, Nicholas and Zarubiieva, Iuliia and Haurum, Joakim Bruslund and Lowe, Scott and McKeown, Jaclyn and Ho, Chris and McLeod, Joschka and Wei, Yi-Yun and others},
+            journal={Advances in Neural Information Processing Systems, Datasets and Benchmarks},
+            volume={36},
+            year={2024}
+          }
+        </code></pre>
+    </div>
+  </section>
+
+
+  <footer class="footer">
+    <div class="container">
+      <div class="content has-text-centered">
+        <a class="icon-link" href="">
+          <i class="fas fa-file-pdf"></i>
+        </a>
+        <a class="icon-link" href="https://github.com/3dlg-hcvc/bioscan-clip" class="external-link" disabled>
+          <i class="fab fa-github"></i>
+        </a>
+      </div>
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>
+              This website is licensed under a <a rel="license"
+                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+                Commons Attribution-ShareAlike 4.0 International License</a>.
+              The template is borrowed from <a href="https://nerfies.github.io/">Nerfies</a>.
+              Please check out their great work if you find it helpful as well.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>
