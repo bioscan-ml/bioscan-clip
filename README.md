@@ -1,7 +1,10 @@
 # BIOSCAN-CLIP
 This is the official implementation for "BIOSCAN-CLIP: Bridging Vision and Genomics for Biodiversity Monitoring at Scale".
+
+Links: [website](https://3dlg-hcvc.github.io/bioscan-clip/) | [paper](https://arxiv.org/abs/2405.17537)
+
 # Overview
-![Teaser](./doc/img/teaser.png)
+![Teaser](./docs/static/images/method.png)
 Taxonomically classifying organisms at scale and in-depth is crucial for monitoring biodiversity, understanding ecosystems, and preserving sustainability.
 BIOSCAN-CLIP uses contrastive learning to map biological images, textual taxonomic labels, and DNA barcodes to the same latent space, while relaxing the constraint for comprehensive and correct taxonomy annotations. Either images or DNA barcodes can be flexibly classified to predict the taxonomy. The shared embedding space further enables future research into commonalities and differences between species. In addition to the ecological benefits, building such a foundation model for biodiversity is a case study of a broader challenge to build models which can identify fine-grained differences, both visually and textually. Taxonomic classification is particularly interesting because those visual differences between species are often not well-defined, and the DNA and text modalities, while using identical characters to those expected by most language models, do not share much semantic overlap with natural language. We demonstrate the benefits of pretraining with all three modalities through improved taxonomic classification accuracy over prior works in both retrieval and zero-shot settings using our learned representations.
 # Dataset
@@ -13,7 +16,7 @@ Insects comprise of vast biodiversity although approximately only 20% of them ar
 - Expert- annotated taxonomic labels
 - DNA barcodes
 ### ii) Data Partition
-![Data Partioning Visual](./doc/img/partition.png) <br>
+![Data Partioning Visual](./docs/static/images/partition.png) <br>
 The data has been partitioned into a training set for contrastive learning, and validation and test partitions. The training set has records without any species labels as well as a set of seen species. The validation and test sets include seen and unseen species. These images are further split into subpartitions of queries and keys for evaluation.
 <br>
 # Experiments
