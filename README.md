@@ -32,23 +32,24 @@ conda install pytorch=2.0.1 torchvision=0.15.2 torchtext=0.15.2 pytorch-cuda=11.
 pip install -r requirements.txt
 pip install git+https://github.com/openai/CLIP.git
 conda install -c conda-forge faiss
-pip intall .
+pip install .
 ```
 in the terminal. However, based on your GPU version, you may have to modify the torch version and install other packages manually with different version.
 # Download data
 ```shell
 # From project folder
-mkdir data/BioScan_1M
+mkdir -p data/BioScan_1M/split_data
 cd data/BioScan_1M
 wget https://aspis.cmpt.sfu.ca/projects/bioscan/clip_project/data/version_0.2.1/BioScan_data_in_splits.hdf5
 ```
 # Download checkpoint for BarcodeBERT and bioscan_clip
 ```shell
 # From project folder
-mkdir ckpt/BarcodeBERT/5_mer
+mkdir -p ckpt/BarcodeBERT/5_mer
 cd ckpt/BarcodeBERT/5_mer
 wget https://aspis.cmpt.sfu.ca/projects/bioscan/clip_project/ckpt/BarcodeBERT/model_41.pth
 cd ../..
+mkdir -p bioscan_clip/lora_vit_lora_bert_ssl_batch_size_400
 cd bioscan_clip/lora_vit_lora_bert_ssl_batch_size_400
 wget https://aspis.cmpt.sfu.ca/projects/bioscan/clip_project/ckpt/bioscan_clip/version_0_1_0/lora_vit_lora_bert_ssl_batch_size_400/best.pth
 ```
