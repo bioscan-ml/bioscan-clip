@@ -48,9 +48,9 @@ wget https://aspis.cmpt.sfu.ca/projects/bioscan/clip_project/data/version_0.2.1/
 mkdir -p ckpt/BarcodeBERT/5_mer
 cd ckpt/BarcodeBERT/5_mer
 wget https://aspis.cmpt.sfu.ca/projects/bioscan/clip_project/ckpt/BarcodeBERT/model_41.pth
-cd ../..
-mkdir -p bioscan_clip/lora_vit_lora_bert_ssl_batch_size_400
-cd bioscan_clip/lora_vit_lora_bert_ssl_batch_size_400
+cd ../../..
+mkdir -p ckpt/bioscan_clip
+cd ckpt/bioscan_clip
 wget https://aspis.cmpt.sfu.ca/projects/bioscan/clip_project/ckpt/bioscan_clip/version_0_1_0/lora_vit_lora_bert_ssl_batch_size_400/best.pth
 ```
 # Activate Wandb
