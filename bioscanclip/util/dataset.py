@@ -13,102 +13,6 @@ import torchvision.transforms as transforms
 from bioscanclip.model.dna_encoder import get_sequence_pipeline
 from torch.utils.data.distributed import DistributedSampler
 
-
-class BioscanDataset(Dataset):
-    DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-
-    def __init__(self, metadata, image_hdf5=None, image_transforms=None, dna_transforms=None, **kwargs) -> None:
-        super().__init__()
-
-        self.metadata = pd.read_csv(metadata, sep="\t")
-        self.images = h5py.File(image_hdf5, "r")["bioscan_dataset"]
-        self.image_transforms = image_transforms
-        self.dna_transforms = dna_transforms
-
-    @property
-    def image_ids(self):
-        return self.metadata["image_files"]
-
-    def load_image(self, key: str):
-        byte_data = np.asarray(self.images[key])
-        image = Image.open(io.BytesIO(byte_data))
-        return image
-
-    def __len__(self):
-        return len(self.metadata)
-
-    def __getitem__(self, index) -> Any:
-        row = self.metadata.iloc[index]
-        image_file_name = row["image_file"]
-        curr_image = self.load_image(image_file_name)
-        if self.image_transforms:
-            curr_image = self.image_transforms(curr_image).to(self.DEVICE).half()
-
-        # prepare dna input
-        dna_barcode = row["nucraw"]
-        if self.dna_transforms:
-            dna_barcode = self.dna_transforms(dna_barcode)
-        curr_dna_input = torch.tensor(dna_barcode, dtype=torch.int64).to(self.DEVICE)
-        return curr_image, curr_dna_input
-
-
-class BadirliDataset(Dataset):
-    DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-
-    def __init__(self, metadata, image_folder=None, image_transforms=None, dna_transforms=None, **kwargs) -> None:
-        super().__init__()
-
-        metadata = sio.loadmat(metadata)
-        image_ids = [id_.item() for id_ in metadata["ids"].flatten()]
-        barcodes = [bc.item() for bc in metadata["nucleotides"].flatten()]
-        species = [sp.item() for sp in metadata["species"].flatten()]
-        self.metadata = pd.DataFrame.from_dict({"image_id": image_ids, "barcode": barcodes, "species": species})
-
-        self.images = BadirliDataset.compile_images(image_folder)
-        self.image_transforms = image_transforms
-        self.dna_transforms = dna_transforms
-
-        print(
-            f"# overlapping images: {len(set(self.metadata['image_id'].tolist()).intersection(set(self.images.keys())))}"
-        )
-
-    @property
-    def image_ids(self):
-        return self.metadata["image_id"]
-
-    @staticmethod
-    def compile_images(image_folder):
-        image_paths = {}
-        for root, _, files in os.walk(image_folder):
-            for file in files:
-                image_id, ext = os.path.splitext(file)
-                image_paths[image_id] = os.path.join(root, file)
-        return image_paths
-
-    def load_image(self, key: str):
-        image_path = self.images[key]
-        image = Image.open(image_path)
-        return image
-
-    def __len__(self):
-        return len(self.metadata)
-
-    def __getitem__(self, index) -> Any:
-        row = self.metadata.iloc[index]
-        image_id = row["image_id"]
-        # print(row["image_id"], row["species"])
-        curr_image = self.load_image(image_id)
-        if self.image_transforms:
-            curr_image = self.image_transforms(curr_image).to(self.DEVICE).half()
-
-        # prepare dna input
-        dna_barcode = row["barcode"]
-        if self.dna_transforms:
-            dna_barcode = self.dna_transforms(dna_barcode)
-        curr_dna_input = torch.tensor(dna_barcode, dtype=torch.int64).to(self.DEVICE)
-        return curr_image, curr_dna_input
-
-
 def get_label_ids(input_labels):
     label_to_id = {}
 
@@ -193,7 +97,10 @@ class Dataset_for_CL(Dataset):
         labels=None,
         for_training=False,
     ):
-        self.hdf5_inputs_path = args.bioscan_data.path_to_hdf5_data
+        if args.model_config.dataset == "bioscan_5m":
+            self.hdf5_inputs_path = args.bioscan_5m_data.path_to_hdf5_data
+        else:
+            self.hdf5_inputs_path = args.bioscan_data.path_to_hdf5_data
         self.split = split
         self.image_input_type = image_type
         self.dna_inout_type = dna_type
@@ -280,40 +187,21 @@ class Dataset_for_CL(Dataset):
             # Check if DNA feature are loaded correctly
             curr_dna_input = self.hdf5_split_group["dna_features"][idx].astype(np.float32)
 
-        if self.for_training:
-            if self.return_language is False:
-                return curr_image_input, curr_dna_input, self.labels[idx]
-            else:
-                language_input_ids = self.hdf5_split_group["language_tokens_input_ids"][idx]
-                language_token_type_ids = self.hdf5_split_group["language_tokens_token_type_ids"][idx]
-                language_attention_mask = self.hdf5_split_group["language_tokens_attention_mask"][idx]
+        curr_processid = self.hdf5_split_group["processid"][idx].decode("utf-8")
 
-                return (
-                    curr_image_input,
-                    curr_dna_input,
-                    language_input_ids,
-                    language_token_type_ids,
-                    language_attention_mask,
-                    self.labels[idx],
-                )
+        language_input_ids = self.hdf5_split_group["language_tokens_input_ids"][idx]
+        language_token_type_ids = self.hdf5_split_group["language_tokens_token_type_ids"][idx]
+        language_attention_mask = self.hdf5_split_group["language_tokens_attention_mask"][idx]
+        return (
+            curr_processid,
+            curr_image_input,
+            curr_dna_input,
+            language_input_ids,
+            language_token_type_ids,
+            language_attention_mask,
+            self.labels[idx],
+        )
 
-        else:
-            curr_file_name = self.hdf5_split_group["image_file"][idx].decode("utf-8")
-            if self.return_language is False:
-                return curr_file_name, curr_image_input, curr_dna_input, self.labels[idx]
-            else:
-                language_input_ids = self.hdf5_split_group["language_tokens_input_ids"][idx]
-                language_token_type_ids = self.hdf5_split_group["language_tokens_token_type_ids"][idx]
-                language_attention_mask = self.hdf5_split_group["language_tokens_attention_mask"][idx]
-                return (
-                    curr_file_name,
-                    curr_image_input,
-                    curr_dna_input,
-                    language_input_ids,
-                    language_token_type_ids,
-                    language_attention_mask,
-                    self.labels[idx],
-                )
 
 
 def get_len_dict(args):
@@ -347,7 +235,12 @@ def construct_dataloader(
         dna_type = args.model_config.dna.input_type
 
     if dna_type == "sequence":
-        hdf5_file = h5py.File(args.bioscan_data.path_to_hdf5_data, "r", libver="latest")
+
+        if args.model_config.dataset == "bioscan_5m":
+            hdf5_file = h5py.File(args.bioscan_5m_data.path_to_hdf5_data, "r", libver="latest")
+        else:
+            hdf5_file = h5py.File(args.bioscan_data.path_to_hdf5_data, "r", libver="latest")
+
         unprocessed_dna_barcode = np.array([item.decode("utf-8") for item in hdf5_file[split]["barcode"][:]])
         barcode_bert_dna_tokens = tokenize_dna_sequence(sequence_pipeline, unprocessed_dna_barcode)
 
@@ -482,10 +375,8 @@ def load_bioscan_dataloader_with_train_seen_and_separate_keys(args, world_size=N
     )
 
 
-def load_bioscan_dataloader(args, world_size=None, rank=None, for_pretrain=True):
+def load_dataloader(args, world_size=None, rank=None, for_pretrain=True):
     length_dict = get_len_dict(args)
-
-    # TODO add label for supervised learning
 
     return_language = True
 
@@ -571,98 +462,6 @@ def load_bioscan_dataloader(args, world_size=None, rank=None, for_pretrain=True)
             shuffle=True,
         )
         return train_seen_dataloader, seen_val_dataloader, unseen_val_dataloader, all_keys_dataloader
-
-
-def load_bioscan_dataloader_for_test(args, world_size=None, rank=None, for_pretrain=True):
-    length_dict = get_len_dict(args)
-
-    # TODO add label for supervised learning
-
-    return_language = True
-
-    sequence_pipeline = get_sequence_pipeline()
-
-    seen_test_dataloader = construct_dataloader(
-        args,
-        "test_seen",
-        length_dict["test_seen"],
-        sequence_pipeline,
-        return_language=return_language,
-        labels=None,
-        for_pre_train=False,
-        world_size=world_size,
-        rank=rank,
-    )
-
-    unseen_test_dataloader = construct_dataloader(
-        args,
-        "test_unseen",
-        length_dict["test_unseen"],
-        sequence_pipeline,
-        return_language=return_language,
-        labels=None,
-        for_pre_train=False,
-        world_size=world_size,
-        rank=rank,
-    )
-
-    all_keys_dataloader = construct_dataloader(
-        args,
-        "all_keys",
-        length_dict["all_keys"],
-        sequence_pipeline,
-        return_language=return_language,
-        labels=None,
-        for_pre_train=False,
-        world_size=world_size,
-        rank=rank,
-    )
-    if for_pretrain:
-        if (
-            hasattr(args.model_config, "using_train_seen_for_pre_train")
-            and args.model_config.using_train_seen_for_pre_train
-        ):
-            pre_train_dataloader = construct_dataloader(
-                args,
-                "no_split_and_seen_train",
-                length_dict["no_split_and_seen_train"],
-                sequence_pipeline,
-                return_language=return_language,
-                labels=None,
-                for_pre_train=True,
-                world_size=world_size,
-                rank=rank,
-                shuffle=True,
-            )
-        else:
-            pre_train_dataloader = construct_dataloader(
-                args,
-                "no_split",
-                length_dict["no_split"],
-                sequence_pipeline,
-                return_language=return_language,
-                labels=None,
-                for_pre_train=True,
-                world_size=world_size,
-                rank=rank,
-                shuffle=True,
-            )
-        return pre_train_dataloader, seen_test_dataloader, unseen_test_dataloader, all_keys_dataloader
-    else:
-        train_seen_dataloader = construct_dataloader(
-            args,
-            "train_seen",
-            length_dict["train_seen"],
-            sequence_pipeline,
-            return_language=return_language,
-            labels=None,
-            for_pre_train=False,
-            world_size=world_size,
-            rank=rank,
-            shuffle=True,
-        )
-        return train_seen_dataloader, seen_test_dataloader, unseen_test_dataloader, all_keys_dataloader
-
 
 def load_bioscan_dataloader_all_small_splits(args, world_size=None, rank=None):
     length_dict = get_len_dict(args)

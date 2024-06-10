@@ -149,7 +149,7 @@ def eval_epoch(model, val_dataloader, keys_encoded_feature, keys_label, dataset_
 
     if k_list is None:
         k_list = [1, 3, 5]
-
+    model.eval()
     with torch.no_grad():
         total = 0
         index = faiss.IndexFlatIP(keys_encoded_feature.shape[-1])
@@ -167,8 +167,7 @@ def eval_epoch(model, val_dataloader, keys_encoded_feature, keys_label, dataset_
             all_dna_feature = []
 
         for batch in pbar:
-
-            image_file_name, image_input_batch, dna_batch, input_ids, token_type_ids, attention_mask, label_batch = batch
+            processid_batch, image_input_batch, dna_input_batch, input_ids, token_type_ids, attention_mask, label_batch = batch
 
             pbar.set_description("Eval on " + dataset_name + ":...")
 
@@ -184,15 +183,15 @@ def eval_epoch(model, val_dataloader, keys_encoded_feature, keys_label, dataset_
 
             # For DNA
             if return_image_and_dna_feature:
-                dna_batch = dna_batch.to(device)
+                dna_input_batch = dna_input_batch.to(device)
 
                 if multi_gpu:
-                    encoded_dna_feature_batch = model.module.dna_encoder(dna_batch)
+                    encoded_dna_feature_batch = model.module.dna_encoder(dna_input_batch)
                 else:
                     if model.dna_encoder is None:
-                        encoded_dna_feature_batch = F.normalize(dna_batch, dim=-1)
+                        encoded_dna_feature_batch = F.normalize(dna_input_batch, dim=-1)
                     else:
-                        encoded_dna_feature_batch = model.dna_encoder(dna_batch)
+                        encoded_dna_feature_batch = model.dna_encoder(dna_input_batch)
                 all_dna_feature = all_dna_feature + encoded_dna_feature_batch.cpu().tolist()
             list_of_label_dict = convert_label_dict_to_list_of_dict(label_batch)
 

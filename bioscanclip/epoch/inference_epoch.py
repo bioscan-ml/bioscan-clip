@@ -20,23 +20,23 @@ def get_feature_and_label(dataloader, model, device, type_of_feature="dna", mult
     label_list = []
     file_name_list =[]
     pbar = tqdm(enumerate(dataloader), total=len(dataloader))
+    model.eval()
     with torch.no_grad():
         for step, batch in pbar:
             pbar.set_description(f"Getting {type_of_feature} features")
-            
-            file_name_batch, image_input_batch, dna_batch, input_ids, token_type_ids, attention_mask, label_batch = batch
+            processid_batch, image_input_batch, dna_input_batch, input_ids, token_type_ids, attention_mask, label_batch = batch
             language_input = {'input_ids': input_ids.to(device), 'token_type_ids': token_type_ids.to(device),
                               'attention_mask': attention_mask.to(device)}
 
             if type_of_feature == 'dna':
-                dna_batch = dna_batch.to(device)
+                dna_input_batch = dna_input_batch.to(device)
                 if multi_gpu:
-                    encoded_dna_feature_batch = model.module.dna_encoder(dna_batch)
+                    encoded_dna_feature_batch = model.module.dna_encoder(dna_input_batch)
                 else:
                     if model.dna_encoder is None:
-                        encoded_dna_feature_batch = F.normalize(dna_batch, dim=-1)
+                        encoded_dna_feature_batch = F.normalize(dna_input_batch, dim=-1)
                     else:
-                        encoded_dna_feature_batch = F.normalize(model.dna_encoder(dna_batch), dim=-1)
+                        encoded_dna_feature_batch = F.normalize(model.dna_encoder(dna_input_batch), dim=-1)
 
                 encoded_feature_list = encoded_feature_list + encoded_dna_feature_batch.cpu().tolist()
 

@@ -16,7 +16,8 @@ from bioscanclip.epoch.train_epoch import train_epoch
 from inference_and_eval import get_features_and_label, inference_and_print_result
 from bioscanclip.model.loss_func import ContrastiveLoss, ClipLoss
 from bioscanclip.model.simple_clip import load_clip_model
-from bioscanclip.util.dataset import load_bioscan_dataloader
+from bioscanclip.util.dataset import load_dataloader
+from bioscanclip.util.util import test_dataloaders
 
 
 def save_prediction(pred_list, gt_list, json_path):
@@ -87,7 +88,7 @@ def main_process(rank: int, world_size: int, args):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     if rank == 0:
         print("Construct dataloader...")
-    pre_train_dataloader, seen_val_dataloader, unseen_val_dataloader, all_keys_dataloader = load_bioscan_dataloader(
+    pre_train_dataloader, seen_val_dataloader, unseen_val_dataloader, all_keys_dataloader = load_dataloader(
         args, world_size=world_size, rank=rank)
 
     if rank == 0:

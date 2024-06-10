@@ -16,10 +16,9 @@ def train_epoch(activate_wandb, total_epochs, epoch, dataloader, model, optimize
     epoch_loss = 0.0
     total_step = len(dataloader)
 
-
+    model.train()
     for step, batch in pbar:
-
-        image_input_batch, dna_input_batch, input_ids, token_type_ids, attention_mask, label_for_train_batch = batch
+        processid_batch, image_input_batch, dna_input_batch, input_ids, token_type_ids, attention_mask, label_for_train_batch = batch
         language_input = {'input_ids': input_ids.to(device), 'token_type_ids': token_type_ids.to(device),
                           'attention_mask': attention_mask.to(device)}
 
@@ -63,5 +62,8 @@ def train_epoch(activate_wandb, total_epochs, epoch, dataloader, model, optimize
 
         if activate_wandb:
             wandb.log({"loss": loss.item(), "step": step + epoch * len(dataloader)})
+
+        break
+    exit()
 
     print(f'Epoch [{epoch}/{total_epochs}], Loss: {epoch_loss / len(dataloader)}')

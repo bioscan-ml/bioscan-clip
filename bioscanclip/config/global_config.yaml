@@ -9,10 +9,16 @@ activate_wandb: false
 save_inference : true
 load_inference: false
 bioscan_data:
-  dir: ${data_dir}/BioScan_1M
+  dir: ${data_dir}/BIOSCAN_1M
   path_to_hdf5_data: ${bioscan_data.dir}/split_data/BioScan_data_in_splits.hdf5
   path_to_tsv_data: ${bioscan_data.dir}/BioScan_Insect_Dataset_metadata_2.tsv
   path_to_small_species_list_json: ${bioscan_data.dir}/small_species_list.json
+bioscan_5m_data:
+  dir: ${data_dir}/BIOSCAN_5M
+  image_dir: ${bioscan_5m_data.dir}/images
+  path_to_hdf5_data: ${bioscan_5m_data.dir}/BIOSCAN_5M.hdf5
+  path_to_tsv_data: ${bioscan_5m_data.dir}/BIOSCAN-5M_Dataset_v3.4.csv
+  path_to_small_species_list_json: ${bioscan_5m_data.dir}/
 insect_data:
   dir: ${data_dir}/INSECT
   path_to_att_splits_mat: ${insect_data.dir}/att_splits.mat
