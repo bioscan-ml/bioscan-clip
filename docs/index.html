@@ -3,11 +3,11 @@
 
 <head>
   <meta charset="utf-8">
-  <meta name="description" content="BIOSCAN-CLIP: Bridging Vision and Genomics \\for Biodiversity Monitoring at Scale">
+  <meta name="description" content="BIOSCAN-CLIP: Bridging Vision and Genomics for Biodiversity Monitoring at Scale">
   <meta name="keywords" content="BIOSCAN-CLIP, BIOSCAN, DNA barcode, taxonomic classification">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
-  <title>BIOSCAN-CLIP: Bridging Vision and Genomics \\for Biodiversity Monitoring at Scale</title>
+  <title>BIOSCAN-CLIP: Bridging Vision and Genomics for Biodiversity Monitoring at Scale</title>
 
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
 
@@ -73,7 +73,7 @@
               <div class="publication-links">
                 <!-- PDF Link. -->
                 <span class="link-block">
-                <a href="#"
+                <a href="https://arxiv.org/pdf/2405.17537"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="fas fa-file-pdf"></i>
@@ -82,7 +82,7 @@
                 </a>
               </span>
                 <span class="link-block">
-                  <a href="#" class="external-link button is-normal is-rounded is-dark">
+                  <a href="https://arxiv.org/abs/2405.17537" class="external-link button is-normal is-rounded is-dark">
                     <span class="icon">
                       <i class="ai ai-arxiv"></i>
                     </span>
@@ -137,7 +137,7 @@
                 Measuring biodiversity is crucial for understanding ecosystem health. 
                 While prior works have developed machine learning models for taxonomic classification of photographic images and DNA separately, in this work, we introduce a <i>multimodal</i> approach combining both, using CLIP-style contrastive learning to align images, DNA barcodes, and textual data in a unified embedding space. 
                 This allows for accurate classification of both known and unknown insect species without task-specific fine-tuning, leveraging contrastive learning for the first time to fuse DNA and image data. 
-                Our method surpasses previous single-modality approaches in accuracy by over 11\% on zero-shot learning tasks, showcasing its effectiveness in biodiversity studies.            
+                Our method surpasses previous single-modality approaches in accuracy by over 11% on zero-shot learning tasks, showcasing its effectiveness in biodiversity studies.            
             </p>
           </div>
         </div>
@@ -158,19 +158,28 @@
             <p>
               Our BIOSCAN-CLIP model consists of three encoders for processing images, DNA barcodes, and text. 
               We start with pretrained encoders and fine-tune them using contrastive loss to align the image, DNA, and text embeddings. 
-              At inference time, we embed a query image and match it to a database of existing image and DNA embeddings (keys). We use cosine similarity to find the closest key embedding and use
-              its taxonomic label to classify the query image.
+              At inference time, we embed a query image and match it to a database of existing image and DNA embeddings (keys). 
+              We use cosine similarity to find the closest key embedding and use its taxonomic label to classify the query image.
             </p>
           </div>
           
-          <!-- Reconstruction. -->
+          <!-- Taxnomomic classification -->
           <div class="content has-text-justified">
             <h3 class="title is-3">Taxonomic classification and retrieval</h3>
             <p>
-              We can use our aligned image-DNA embedding space to performance taxonomic classification and do cross-modal retrieval from image to DNA.
-              We use the data from <a href="https://biodiversitygenomics.net/1m_insects/">BIOSCAN-1M</a>, a large dataset of insect images paired with DNA barcode, and establish train/validation/test split such that we set aside a set of species that are
-              <i>unseen</i> during for evaluation.  
-              We use image embeddings as queries to DNA embeddings and show that we are able to perform taxnomic classification.  
+              We can use our aligned image-DNA embedding space to performance <a href="https://en.wikipedia.org/wiki/Taxonomic_rank">taxonomic classification</a> and do cross-modal retrieval from image to DNA.
+              We use the data from <a href="https://biodiversitygenomics.net/1m_insects/">BIOSCAN-1M</a>, a large dataset of insect images paired 
+              with <a href="https://en.wikipedia.org/wiki/DNA_barcoding">DNA barcode</a>, and establish train/validation/test split such that we set aside a set of species that are
+              <i>unseen</i> during for evaluation.  For the validation and test splits, we also separate samples that we use as <i>queries</i> from
+              the labeled database of <i>keys</i> that we match against.  
+            </p>
+            <img src="./static/images/partition.png" class="interpolation-image" alt="Data partition" />
+            <p>
+              We use image embeddings as queries to DNA embeddings and show that we are able to perform taxonomic classification over 
+              <a href="https://en.wikipedia.org/wiki/Order_(biology)">order</a>, <a href="https://en.wikipedia.org/wiki/Family_(biology)">family</a>, 
+              <a href="https://en.wikipedia.org/wiki/Genus">genus</a>, and <a href="https://en.wikipedia.org/wiki/Species">species</a>.  
+              As we go down the taxonomy, the classification problem becomes increasingly challenging as we go from just 16 classes at the order level
+              to over 8000 at the species level.  In addition, there is a large imbalance across classes, with many species having less than 10 records.
             </p>  
             <img src="./static/images/retrieval-accuracy-image-dna.png" class="interpolation-image" alt="Accuracy when retrieving from image to DNA" />
             <p>
@@ -179,14 +188,17 @@
             </p>
             <img src="./static/images/retrieval-examples-image-dna.png" class="interpolation-image" alt="Examples of retrieving from image to DNA" />
             <p>
-              We compare our aligned embedding space with that of <a href="https://imageomics.github.io/bioclip/">>BioCLIP</a>, 
+              We compare our aligned embedding space with that of <a href="https://imageomics.github.io/bioclip/">BioCLIP</a>, 
               a recent model that aligns images with text derived from taxnomic labels.  We show that by aligning with DNA, 
-              we can achieve more accurate taxonomic classification.
+              we can achieve more accurate taxonomic classification.  Note that we use the pretrained model of BioCLIP
+              which is trained on a wider dataset than ours, and does not use the same careful training split we use so that
+              it is likely that their model was already exposed to our <i>unseen</i> species during training.  We believe these two
+              differences account for the higher performance of our BIOSCAN-CLIP (with image-text embeddings) on the seen subset
+              but lower performance on the unseen subset.
             </p>
             <img src="./static/images/bioclip-comparison.png" class="interpolation-image" alt="Comparison of BIOSCAN-CLIP vs BioCLIP" />
           </div>
         </div>
-        <!--/ Reconstruction. -->
 
       </div>
 
@@ -195,19 +207,19 @@
 
   <section class="section" id="BibTeX">
     <div class="container is-max-desktop content">
-      <h2 class="title">BibTeX for BIOSCAN-CLIP</h2>
+      <h3 class="title">BibTeX for BIOSCAN-CLIP</h3>
       <pre><code>
       @article{gong2024bioscanclip,
           author    = {Gong, ZeMing and Wang, Austin T. and Haurum, Joakim Bruslund and Lowe, Scott C. and Taylor, Graham W. and Chang, Angel X.},
-          title     = {{BIOSCAN-CLIP}: Bridging Vision and Genomics \\for Biodiversity Monitoring at Scale},
+          title     = {{BIOSCAN-CLIP}: Bridging Vision and Genomics for Biodiversity Monitoring at Scale},
           journal   = {arXiv preprint},
           year      = {2024},
-          eprint={2405.xxxxx},
+          eprint={2405.17537},
           archivePrefix={arXiv},
-          primaryClass={cs.CV}    
+          primaryClass={cs.AI}    
       }
       </code></pre>
-      <h2 class="title">BibTeX for BIOSCAN-1M</h2>
+      <h3 class="title">BibTeX for BIOSCAN-1M</h3>
       <pre><code>
         @article{gharaee2024step,
             title={A Step Towards Worldwide Biodiversity Assessment: The BIOSCAN-1M Insect Dataset},
