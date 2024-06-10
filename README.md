@@ -35,12 +35,20 @@ conda install -c conda-forge faiss
 pip install .
 ```
 in the terminal. However, based on your GPU version, you may have to modify the torch version and install other packages manually with different version.
-# Download data
+# Download BIOSCAN-1M data
 ```shell
 # From project folder
 mkdir -p data/BioScan_1M/split_data
 cd data/BioScan_1M
 wget https://aspis.cmpt.sfu.ca/projects/bioscan/clip_project/data/version_0.2.1/BioScan_data_in_splits.hdf5
+```
+# Download BIOSCAN-5M data
+Note: add the command for downloading the images and generating the hdf5 file.
+```shell
+# From project folder
+mkdir -p data/BioScan_5M/split_data
+cd data/BioScan_5M
+wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/BIOSCAN_5M.hdf5
 ```
 # Download checkpoint for BarcodeBERT and bioscan_clip
 ```shell
