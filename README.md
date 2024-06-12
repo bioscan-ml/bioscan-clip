@@ -35,6 +35,7 @@ conda install -c conda-forge faiss
 pip install .
 ```
 in the terminal. However, based on your GPU version, you may have to modify the torch version and install other packages manually with different version.
+TODO: add some explaination of the hdf5 file.
 # Download BIOSCAN-1M data
 ```shell
 # From project folder
