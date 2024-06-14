@@ -30,12 +30,13 @@ conda create -n bioscan-clip python=3.10
 conda activate bioscan-clip
 conda install pytorch=2.0.1 torchvision=0.15.2 torchtext=0.15.2 pytorch-cuda=11.7 -c pytorch -c nvidia
 pip install -r requirements.txt
-pip install git+https://github.com/openai/CLIP.git
+#pip install git+https://github.com/openai/CLIP.git
 conda install -c conda-forge faiss
 pip install .
 ```
 in the terminal. However, based on your GPU version, you may have to modify the torch version and install other packages manually with different version.
 # Download BIOSCAN-1M data
+TODO: add some explaination of the hdf5 file.
 ```shell
 # From project folder
 mkdir -p data/BioScan_1M/split_data
