@@ -17,7 +17,6 @@ from inference_and_eval import get_features_and_label, inference_and_print_resul
 from bioscanclip.model.loss_func import ContrastiveLoss, ClipLoss
 from bioscanclip.model.simple_clip import load_clip_model
 from bioscanclip.util.dataset import load_dataloader
-from bioscanclip.util.util import test_dataloaders
 
 
 def save_prediction(pred_list, gt_list, json_path):
