@@ -206,9 +206,14 @@ class Dataset_for_CL(Dataset):
 
 def get_len_dict(args):
     length_dict = {}
-    with h5py.File(args.bioscan_data.path_to_hdf5_data, "r") as h5file:
-        for split in list(h5file.keys()):
-            length_dict[split] = len(h5file[split]["image"])
+    if hasattr(args.model_config, 'dataset') and args.model_config.dataset == "bioscan_5m":
+        with h5py.File(args.bioscan_5m_data.path_to_hdf5_data, "r") as h5file:
+            for split in list(h5file.keys()):
+                length_dict[split] = len(h5file[split]["image"])
+    else:
+        with h5py.File(args.bioscan_data.path_to_hdf5_data, "r") as h5file:
+            for split in list(h5file.keys()):
+                length_dict[split] = len(h5file[split]["image"])
     return length_dict
 
 
