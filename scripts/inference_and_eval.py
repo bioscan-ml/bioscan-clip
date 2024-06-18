@@ -126,7 +126,7 @@ def generate_embedding_plot(args, image_features, dna_features, language_feature
                 for i in range(len(gt_labels))
                 if gt_labels[i][prev_level] == args.inference_and_eval_setting.embeddings_filters[prev_level]
             ]
-            print(np.unique([gt_labels[i][prev_level] for i in indices]))
+            # print(np.unique([gt_labels[i][prev_level] for i in indices]))
         else:
             indices = [i for i in range(image_features.shape[0])]
 
