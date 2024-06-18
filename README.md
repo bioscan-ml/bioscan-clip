@@ -86,11 +86,19 @@ For multiple GPU, you may have to
 ```shell
 NCCL_P2P_LEVEL=NVL python scripts/train_cl.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_ssl'
 ```
+To train with 5M's data.
+```shell
+python scripts/train_cl.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_5m'
+```
 # Eval
 Evaluation is done by predicting the accuracy of both seen and unseen species to test model generalizability. 
 ```shell
 # From project folder
 python scripts/inference_and_eval.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_ssl'
+```
+To eval with BIOSCAN-5M's data
+```shell
+python scripts/inference_and_eval.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_5m'
 ```
 
 # Conclusion
