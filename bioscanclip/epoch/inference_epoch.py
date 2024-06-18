@@ -58,7 +58,7 @@ def get_feature_and_label(dataloader, model, device, type_of_feature="dna", mult
 
 
             label_list = label_list + convert_label_dict_to_list_of_dict(label_batch)
-            file_name_list = file_name_list + list(file_name_batch)
+            file_name_list = file_name_list + list(processid_batch)
 
     encoded_feature = np.array(encoded_feature_list)
     return file_name_list, encoded_feature, label_list
