@@ -61,6 +61,10 @@ cd ../../..
 mkdir -p ckpt/bioscan_clip
 cd ckpt/bioscan_clip
 wget https://aspis.cmpt.sfu.ca/projects/bioscan/clip_project/ckpt/bioscan_clip/version_0_1_0/lora_vit_lora_bert_ssl_batch_size_400/best.pth
+cd ..
+mkdir bioscan_clip_5m
+cd bioscan_clip_5m
+wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/ckpt/best.pth
 ```
 # Activate Wandb
 #### Register/Login for a [free wandb account](https://wandb.ai/site)
