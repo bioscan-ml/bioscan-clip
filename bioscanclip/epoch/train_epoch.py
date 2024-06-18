@@ -63,7 +63,4 @@ def train_epoch(activate_wandb, total_epochs, epoch, dataloader, model, optimize
         if activate_wandb:
             wandb.log({"loss": loss.item(), "step": step + epoch * len(dataloader)})
 
-        break
-    exit()
-
     print(f'Epoch [{epoch}/{total_epochs}], Loss: {epoch_loss / len(dataloader)}')
