@@ -241,8 +241,6 @@ def main(args: DictConfig) -> None:
 
     count_for_missing_images = 0
 
-    print(f"All meta-splits {list(map_dict.keys())}")
-    exit()
 
     new_file = h5py.File(args.bioscan_5m_data.path_to_hdf5_data, "w")
 

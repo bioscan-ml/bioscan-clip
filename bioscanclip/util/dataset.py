@@ -475,17 +475,31 @@ def load_bioscan_dataloader_all_small_splits(args, world_size=None, rank=None):
 
     sequence_pipeline = get_sequence_pipeline()
 
-    train_seen_dataloader = construct_dataloader(
-        args,
-        "train_seen",
-        length_dict["train_seen"],
-        sequence_pipeline,
-        return_language=return_language,
-        labels=None,
-        for_pre_train=False,
-        world_size=world_size,
-        rank=rank,
-    )
+    if hasattr(args.model_config, 'dataset') and args.model_config.dataset == "bioscan_5m":
+
+        train_seen_dataloader = construct_dataloader(
+            args,
+            "seen_keys",
+            length_dict["seen_keys"],
+            sequence_pipeline,
+            return_language=return_language,
+            labels=None,
+            for_pre_train=False,
+            world_size=world_size,
+            rank=rank,
+        )
+    else:
+        train_seen_dataloader = construct_dataloader(
+            args,
+            "train_seen",
+            length_dict["train_seen"],
+            sequence_pipeline,
+            return_language=return_language,
+            labels=None,
+            for_pre_train=False,
+            world_size=world_size,
+            rank=rank,
+        )
 
     seen_val_dataloader = construct_dataloader(
         args,
