@@ -47,8 +47,8 @@ wget https://aspis.cmpt.sfu.ca/projects/bioscan/clip_project/data/version_0.2.1/
 Note: add the command for downloading the images and generating the hdf5 file.
 ```shell
 # From project folder
-mkdir -p data/BioScan_5M/split_data
-cd data/BioScan_5M
+mkdir -p data/BOSCAN_5M/split_data
+cd data/BOSCAN_5M
 wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/BIOSCAN_5M.hdf5
 ```
 # Download checkpoint for BarcodeBERT and bioscan_clip
