@@ -560,29 +560,54 @@ def load_bioscan_dataloader_all_small_splits(args, world_size=None, rank=None):
         world_size=world_size,
         rank=rank,
     )
+    if hasattr(args.model_config, 'dataset') and args.model_config.dataset == "bioscan_5m":
 
-    val_unseen_keys_dataloader = construct_dataloader(
-        args,
-        "val_unseen_keys",
-        length_dict["val_unseen_keys"],
-        sequence_pipeline,
-        return_language=return_language,
-        labels=None,
-        for_pre_train=False,
-        world_size=world_size,
-        rank=rank,
-    )
-    test_unseen_keys_dataloader = construct_dataloader(
-        args,
-        "test_unseen_keys",
-        length_dict["test_unseen_keys"],
-        sequence_pipeline,
-        return_language=return_language,
-        labels=None,
-        for_pre_train=False,
-        world_size=world_size,
-        rank=rank,
-    )
+        val_unseen_keys_dataloader = construct_dataloader(
+            args,
+            "unseen_keys",
+            length_dict["unseen_keys"],
+            sequence_pipeline,
+            return_language=return_language,
+            labels=None,
+            for_pre_train=False,
+            world_size=world_size,
+            rank=rank,
+        )
+        test_unseen_keys_dataloader = construct_dataloader(
+            args,
+            "unseen_keys",
+            length_dict["unseen_keys"],
+            sequence_pipeline,
+            return_language=return_language,
+            labels=None,
+            for_pre_train=False,
+            world_size=world_size,
+            rank=rank,
+        )
+    else:
+
+        val_unseen_keys_dataloader = construct_dataloader(
+            args,
+            "val_unseen_keys",
+            length_dict["val_unseen_keys"],
+            sequence_pipeline,
+            return_language=return_language,
+            labels=None,
+            for_pre_train=False,
+            world_size=world_size,
+            rank=rank,
+        )
+        test_unseen_keys_dataloader = construct_dataloader(
+            args,
+            "test_unseen_keys",
+            length_dict["test_unseen_keys"],
+            sequence_pipeline,
+            return_language=return_language,
+            labels=None,
+            for_pre_train=False,
+            world_size=world_size,
+            rank=rank,
+        )
 
     all_keys_dataloader = construct_dataloader(
         args,
