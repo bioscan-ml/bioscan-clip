@@ -6,9 +6,6 @@ tqdm~=4.66.1
 transformers==4.29.2
 wandb~=0.15.12
 h5py~=3.9.0
-chardet
-wandb
-ftfy==6.1.1
 timm~=0.6.13
 hydra-core
 seaborn~=0.13.0
