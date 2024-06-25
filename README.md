@@ -20,8 +20,8 @@ Insects comprise of vast biodiversity although approximately only 20% of them ar
 The data has been partitioned into a training set for contrastive learning, and validation and test partitions. The training set has records without any species labels as well as a set of seen species. The validation and test sets include seen and unseen species. These images are further split into subpartitions of queries and keys for evaluation.
 <br>
 # Experiments
-
 Experiments using our model have assessed taxonomic classification accuracy via contrastive learning. Input images are matched against the closest DNA barcodes or comparable images for classification. 
+All of the experiments are 
 
 # Set environment
 For now, you can set the environment by typing
