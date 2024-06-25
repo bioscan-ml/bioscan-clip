@@ -45,7 +45,7 @@ inference_and_eval_setting:
     family: Sciaridae
     genus: Corynoptera
   put_all_key_together: false
-  eval_on: val
+  eval_on: test
 
 visualization:
   output_dir: ${project_root_path}/visualizations

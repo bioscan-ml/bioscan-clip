@@ -97,10 +97,12 @@ class Dataset_for_CL(Dataset):
         labels=None,
         for_training=False,
     ):
-        if args.model_config.dataset == "bioscan_5m":
+        if hasattr(args.model_config, "dataset") and args.model_config.dataset == "bioscan_5m":
             self.hdf5_inputs_path = args.bioscan_5m_data.path_to_hdf5_data
+            self.dataset = "bioscan_5m"
         else:
             self.hdf5_inputs_path = args.bioscan_data.path_to_hdf5_data
+            self.dataset = "bioscan_1m"
         self.split = split
         self.image_input_type = image_type
         self.dna_inout_type = dna_type
@@ -187,7 +189,10 @@ class Dataset_for_CL(Dataset):
             # Check if DNA feature are loaded correctly
             curr_dna_input = self.hdf5_split_group["dna_features"][idx].astype(np.float32)
 
-        curr_processid = self.hdf5_split_group["processid"][idx].decode("utf-8")
+        if self.dataset == "bioscan_5m":
+            curr_processid = self.hdf5_split_group["processid"][idx].decode("utf-8")
+        else:
+            curr_processid = self.hdf5_split_group["image_file"][idx].decode("utf-8").split(".")[-1]
 
         language_input_ids = self.hdf5_split_group["language_tokens_input_ids"][idx]
         language_token_type_ids = self.hdf5_split_group["language_tokens_token_type_ids"][idx]
@@ -476,7 +481,6 @@ def load_bioscan_dataloader_all_small_splits(args, world_size=None, rank=None):
     sequence_pipeline = get_sequence_pipeline()
 
     if hasattr(args.model_config, 'dataset') and args.model_config.dataset == "bioscan_5m":
-
         train_seen_dataloader = construct_dataloader(
             args,
             "seen_keys",
