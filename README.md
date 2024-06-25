@@ -100,6 +100,12 @@ To eval with BIOSCAN-5M's data
 ```shell
 python scripts/inference_and_eval.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_5m'
 ```
+# Extract embedding
+```shell
+# From project folder
+python scripts/extract_embedding.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_ssl'
+python scripts/extract_embedding.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_5m'
+```
 
 # Conclusion
 BIOSCAN-CLIP combines insect images with DNA barcodes and taxonomic labels to improve taxonomic classification via contrastive learning. This method capitalizes on the practicality and low cost of image acquisition, promoting wider participation in global biodiversity tracking. Experimental results demonstrate that BIOSCAN-CLIP's shared embedding space is effective for retrieval tasks involving both known and unknown species, and adaptable for downstream applications like zero-shot learning. The model faces challenges with underrepresented and unseen species, highlighting areas for future enhancement.
