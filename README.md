@@ -21,8 +21,7 @@ The data has been partitioned into a training set for contrastive learning, and 
 <br>
 # Experiments
 Experiments using our model have assessed taxonomic classification accuracy via contrastive learning. Input images are matched against the closest DNA barcodes or comparable images for classification. 
-All of the experiments are 
-
+The training of the model was completed on two NVIDIA A100 PCIe GPUs. The version of Python used is 3.10, the CUDA version is 12.4, and the PyTorch version is 2.0.1. During training, when the batch size is set to 400, the maximum CUDA memory usage is approximately 79GB. You can try reducing the batch size in the config file if your GPU's CUDA memory is insufficient.
 # Set environment
 For now, you can set the environment by typing
 ```shell
@@ -35,7 +34,7 @@ conda install -c conda-forge faiss
 pip install .
 ```
 in the terminal. However, based on your GPU version, you may have to modify the torch version and install other packages manually with different version.
-# Download BIOSCAN-1M data
+# Download BIOSCAN-1M data (79.7 GB)
 TODO: add some explaination of the hdf5 file.
 ```shell
 # From project folder
@@ -43,7 +42,7 @@ mkdir -p data/BioScan_1M/split_data
 cd data/BioScan_1M
 wget https://aspis.cmpt.sfu.ca/projects/bioscan/clip_project/data/version_0.2.1/BioScan_data_in_splits.hdf5
 ```
-# Download BIOSCAN-5M data
+# Download BIOSCAN-5M data (190.4 GB)
 TODO: add the command for downloading the images and generating the hdf5 file.
 ```shell
 # From project folder
