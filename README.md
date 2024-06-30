@@ -25,21 +25,24 @@ conda install -c conda-forge faiss
 pip install .
 ```
 
-Depending on your GPU version, you may have to modify the torch version and other package versions in [requirements.txt](https://github.com/3dlg-hcvc/bioscan-clip/blob/main/requirements.txt).
+Depending on your GPU version, you may have to modify the torch version and other package versions in [requirements.txt](./requirements.txt).
 
 # Pretrained embeddings and models
-We provide pretrained embeddings and models.  We evaluate our models by encoding the image or DNA barcode, and using the taxonomic labels from the closest matching embedding (either using image or DNA barcode).  See [Download dataset](#download-dataset) and [Running Experiments](#running-experiments) for how to get the data, and to train and evaluate the models.
+We provide pretrained embeddings and model weights.  We evaluate our models by encoding the image or DNA barcode, and using the taxonomic labels from the closest matching embedding (either using image or DNA barcode).  See [Download dataset](#download-dataset) and [Running Experiments](#running-experiments) for how to get the data, and to train and evaluate the models.
+
 
 | Training data |  Aligned modalities |  Embeddings |  Model  | Config |  
 |---------------|---------------------|-------------|---------|--------|
 | BIOSCAN-1M    |  None               |  TODO       |  TODO   |  TODO  |
-| BIOSCAN-1M    |  Image + DNA        |  TODO       |  TODO   |  TODO  | 
-| BIOSCAN-1M    |  Image + DNA + Tax  |  TODO       |  [Link](https://aspis.cmpt.sfu.ca/projects/bioscan/clip_project/ckpt/bioscan_clip/version_0_1_0/lora_vit_lora_bert_ssl_batch_size_400/best.pth)|  TODO  | 
+| BIOSCAN-1M    |  **I**mage + **D**NA        |  TODO       |  TODO   |  TODO  | 
+| BIOSCAN-1M    |  **I**mage + **D**NA + **T**ax  |  TODO       |  [Link](https://aspis.cmpt.sfu.ca/projects/bioscan/clip_project/ckpt/bioscan_clip/version_0_1_0/lora_vit_lora_bert_ssl_batch_size_400/best.pth)|  TODO  | 
 | BIOSCAN-5M    |  None               |  TODO       |  TODO   |  TODO  |
-| BIOSCAN-5M    |  Image + DNA        |  TODO       |  TODO   |  TODO  |
-| BIOSCAN-5M    |  Image + DNA + Tax  |  TODO       |  [Link](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/ckpt/best.pth)|   TODO  |
+| BIOSCAN-5M    |  **I**mage + **D**NA        |  TODO       |  TODO   |  TODO  |
+| BIOSCAN-5M    |  **I**mage + **D**NA + **T**ax  |  TODO       |  [Link](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/ckpt/best.pth)|   TODO  |
 
 ## Using pretrained models to extract embeddings
+
+TODO: provide short description of what this script does
 
 ```shell
 # From project folder
@@ -51,12 +54,11 @@ python scripts/extract_embedding.py 'model_config=lora_vit_lora_barcode_bert_lor
 ![Data Partioning Visual](./docs/static/images/partition.png) <br>
 For BIOSCAN 1M, we partition the dataset for our BIOSCAN-CLIP experiments into a training set for contrastive learning, and validation and test partitions. The training set has records without any species labels as well as a set of seen species. The validation and test sets include seen and unseen species. These images are further split into subpartitions of queries and keys for evaluation.
 
-For BIOSCAN 5M, we use the dataset partioning established in the BIOSCAN-5M paper.
+For BIOSCAN 5M, we use the dataset partitioning established in the BIOSCAN-5M paper.
 
-For training and reproducing our experiments, we provide HDF5 files with BIOSCAN-1M and BIOSCAN-5M images.  We also provide scripts for generating the HDF5 files directly from the BIOSCAN-1M and BIOSCAN-5M data.
+For training and reproducing our experiments, we provide HDF5 files with BIOSCAN-1M and BIOSCAN-5M images.  See [DATA.md](DATA.md) for format details. We also provide scripts for generating the HDF5 files directly from the BIOSCAN-1M and BIOSCAN-5M data.
 
 ### Download BIOSCAN-1M data (79.7 GB)
-TODO: add explanation of the hdf5 file.
 ```shell
 # From project folder
 mkdir -p data/BioScan_1M/split_data
@@ -65,17 +67,19 @@ wget https://aspis.cmpt.sfu.ca/projects/bioscan/clip_project/data/version_0.2.1/
 ```
 
 ### Download BIOSCAN-5M data (190.4 GB)
-TODO: add the command for downloading the images and generating the hdf5 file.
 ```shell
 # From project folder
 mkdir -p data/BOSCAN_5M/split_data
 cd data/BOSCAN_5M
 wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/BIOSCAN_5M.hdf5
 ```
-# To download other data for generating hdf5 files.
-You can check [BIOSCAN-1M](https://github.com/zahrag/BIOSCAN-1M) and [BIOSCAN-5M](https://github.com/zahrag/BIOSCAN-5M) to download tsv files.
+# To download data for generating hdf5 files.
 
 TODO: provide instructions on how to generate hdf5 files and explain what input is needed to generate the hdf5 files.
+TODO: add the command for downloading the images and generating the hdf5 file.
+
+You can check [BIOSCAN-1M](https://github.com/zahrag/BIOSCAN-1M) and [BIOSCAN-5M](https://github.com/zahrag/BIOSCAN-5M) to download tsv files.
+
 
 # Running experiments
 We recommend the use of [weights and biases](https://wandb.ai/site) to track and log experiments
@@ -89,7 +93,7 @@ wandb login
 
 ## Checkpoints
 
-Download checkpoint for BarcodeBERT and bioscan_clip
+Download checkpoint for BarcodeBERT and bioscan_clip and place them under `ckpt`.  
 ```shell
 # From project folder
 mkdir -p ckpt/BarcodeBERT/5_mer
@@ -107,29 +111,32 @@ wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/ckpt/
 
 ## Train
 
-To train using BIOSCAN-1M:
-
+Use `[train_cl.py](scripts/train.cl_.py)` with the appropriate `model_config` to train BIOSCAN-CLIP.
 ```shell
 # From project folder
 python scripts/train_cl.py 'model_config={config_name}'
 ```
-For example
+
+To train the full model (I+D+T) using BIOSCAN-1M:
 ```shell
 # From project folder
 python scripts/train_cl.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_ssl'
 ```
-For multiple GPU, you may have to
+For multi-GPU training, you may need to specify the transport communication between the GPU using NCCL_P2P_LEVEL:
 ```shell
 NCCL_P2P_LEVEL=NVL python scripts/train_cl.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_ssl'
 ```
 
-To train using BIOSCAN-5M:
+To train the full model (I+D+T) using BIOSCAN-5M:
 ```shell
 python scripts/train_cl.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_5m'
 ```
 
-## Eval
-Evaluation is done by predicting the accuracy of both seen and unseen species to test model generalizability. 
+## Evaluation
+
+During evaluation, we using the trained encoders to obtain embeddings for input image or DNA, and the find the closest matching image or DNA and use the corresponding taxonomical labels as the predicted labels.  We report both the micro and class averaged accuracy for seen and unseen species. 
+
+TODO: specify how to run evaluation for different models, and different query and key combinations.
 
 To run evaluation for BIOSCAN-1M:
 ```shell
