@@ -7,7 +7,8 @@ Links: [website](https://3dlg-hcvc.github.io/bioscan-clip/) | [paper](https://ar
 ![Teaser](./docs/static/images/method.png)
 Taxonomically classifying organisms at scale is crucial for monitoring biodiversity, understanding ecosystems, and preserving sustainability.  It is possible to taxonomically classify organisms based on their image or their [DNA barcode](https://en.wikipedia.org/wiki/DNA_barcoding).  While DNA barcodes are precise at species identification, they are less readily available than images.  Thus, we investigate whether we can use DNA barcodes to improve taxonomic classification using image.  
 
-We introduce BIOSCAN-CLIP, a model uses contrastive learning to map biological images, textual taxonomic labels, and DNA barcodes to the same latent space.  The aligned image-DNA embedding space improves taxonomic classification using images and allows us to do cross-modal retrieval from image to DNA. We train BIOSCAN-CLIP on the [BIOSCAN-1M](https://biodiversitygenomics.net/projects/1m-insects/) and [BIOSCAN-5M](https://biodiversitygenomics.net/projects/5m-insects/) insect datasets.  These datasets provides paired images of insects and their DNA barcodes, along with their taxonomic labels.  
+We introduce BIOSCAN-CLIP, a model uses contrastive learning to map biological images, DNA barcodes, and textual taxonomic labels to the same latent space.  The model is initialized using pretrained encoders for images ([vit-base-patch16-224](https://huggingface.co/google/vit-base-patch16-224)), DNA barcodes ([BarcodeBERT](https://github.com/Kari-Genomics-Lab/BarcodeBERT)), and textual taxonomic labels ([BERT-small](https://huggingface.co/prajjwal1/bert-small)), and the weights of the encoders are fine-tuned using LoRA.
+The aligned image-DNA embedding space improves taxonomic classification using images and allows us to do cross-modal retrieval from image to DNA. We train BIOSCAN-CLIP on the [BIOSCAN-1M](https://biodiversitygenomics.net/projects/1m-insects/) and [BIOSCAN-5M](https://biodiversitygenomics.net/projects/5m-insects/) insect datasets.  These datasets provides paired images of insects and their DNA barcodes, along with their taxonomic labels.  
 
 # Setup environment
 BIOSCAN-CLIP was developed using Python 3.10 and PyTorch 2.0.1.  We recommend the use of GPU and CUDA for efficient training and inference.  Our models were developed with CUDA 12.4.  
@@ -27,16 +28,16 @@ pip install .
 Depending on your GPU version, you may have to modify the torch version and other package versions in [requirements.txt](https://github.com/3dlg-hcvc/bioscan-clip/blob/main/requirements.txt).
 
 # Pretrained embeddings and models
-We provide pretrained embeddings and models.  We evaluate our models by encoding the image or DNA barcode, and using the taxonomic labels from the closest matching embedding (either using image or DNA barcode).
+We provide pretrained embeddings and models.  We evaluate our models by encoding the image or DNA barcode, and using the taxonomic labels from the closest matching embedding (either using image or DNA barcode).  See [Download dataset](#download-dataset) and [Running Experiments](#running-experiments) for how to get the data, and to train and evaluate the models.
 
-| Training data |  Aligned modalities |  Embeddings |  Model  |  
-|---------------|---------------------|-------------|---------|
-| BIOSCAN-1M    |  None               |  TODO       |  TODO   | 
-| BIOSCAN-1M    |  Image + DNA        |  TODO       |  TODO   | 
-| BIOSCAN-1M    |  Image + DNA + Tax  |  TODO       |  [Link](https://aspis.cmpt.sfu.ca/projects/bioscan/clip_project/ckpt/bioscan_clip/version_0_1_0/lora_vit_lora_bert_ssl_batch_size_400/best.pth)| 
-| BIOSCAN-5M    |  None               |  TODO       |  TODO   | 
-| BIOSCAN-5M    |  Image + DNA        |  TODO       |  TODO   | 
-| BIOSCAN-5M    |  Image + DNA + Tax  |  TODO       |  [Link](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/ckpt/best.pth)|
+| Training data |  Aligned modalities |  Embeddings |  Model  | Config |  
+|---------------|---------------------|-------------|---------|--------|
+| BIOSCAN-1M    |  None               |  TODO       |  TODO   |  TODO  |
+| BIOSCAN-1M    |  Image + DNA        |  TODO       |  TODO   |  TODO  | 
+| BIOSCAN-1M    |  Image + DNA + Tax  |  TODO       |  [Link](https://aspis.cmpt.sfu.ca/projects/bioscan/clip_project/ckpt/bioscan_clip/version_0_1_0/lora_vit_lora_bert_ssl_batch_size_400/best.pth)|  TODO  | 
+| BIOSCAN-5M    |  None               |  TODO       |  TODO   |  TODO  |
+| BIOSCAN-5M    |  Image + DNA        |  TODO       |  TODO   |  TODO  |
+| BIOSCAN-5M    |  Image + DNA + Tax  |  TODO       |  [Link](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/ckpt/best.pth)|   TODO  |
 
 ## Using pretrained models to extract embeddings
 
@@ -73,6 +74,8 @@ wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/BIOSC
 ```
 # To download other data for generating hdf5 files.
 You can check [BIOSCAN-1M](https://github.com/zahrag/BIOSCAN-1M) and [BIOSCAN-5M](https://github.com/zahrag/BIOSCAN-5M) to download tsv files.
+
+TODO: provide instructions on how to generate hdf5 files and explain what input is needed to generate the hdf5 files.
 
 # Running experiments
 We recommend the use of [weights and biases](https://wandb.ai/site) to track and log experiments
