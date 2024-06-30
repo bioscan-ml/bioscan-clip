@@ -33,10 +33,10 @@ We provide pretrained embeddings and models.  We evaluate our models by encoding
 |---------------|---------------------|-------------|---------|
 | BIOSCAN-1M    |  None               |  TODO       |  TODO   | 
 | BIOSCAN-1M    |  Image + DNA        |  TODO       |  TODO   | 
-| BIOSCAN-1M    |  Image + DNA + Tax  |  TODO       |  TODO   | 
+| BIOSCAN-1M    |  Image + DNA + Tax  |  TODO       |  [Link](https://aspis.cmpt.sfu.ca/projects/bioscan/clip_project/ckpt/bioscan_clip/version_0_1_0/lora_vit_lora_bert_ssl_batch_size_400/best.pth)| 
 | BIOSCAN-5M    |  None               |  TODO       |  TODO   | 
 | BIOSCAN-5M    |  Image + DNA        |  TODO       |  TODO   | 
-| BIOSCAN-5M    |  Image + DNA + Tax  |  TODO       |  TODO   |
+| BIOSCAN-5M    |  Image + DNA + Tax  |  TODO       |  [Link](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/ckpt/best.pth)|
 
 ## Using pretrained models to extract embeddings
 
