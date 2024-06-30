@@ -73,7 +73,7 @@ mkdir -p data/BOSCAN_5M/split_data
 cd data/BOSCAN_5M
 wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/BIOSCAN_5M.hdf5
 ```
-# To download data for generating hdf5 files.
+### Download data for generating hdf5 files
 
 TODO: provide instructions on how to generate hdf5 files and explain what input is needed to generate the hdf5 files.
 TODO: add the command for downloading the images and generating the hdf5 file.
