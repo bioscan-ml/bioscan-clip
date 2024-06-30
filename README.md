@@ -111,7 +111,7 @@ wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/ckpt/
 
 ## Train
 
-Use `[train_cl.py](scripts/train.cl_.py)` with the appropriate `model_config` to train BIOSCAN-CLIP.
+Use [train_cl.py](./scripts/train_cl.py) with the appropriate `model_config` to train BIOSCAN-CLIP.
 ```shell
 # From project folder
 python scripts/train_cl.py 'model_config={config_name}'
