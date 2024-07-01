@@ -104,8 +104,8 @@ mkdir -p ckpt/bioscan_clip/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_4
 cd ckpt/bioscan_clip/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400
 wget https://aspis.cmpt.sfu.ca/projects/bioscan/clip_project/ckpt/bioscan_clip/version_0_1_0/lora_vit_lora_bert_ssl_batch_size_400/best.pth
 cd ..
-mkdir bioscan_clip_5m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400_5m
-cd bioscan_clip_5m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400_5m
+mkdir bioscan_clip/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400_5m
+cd bioscan_clip/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400_5m
 wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/ckpt/best.pth
 ```
 
