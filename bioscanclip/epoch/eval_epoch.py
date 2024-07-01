@@ -135,9 +135,7 @@ def remove_specific_species(keys_encoded_feature, keys_label, species_to_drop):
                 idxs_to_keep.append(idx)
                 labels_after_drop.append(label)
         except:
-            print(label)
-            print(species_to_drop)
-            exit()
+            exit(1)
     keys_encoded_feature_after_drop = keys_encoded_feature[idxs_to_keep]
 
     return keys_encoded_feature_after_drop, labels_after_drop

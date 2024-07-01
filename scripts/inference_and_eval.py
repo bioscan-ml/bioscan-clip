@@ -719,26 +719,32 @@ def main(args: DictConfig) -> None:
         print("Loading embeddings from file...")
 
         with h5py.File(extracted_features_path, 'r') as hdf5_file:
+
+
             seen_dict = {
-                "encoded_image_feature": hdf5_file["seen"]["encoded_image_feature"][:],
-                "encoded_dna_feature": hdf5_file["seen"]["encoded_dna_feature"][:],
-                "encoded_language_feature": hdf5_file["seen"]["encoded_language_feature"][:],
+
             }
+            for type_of_feature in All_TYPE_OF_FEATURES_OF_KEY:
+                if type_of_feature in hdf5_file["seen"].keys():
+                    seen_dict[type_of_feature] = hdf5_file["seen"][type_of_feature][:]
+
             unseen_dict = {
-                "encoded_image_feature": hdf5_file["unseen"]["encoded_image_feature"][:],
-                "encoded_dna_feature": hdf5_file["unseen"]["encoded_dna_feature"][:],
-                "encoded_language_feature": hdf5_file["unseen"]["encoded_language_feature"][:],
             }
+            for type_of_feature in All_TYPE_OF_FEATURES_OF_KEY:
+                if type_of_feature in hdf5_file["unseen"].keys():
+                    unseen_dict[type_of_feature] = hdf5_file["unseen"][type_of_feature][:]
             keys_dict = {
-                "encoded_image_feature": hdf5_file["key"]["encoded_image_feature"][:],
-                "encoded_dna_feature": hdf5_file["key"]["encoded_dna_feature"][:],
-                "encoded_language_feature": hdf5_file["key"]["encoded_language_feature"][:],
             }
+            for type_of_feature in All_TYPE_OF_FEATURES_OF_KEY:
+                if type_of_feature in hdf5_file["key"].keys():
+                    keys_dict[type_of_feature] = hdf5_file["key"][type_of_feature][:]
+
         with open(labels_path, "r") as json_file:
             total_dict = json.load(json_file)
         seen_dict["label_list"] = total_dict["seen_gt_dict"]
         unseen_dict["label_list"] = total_dict["unseen_gt_dict"]
         keys_dict["label_list"] = total_dict["key_gt_dict"]
+        keys_dict["all_key_features_label"] = total_dict["key_gt_dict"] + total_dict["key_gt_dict"] + total_dict["key_gt_dict"]
 
     else:
         # initialize model
@@ -772,8 +778,13 @@ def main(args: DictConfig) -> None:
             split_dicts = [seen_dict, unseen_dict, keys_dict]
             for split_name, split in zip(name_of_splits, split_dicts):
                 group = new_file.create_group(split_name)
-                for embedding_type in split.keys():
-                    group.create_dataset(embedding_type, data=split[embedding_type])
+                for embedding_type in All_TYPE_OF_FEATURES_OF_KEY:
+                    if embedding_type in split.keys():
+                        try:
+                            group.create_dataset(embedding_type, data=split[embedding_type])
+                        except:
+                            print(f"Error in creating dataset for {embedding_type}")
+                        # group.create_dataset(embedding_type, data=split[embedding_type])
             new_file.close()
             total_dict = {
                 "seen_gt_dict": seen_dict["label_list"],
@@ -793,16 +804,16 @@ def main(args: DictConfig) -> None:
 
     seen_final_pred = pred_dict["encoded_image_feature"]["encoded_dna_feature"]["curr_seen_pred_list"]
     unseen_final_pred = pred_dict["encoded_image_feature"]["encoded_dna_feature"]["curr_unseen_pred_list"]
-    all_unique_seen_species = get_all_unique_species_from_dataloader(seen_keys_dataloader)
-    all_unique_val_unseen_species = get_all_unique_species_from_dataloader(val_unseen_keys_dataloader)
-    all_unique_test_unseen_species = get_all_unique_species_from_dataloader(test_unseen_keys_dataloader)
-
-    print("For seen")
-    check_for_acc_about_correct_predict_seen_or_unseen(seen_final_pred, all_unique_seen_species)
-    print("For unseen")
-    check_for_acc_about_correct_predict_seen_or_unseen(
-        unseen_final_pred, all_unique_val_unseen_species + all_unique_test_unseen_species
-    )
+    # all_unique_seen_species = get_all_unique_species_from_dataloader(seen_keys_dataloader)
+    # all_unique_val_unseen_species = get_all_unique_species_from_dataloader(val_unseen_keys_dataloader)
+    # all_unique_test_unseen_species = get_all_unique_species_from_dataloader(test_unseen_keys_dataloader)
+    #
+    # print("For seen")
+    # check_for_acc_about_correct_predict_seen_or_unseen(seen_final_pred, all_unique_seen_species)
+    # print("For unseen")
+    # check_for_acc_about_correct_predict_seen_or_unseen(
+    #     unseen_final_pred, all_unique_val_unseen_species + all_unique_test_unseen_species
+    # )
 
     if args.inference_and_eval_setting.plot_embeddings:
         generate_embedding_plot(
