@@ -1,3 +1,4 @@
+import h5py
 import io
 import json
 import os
@@ -202,7 +203,7 @@ def generate_embedding_plot(args, image_features, dna_features, language_feature
         )
 
         folder_path = os.path.join(
-            "/", f"{PLOT_FOLDER}/{args.model_config.model_output_name}"
+            args.project_root_path, f"{PLOT_FOLDER}/{args.model_config.model_output_name}"
         )
         os.makedirs(folder_path, exist_ok=True)
         # fig_3d.update_traces(marker_size=5)
@@ -423,7 +424,7 @@ def make_prediction(query_feature, keys_feature, keys_label, with_similarity=Fal
             if level not in k_pred_in_diff_level.keys():
                 k_pred_in_diff_level[level] = []
             for i in key_indices:
-                print((keys_label[i][level]))
+                import pdb; pdb.set_trace()
                 k_pred_in_diff_level[level].append(keys_label[i][level])
         pred_list.append(k_pred_in_diff_level)
 
@@ -704,39 +705,41 @@ def main(args: DictConfig) -> None:
         args.model_config.ckpt_path = os.path.join(args.model_config.ckpt_path, "best.pth")
     elif os.path.exists(os.path.join(args.model_config.ckpt_path, "last.pth")):
         args.model_config.ckpt_path = os.path.join(args.model_config.ckpt_path, "last.pth")
-
-    folder_for_saving = os.path.join(
-        args.visualization.output_dir, args.model_config.model_output_name, "features_and_prediction"
-    )
+    folder_for_saving = os.path.join(args.project_root_path,
+                                     "extracted_embedding", args.model_config.dataset,
+                                     args.model_config.model_output_name
+                                     )
     os.makedirs(folder_for_saving, exist_ok=True)
-    extracted_features_path = os.path.join(folder_for_saving, f"extracted_feature_{args.inference_and_eval_setting.eval_on}.npz")
     labels_path = os.path.join(folder_for_saving, f"labels_{args.inference_and_eval_setting.eval_on}.json")
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    if os.path.exists(extracted_features_path) and os.path.exists(labels_path) and args.load_inference:
-        print("Loading predictions from file...")
-        npzfile = np.load(extracted_features_path)
-        seen_dict = {
-            "encoded_image_feature": npzfile["seen_np_all_image_feature"],
-            "encoded_dna_feature": npzfile["seen_np_all_dna_feature"],
-            "encoded_language_feature": npzfile["seen_np_all_language_feature"],
-        }
-        unseen_dict = {
-            "encoded_image_feature": npzfile["unseen_np_all_image_feature"],
-            "encoded_dna_feature": npzfile["unseen_np_all_dna_feature"],
-            "encoded_language_feature": npzfile["unseen_np_all_language_feature"],
-        }
-        keys_dict = {
-            "encoded_image_feature": npzfile["keys_encoded_image_feature"],
-            "encoded_dna_feature": npzfile["keys_encoded_dna_feature"],
-            "encoded_language_feature": npzfile["keys_encoded_language_feature"],
-        }
+    extracted_features_path = os.path.join(folder_for_saving, f"extracted_feature_from_{args.inference_and_eval_setting.eval_on}_split.hdf5")
 
+    if os.path.exists(extracted_features_path) and os.path.exists(labels_path) and args.load_inference:
+        print("Loading embeddings from file...")
+
+        with h5py.File(extracted_features_path, 'r') as hdf5_file:
+            seen_dict = {
+                "encoded_image_feature": hdf5_file["seen"]["encoded_image_feature"][:],
+                "encoded_dna_feature": hdf5_file["seen"]["encoded_dna_feature"][:],
+                "encoded_language_feature": hdf5_file["seen"]["encoded_language_feature"][:],
+            }
+            unseen_dict = {
+                "encoded_image_feature": hdf5_file["unseen"]["encoded_image_feature"][:],
+                "encoded_dna_feature": hdf5_file["unseen"]["encoded_dna_feature"][:],
+                "encoded_language_feature": hdf5_file["unseen"]["encoded_language_feature"][:],
+            }
+            keys_dict = {
+                "encoded_image_feature": hdf5_file["key"]["encoded_image_feature"][:],
+                "encoded_dna_feature": hdf5_file["key"]["encoded_dna_feature"][:],
+                "encoded_language_feature": hdf5_file["key"]["encoded_language_feature"][:],
+            }
         with open(labels_path, "r") as json_file:
             total_dict = json.load(json_file)
         seen_dict["label_list"] = total_dict["seen_gt_dict"]
         unseen_dict["label_list"] = total_dict["unseen_gt_dict"]
+        keys_dict["label_list"] = total_dict["key_gt_dict"]
 
     else:
         # initialize model
@@ -764,65 +767,45 @@ def main(args: DictConfig) -> None:
 
         unseen_dict = get_features_and_label(unseen_dataloader, model, device)
 
-        # small_species_list = load_small_species(args)
+        if args.save_inference and not (os.path.exists(extracted_features_path) and os.path.exists(labels_path)):
+            new_file = h5py.File(extracted_features_path, "w")
+            name_of_splits = ["seen", "unseen", "key"]
+            split_dicts = [seen_dict, unseen_dict, keys_dict]
+            for split_name, split in zip(name_of_splits, split_dicts):
+                group = new_file.create_group(split_name)
+                for embedding_type in ["encoded_image_feature", "encoded_dna_feature", "encoded_language_feature"]:
 
-        acc_dict, per_class_acc, pred_dict = inference_and_print_result(
-            keys_dict,
-            seen_dict,
-            unseen_dict,
-            small_species_list=None,
-            k_list=args.inference_and_eval_setting.k_list,
-        )
 
-        seen_final_pred = pred_dict["encoded_image_feature"]["encoded_dna_feature"]["curr_seen_pred_list"]
-        unseen_final_pred = pred_dict["encoded_image_feature"]["encoded_dna_feature"]["curr_unseen_pred_list"]
-
-        all_unique_seen_species = get_all_unique_species_from_dataloader(seen_keys_dataloader)
-        all_unique_val_unseen_species = get_all_unique_species_from_dataloader(val_unseen_keys_dataloader)
-        all_unique_test_unseen_species = get_all_unique_species_from_dataloader(test_unseen_keys_dataloader)
-
-        print("For seen")
-        check_for_acc_about_correct_predict_seen_or_unseen(seen_final_pred, all_unique_seen_species)
-        print("For unseen")
-        check_for_acc_about_correct_predict_seen_or_unseen(
-            unseen_final_pred, all_unique_val_unseen_species + all_unique_test_unseen_species
-        )
-
-        with open(f"per_class_acc_{args.inference_and_eval_setting.eval_on}.json", "w") as json_file:
-            json.dump(per_class_acc, json_file, indent=4)
-
-        if args.save_inference:
-            np.savez(
-                extracted_features_path,
-                seen_np_all_image_feature=seen_dict["encoded_image_feature"],
-                seen_np_all_dna_feature=seen_dict["encoded_dna_feature"],
-                seen_np_all_language_feature=seen_dict["encoded_language_feature"],
-                unseen_np_all_image_feature=unseen_dict["encoded_image_feature"],
-                unseen_np_all_dna_feature=unseen_dict["encoded_dna_feature"],
-                unseen_np_all_language_feature=unseen_dict["encoded_language_feature"],
-                keys_encoded_image_feature=keys_dict["encoded_image_feature"],
-                keys_encoded_dna_feature=keys_dict["encoded_dna_feature"],
-                keys_encoded_language_feature=keys_dict["encoded_language_feature"],
-            )
+                    group.create_dataset(embedding_type, data=split[embedding_type])
+            new_file.close()
             total_dict = {
                 "seen_gt_dict": seen_dict["label_list"],
                 "unseen_gt_dict": unseen_dict["label_list"],
-                "seen_pred_dict_with_dna_key": pred_dict["encoded_image_feature"]["encoded_dna_feature"][
-                    "curr_seen_pred_list"
-                ],
-                "unseen_pred_dict_with_dna_key": pred_dict["encoded_image_feature"]["encoded_dna_feature"][
-                    "curr_unseen_pred_list"
-                ],
-                "seen_pred_dict_with_image_key": pred_dict["encoded_image_feature"]["encoded_image_feature"][
-                    "curr_seen_pred_list"
-                ],
-                "unseen_pred_dict_with_image_key": pred_dict["encoded_image_feature"]["encoded_image_feature"][
-                    "curr_unseen_pred_list"
-                ],
+                "key_gt_dict": keys_dict["label_list"],
             }
-
             with open(labels_path, "w") as json_file:
                 json.dump(total_dict, json_file, indent=4)
+
+    acc_dict, per_class_acc, pred_dict = inference_and_print_result(
+        keys_dict,
+        seen_dict,
+        unseen_dict,
+        small_species_list=None,
+        k_list=args.inference_and_eval_setting.k_list,
+    )
+
+    seen_final_pred = pred_dict["encoded_image_feature"]["encoded_dna_feature"]["curr_seen_pred_list"]
+    unseen_final_pred = pred_dict["encoded_image_feature"]["encoded_dna_feature"]["curr_unseen_pred_list"]
+    all_unique_seen_species = get_all_unique_species_from_dataloader(seen_keys_dataloader)
+    all_unique_val_unseen_species = get_all_unique_species_from_dataloader(val_unseen_keys_dataloader)
+    all_unique_test_unseen_species = get_all_unique_species_from_dataloader(test_unseen_keys_dataloader)
+
+    print("For seen")
+    check_for_acc_about_correct_predict_seen_or_unseen(seen_final_pred, all_unique_seen_species)
+    print("For unseen")
+    check_for_acc_about_correct_predict_seen_or_unseen(
+        unseen_final_pred, all_unique_val_unseen_species + all_unique_test_unseen_species
+    )
 
     if args.inference_and_eval_setting.plot_embeddings:
         generate_embedding_plot(
@@ -832,6 +815,7 @@ def main(args: DictConfig) -> None:
             seen_dict["encoded_language_feature"],
             seen_dict["label_list"],
         )
+
     #
     # if args.inference_and_eval_setting.retrieve_images:
     #     image_data = h5py.File(args.bioscan_data.path_to_hdf5_data, "r")
