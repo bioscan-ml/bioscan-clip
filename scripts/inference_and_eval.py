@@ -424,7 +424,6 @@ def make_prediction(query_feature, keys_feature, keys_label, with_similarity=Fal
             if level not in k_pred_in_diff_level.keys():
                 k_pred_in_diff_level[level] = []
             for i in key_indices:
-                import pdb; pdb.set_trace()
                 k_pred_in_diff_level[level].append(keys_label[i][level])
         pred_list.append(k_pred_in_diff_level)
 
@@ -773,9 +772,7 @@ def main(args: DictConfig) -> None:
             split_dicts = [seen_dict, unseen_dict, keys_dict]
             for split_name, split in zip(name_of_splits, split_dicts):
                 group = new_file.create_group(split_name)
-                for embedding_type in ["encoded_image_feature", "encoded_dna_feature", "encoded_language_feature"]:
-
-
+                for embedding_type in split.keys():
                     group.create_dataset(embedding_type, data=split[embedding_type])
             new_file.close()
             total_dict = {
