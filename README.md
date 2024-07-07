@@ -34,11 +34,11 @@ We provide pretrained embeddings and model weights.  We evaluate our models by e
 | Training data |  Aligned modalities |  Embeddings |  Model  | Config |  
 |---------------|---------------------|-------------|---------|--------|
 | BIOSCAN-1M    |  None               |  TODO       |  TODO   |  TODO  |
-| BIOSCAN-1M    |  **I**mage + **D**NA        |  TODO       |  TODO   |  TODO  | 
-| BIOSCAN-1M    |  **I**mage + **D**NA + **T**ax  |  TODO       |  [Link](https://aspis.cmpt.sfu.ca/projects/bioscan/clip_project/ckpt/bioscan_clip/version_0_1_0/lora_vit_lora_bert_ssl_batch_size_400/best.pth)|  TODO  | 
+| BIOSCAN-1M    |  **I**mage + **D**NA        |  [Link](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/extracted_embedding/bioscan_1m/lora_vit_lora_barcode_bert_ssl_batch_size_400/extracted_feature_from_val_split.hdf5)        |  TODO   |  TODO  | 
+| BIOSCAN-1M    |  **I**mage + **D**NA + **T**ax  |  [Link](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/extracted_embedding/bioscan_1m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400/extracted_feature_from_val_split.hdf5)       |  [Link](https://aspis.cmpt.sfu.ca/projects/bioscan/clip_project/ckpt/bioscan_clip/version_0_1_0/lora_vit_lora_bert_ssl_batch_size_400/best.pth)|  TODO  | 
 | BIOSCAN-5M    |  None               |  TODO       |  TODO   |  TODO  |
-| BIOSCAN-5M    |  **I**mage + **D**NA        |  TODO       |  TODO   |  TODO  |
-| BIOSCAN-5M    |  **I**mage + **D**NA + **T**ax  |  TODO       |  [Link](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/ckpt/best.pth)|   TODO  |
+| BIOSCAN-5M    |  **I**mage + **D**NA        |  [Link](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/extracted_embedding/bioscan_5m/lora_vit_lora_barcode_bert_ssl_batch_size_400/extracted_feature_from_val_split.hdf5)       |  TODO   |  TODO  |
+| BIOSCAN-5M    |  **I**mage + **D**NA + **T**ax  |  [Link](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/extracted_embedding/bioscan_5m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400/extracted_feature_from_val_split.hdf5)       |  [Link](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/ckpt/best.pth)|   TODO  |
 
 ## Using pretrained models to extract embeddings
 
