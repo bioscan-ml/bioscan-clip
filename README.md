@@ -141,7 +141,7 @@ For multi-GPU training, you may need to specify the transport communication betw
 NCCL_P2P_LEVEL=NVL python scripts/train_cl.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_ssl'
 ```
 
-To train the full model (I+D+T) using BIOSCAN-5M:
+For example, using the following command, you can load the pre-trained ViT-B, BarcodeBERT, and BERT-small and fine-tune them through contrastive learning. Note that this training will only update their LoRA layers, not all the parameters.
 ```shell
 python scripts/train_cl.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_5m'
 ```
