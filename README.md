@@ -98,9 +98,24 @@ You can check [BIOSCAN-1M](https://github.com/zahrag/BIOSCAN-1M) and [BIOSCAN-5M
 
 The data is stored in HDF5 format with the following structure. Each dataset contains multiple groups, each representing different splits of the data.
 
-### Group Structure
 
-Each group represents a specific data split and contains several datasets:
+### Group Structure
+Each group represents a specific data split and contains several datasets. The groups are organized as follows:
+
+- `all_keys`: Contains all data that will be used as key during the evaluation.
+- `val_seen`: Contains seen query data for validation.
+- `test_seen`: Contains seen query data for testing.
+- `seen_keys`: Contains seen data that will be used as key during the evaluation. Note, for BIOSCAN-5M, these data are also used for training.
+- `test_unseen`: Contains unseen test data.
+- `val_unseen`: Contains unseen validation data.
+- `unseen_keys`: Contains unseen data that will be used as key during the evaluation.
+- `no_split_and_seen_train`: All data that will be used for contrastive pretrain.
+
+Notably, there are some slight differences in the group structure of the BIOSCAN-1M and BIOSCAN-5M data, but they are fundamentally consistent.
+
+### Dataset Structure
+
+Each group contains several datasets:
 
 - `image`: Stores the image data as byte arrays.
 - `image_mask`: Stores the length of each image byte array.
