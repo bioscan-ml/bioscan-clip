@@ -40,14 +40,28 @@ We provide pretrained embeddings and model weights.  We evaluate our models by e
 | BIOSCAN-5M    |  **I**mage + **D**NA        |  [Embedding](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/extracted_embedding/bioscan_5m/lora_vit_lora_barcode_bert_ssl_batch_size_400/extracted_feature_from_val_split.hdf5) [Label](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/extracted_embedding/bioscan_5m/lora_vit_lora_barcode_bert_ssl_batch_size_400/labels_val.json)       |  [Link](https://aspis.cmpt.sfu.ca/projects/bioscan/clip_project/ckpt/bioscan_clip/BIOSCAN_5M_for_downloading/ckpt/trained_with_bioscan_5m/image_dna.pth)    |  [Link](/localhome/zmgong/Desktop/projects/bioscan/www/BIOSCAN_5M_for_downloading/config_files/for_bioscan_5m/lora_vit_lora_barcode_bert_5m.yaml)  |
 | BIOSCAN-5M    |  **I**mage + **D**NA + **T**ax  |  [Embedding](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/extracted_embedding/bioscan_5m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400/extracted_feature_from_val_split.hdf5) [Label](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/extracted_embedding/bioscan_5m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400/labels_val.json)      |  [Link](https://aspis.cmpt.sfu.ca/projects/bioscan/clip_project/ckpt/bioscan_clip/BIOSCAN_5M_for_downloading/ckpt/trained_with_bioscan_5m/image_dna_text.pth)|   [Link](/localhome/zmgong/Desktop/projects/bioscan/www/BIOSCAN_5M_for_downloading/config_files/for_bioscan_5m/lora_vit_lora_barcode_bert_lora_bert_5m.yaml)  |
 
-## Using pretrained models to extract embeddings
+## Quick start
+Instead of conducting a full training, you can choose to download pre-trained models or pre-extracted embeddings for evaluation.
 
-TODO: provide short description of what this script does
+To evaluate with a pre-trained model or pre-extracted embeddings, you need to place the corresponding trained model or extracted embeddings in the location specified in the config file：
 
+For example, evaluate with model that pre-trained with Image+DNA+Text from BIOSCAN-5M:
 ```shell
-# From project folder
-python scripts/extract_embedding.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_ssl'
-python scripts/extract_embedding.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_5m'
+mkdir -p ckpt/bioscan_clip_5m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400
+cd ckpt/bioscan_clip_5m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400
+wget https://aspis.cmpt.sfu.ca/projects/bioscan/clip_project/ckpt/bioscan_clip/BIOSCAN_5M_for_downloading/ckpt/trained_with_bioscan_1m/image_dna_text.pth
+cd ../../..
+python scripts/inference_and_eval.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_5m'
+```
+Note: Running `inference_and_eval.py` with pre-trained model with generate the extracted embeddings and labels.
+
+Evaluate with extracted embeddings:
+```shell
+mkdir -p extracted_embedding/bioscan_5m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400_5m
+wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/extracted_embedding/bioscan_5m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400/extracted_feature_from_val_split.hdf5
+wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/extracted_embedding/bioscan_5m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400/labels_val.json
+cd ../../..
+python scripts/inference_and_eval.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_5m'
 ```
 
 # Download dataset
