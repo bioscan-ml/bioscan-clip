@@ -424,7 +424,11 @@ def make_prediction(query_feature, keys_feature, keys_label, with_similarity=Fal
             if level not in k_pred_in_diff_level.keys():
                 k_pred_in_diff_level[level] = []
             for i in key_indices:
-                k_pred_in_diff_level[level].append(keys_label[i][level])
+                try:
+                    k_pred_in_diff_level[level].append(keys_label[i][level])
+                except:
+                    print(keys_label[i])
+                    exit()
         pred_list.append(k_pred_in_diff_level)
 
     out = [pred_list]
@@ -522,7 +526,11 @@ def print_micro_and_macro_acc(acc_dict, k_list):
     rows = []
     rows_for_copy_to_google_doc = []
     for query_feature_type in All_TYPE_OF_FEATURES_OF_QUERY:
+        if query_feature_type not in acc_dict.keys():
+            continue
         for key_feature_type in All_TYPE_OF_FEATURES_OF_KEY:
+            if key_feature_type not in acc_dict[query_feature_type].keys():
+                continue
             for type_of_acc in ["micro_acc", "macro_acc"]:
                 for k in k_list:
                     if len(list(acc_dict[query_feature_type][key_feature_type].keys())) == 0:
@@ -564,10 +572,15 @@ def inference_and_print_result(keys_dict, seen_dict, unseen_dict, small_species_
     pred_dict = {}
 
     for query_feature_type in All_TYPE_OF_FEATURES_OF_QUERY:
+        if query_feature_type not in seen_dict.keys():
+            continue
         acc_dict[query_feature_type] = {}
         per_class_acc[query_feature_type] = {}
         pred_dict[query_feature_type] = {}
+
         for key_feature_type in All_TYPE_OF_FEATURES_OF_KEY:
+            if key_feature_type not in keys_dict.keys():
+                continue
             acc_dict[query_feature_type][key_feature_type] = {}
             per_class_acc[query_feature_type][key_feature_type] = {}
             pred_dict[query_feature_type][key_feature_type] = {}
@@ -698,7 +711,6 @@ def get_features_and_label(dataloader, model, device, for_key_set=False):
 
 @hydra.main(config_path="../bioscanclip/config", config_name="global_config", version_base="1.1")
 def main(args: DictConfig) -> None:
-
     args.save_inference = True
     if os.path.exists(os.path.join(args.model_config.ckpt_path, "best.pth")):
         args.model_config.ckpt_path = os.path.join(args.model_config.ckpt_path, "best.pth")
@@ -719,8 +731,6 @@ def main(args: DictConfig) -> None:
         print("Loading embeddings from file...")
 
         with h5py.File(extracted_features_path, 'r') as hdf5_file:
-
-
             seen_dict = {
 
             }
@@ -751,8 +761,10 @@ def main(args: DictConfig) -> None:
         print("Initialize model...")
 
         model = load_clip_model(args, device)
-        checkpoint = torch.load(args.model_config.ckpt_path, map_location="cuda:0")
-        model.load_state_dict(checkpoint)
+
+        if args.model_config.load_ckpt:
+            checkpoint = torch.load(args.model_config.ckpt_path, map_location="cuda:0")
+            model.load_state_dict(checkpoint)
 
         # Load data
         args.model_config.batch_size = 24
