@@ -49,7 +49,7 @@ For example, evaluate with model that pre-trained with Image+DNA+Text from BIOSC
 ```shell
 mkdir -p ckpt/bioscan_clip_5m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400
 cd ckpt/bioscan_clip_5m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400
-wget https://aspis.cmpt.sfu.ca/projects/bioscan/clip_project/ckpt/bioscan_clip/BIOSCAN_5M_for_downloading/ckpt/trained_with_bioscan_1m/image_dna_text.pth
+wget https://aspis.cmpt.sfu.ca/projects/bioscan/clip_project/ckpt/bioscan_clip/BIOSCAN_5M_for_downloading/ckpt/trained_with_bioscan_5m/image_dna_text.pth
 cd ../../..
 python scripts/inference_and_eval.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_5m'
 ```
