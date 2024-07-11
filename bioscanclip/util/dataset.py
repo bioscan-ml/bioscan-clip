@@ -769,10 +769,6 @@ class INSECTDataset(Dataset):
 
         label = self.labels[index]
 
-        if self.for_training:
-            return curr_image, dna_barcode, self.input_ids[index], self.attention_mask[index], \
-                self.token_type_ids[index], label
-
         return image_id, curr_image, dna_barcode, self.input_ids[index], self.attention_mask[index], \
         self.token_type_ids[index], label
 
