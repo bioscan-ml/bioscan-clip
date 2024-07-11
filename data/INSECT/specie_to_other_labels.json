@@ -1,0 +1,6064 @@
+{
+    "Othius myrmecophilus": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Othius"
+    },
+    "Poecilus cupreus": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Poecilus"
+    },
+    "Tipula bergrothiana": {
+        "order": "Diptera",
+        "family": "Tipulidae",
+        "genus": "Tipula"
+    },
+    "Armigeres subalbatus": {
+        "order": "Diptera",
+        "family": "Culicidae",
+        "genus": "Armigeres"
+    },
+    "Diamesa bohemani": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Diamesa"
+    },
+    "Stenagostus rhombeus": {
+        "order": "Coleoptera",
+        "family": "Elateridae",
+        "genus": "Stenagostus"
+    },
+    "Symplecta cana": {
+        "order": "Diptera",
+        "family": "Limoniidae",
+        "genus": "Symplecta"
+    },
+    "Malthodes guttifer": {
+        "order": "Coleoptera",
+        "family": "Cantharidae",
+        "genus": "Malthodes"
+    },
+    "Sterictiphora angelicae": {
+        "order": "Hymenoptera",
+        "family": "Argidae",
+        "genus": "Sterictiphora"
+    },
+    "Hylaeus angustatus": {
+        "order": "Hymenoptera",
+        "family": "Colletidae",
+        "genus": "Hylaeus"
+    },
+    "Tenthredo cordillera": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Tenthredo"
+    },
+    "Tetrastichus leocrates": {
+        "order": "Hymenoptera",
+        "family": "Eulophidae",
+        "genus": "Tetrastichus"
+    },
+    "Tetrastichus suecus": {
+        "order": "Hymenoptera",
+        "family": "Eulophidae",
+        "genus": "Tetrastichus"
+    },
+    "Trypoxylon medium": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Trypoxylon"
+    },
+    "Brachypterolus pulicarius": {
+        "order": "Coleoptera",
+        "family": "Kateretidae",
+        "genus": "Brachypterolus"
+    },
+    "Dolichurus corniculus": {
+        "order": "Hymenoptera",
+        "family": "Ampulicidae",
+        "genus": "Dolichurus"
+    },
+    "Allantus cinctus": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Allantus"
+    },
+    "Andrena propinqua": {
+        "order": "Hymenoptera",
+        "family": "Andrenidae",
+        "genus": "Andrena"
+    },
+    "Elaphrus cupreus": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Elaphrus"
+    },
+    "Micropsectra junci": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Micropsectra"
+    },
+    "Polydrusus confluens": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Polydrusus"
+    },
+    "Tenthredo obsoleta": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Tenthredo"
+    },
+    "Toxomerus pictus": {
+        "order": "Diptera",
+        "family": "Syrphidae",
+        "genus": "Toxomerus"
+    },
+    "Eristalis arbustorum": {
+        "order": "Diptera",
+        "family": "Syrphidae",
+        "genus": "Eristalis"
+    },
+    "Olla v-nigrum": {
+        "order": "Coleoptera",
+        "family": "Coccinellidae",
+        "genus": "Olla"
+    },
+    "Polyrhachis ammon": {
+        "order": "Hymenoptera",
+        "family": "Formicidae",
+        "genus": "Polyrhachis"
+    },
+    "Bembidion tibiale": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Bembidion"
+    },
+    "Hylaeus annulatus": {
+        "order": "Hymenoptera",
+        "family": "Colletidae",
+        "genus": "Hylaeus"
+    },
+    "Lasioglossum leucozonium": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Lasioglossum"
+    },
+    "Andrena nigroaenea": {
+        "order": "Hymenoptera",
+        "family": "Andrenidae",
+        "genus": "Andrena"
+    },
+    "Harmonia eucharis": {
+        "order": "Coleoptera",
+        "family": "Coccinellidae",
+        "genus": "Harmonia"
+    },
+    "Nesoselandria morio": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Nesoselandria"
+    },
+    "Sphecodes crassus": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Sphecodes"
+    },
+    "Chrysolina varians": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Chrysolina"
+    },
+    "Lasioglossum birkmanni": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Lasioglossum"
+    },
+    "Agonum marginatum": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Agonum"
+    },
+    "Stenurella bifasciata": {
+        "order": "Coleoptera",
+        "family": "Cerambycidae",
+        "genus": "Stenurella"
+    },
+    "Malachius bipustulatus": {
+        "order": "Coleoptera",
+        "family": "Melyridae",
+        "genus": "Malachius"
+    },
+    "Carpelimus bilineatus": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Carpelimus"
+    },
+    "Nitela borealis": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Nitela"
+    },
+    "Stictochironomus unguiculatus": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Stictochironomus"
+    },
+    "Bembidion fluviatile": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Bembidion"
+    },
+    "Dolerus gonager": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Dolerus"
+    },
+    "Halictus confusus": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Seladonia"
+    },
+    "Macrophya annulata": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Macrophya"
+    },
+    "Ischiodon scutellaris": {
+        "order": "Diptera",
+        "family": "Syrphidae",
+        "genus": "Ischiodon"
+    },
+    "Bledius opacus": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Bledius"
+    },
+    "Brachypterus urticae": {
+        "order": "Coleoptera",
+        "family": "Kateretidae",
+        "genus": "Brachypterus"
+    },
+    "Dromius quadrimaculatus": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Dromius"
+    },
+    "Hylobius abietis": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Hylobius"
+    },
+    "Omophlus lividipes": {
+        "order": "Coleoptera",
+        "family": "Tenebrionidae",
+        "genus": "Omophlus"
+    },
+    "Bradycellus harpalinus": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Bradycellus"
+    },
+    "Smaragdina affinis": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Smaragdina"
+    },
+    "Tapinoma sessile": {
+        "order": "Hymenoptera",
+        "family": "Formicidae",
+        "genus": "Tapinoma"
+    },
+    "Taxonus agrorum": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Taxonus"
+    },
+    "Tetrastichus ballotus": {
+        "order": "Hymenoptera",
+        "family": "Eulophidae",
+        "genus": "Tetrastichus"
+    },
+    "Colymbetes dolabratus": {
+        "order": "Coleoptera",
+        "family": "Dytiscidae",
+        "genus": "Colymbetes"
+    },
+    "Elaphrus riparius": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Elaphrus"
+    },
+    "Aplotarsus incanus": {
+        "order": "Coleoptera",
+        "family": "Elateridae",
+        "genus": "Aplotarsus"
+    },
+    "Drosophila affinis": {
+        "order": "Diptera",
+        "family": "Drosophilidae",
+        "genus": "Drosophila"
+    },
+    "Dolerus nigratus": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Dolerus"
+    },
+    "Ilybius fuliginosus": {
+        "order": "Coleoptera",
+        "family": "Dytiscidae",
+        "genus": "Ilybius"
+    },
+    "Uloma culinaris": {
+        "order": "Coleoptera",
+        "family": "Tenebrionidae",
+        "genus": "Uloma"
+    },
+    "Hydrotaea dentipes": {
+        "order": "Diptera",
+        "family": "Muscidae",
+        "genus": "Hydrotaea"
+    },
+    "Birka cinereipes": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Birka"
+    },
+    "Hylaeus dilatatus": {
+        "order": "Hymenoptera",
+        "family": "Colletidae",
+        "genus": "Hylaeus"
+    },
+    "Psorophora cyanescens": {
+        "order": "Diptera",
+        "family": "Culicidae",
+        "genus": "Psorophora"
+    },
+    "Brachypogon sociabilis": {
+        "order": "Diptera",
+        "family": "Ceratopogonidae",
+        "genus": "Brachypogon"
+    },
+    "Aeolus mellillus": {
+        "order": "Coleoptera",
+        "family": "Elateridae",
+        "genus": "Aeolus"
+    },
+    "Gyrohypnus angustatus": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Gyrohypnus"
+    },
+    "Hoplitis papaveris": {
+        "order": "Hymenoptera",
+        "family": "Megachilidae",
+        "genus": "Hoplitis"
+    },
+    "Harmonia axyridis": {
+        "order": "Coleoptera",
+        "family": "Coccinellidae",
+        "genus": "Harmonia"
+    },
+    "Bembidion femoratum": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Bembidion"
+    },
+    "Platycheirus neoperpallidus": {
+        "order": "Diptera",
+        "family": "Syrphidae",
+        "genus": "Platycheirus"
+    },
+    "Protophormia terraenovae": {
+        "order": "Diptera",
+        "family": "Calliphoridae",
+        "genus": "Protophormia"
+    },
+    "Cladius compressicornis": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Cladius"
+    },
+    "Anchomenus dorsalis": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Anchomenus"
+    },
+    "Psylliodes isatidis": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Psylliodes"
+    },
+    "Arge gracilicornis": {
+        "order": "Hymenoptera",
+        "family": "Argidae",
+        "genus": "Arge"
+    },
+    "Andrena mitis": {
+        "order": "Hymenoptera",
+        "family": "Andrenidae",
+        "genus": "Andrena"
+    },
+    "Bisnius hyperboreus": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Bisnius"
+    },
+    "Athalia cordata": {
+        "order": "Hymenoptera",
+        "family": "Athaliidae",
+        "genus": "Athalia"
+    },
+    "Chrysomya megacephala": {
+        "order": "Diptera",
+        "family": "Calliphoridae",
+        "genus": "Chrysomya"
+    },
+    "Cladius brullei": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Cladius"
+    },
+    "Pyropterus nigroruber": {
+        "order": "Coleoptera",
+        "family": "Lycidae",
+        "genus": "Pyropterus"
+    },
+    "Claremontia waldheimii": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Claremontia"
+    },
+    "Tenthredo mandibularis": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Tenthredo"
+    },
+    "Pterostichus nigrita": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Pterostichus"
+    },
+    "Tetrastichus atratulus": {
+        "order": "Hymenoptera",
+        "family": "Eulophidae",
+        "genus": "Tetrastichus"
+    },
+    "Rhinoncus castor": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Rhinoncus"
+    },
+    "Hydroporus morio": {
+        "order": "Coleoptera",
+        "family": "Dytiscidae",
+        "genus": "Hydroporus"
+    },
+    "Philonthus quisquiliarius": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Philonthus"
+    },
+    "Amara bifrons": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Amara"
+    },
+    "Clytra quadripunctata": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Clytra"
+    },
+    "Pagiocerus frontalis": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Pagiocerus"
+    },
+    "Tenthredo stricklandi": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Tenthredo"
+    },
+    "Aedes serratus": {
+        "order": "Diptera",
+        "family": "Culicidae",
+        "genus": "Ochlerotatus"
+    },
+    "Athalia circularis": {
+        "order": "Hymenoptera",
+        "family": "Athaliidae",
+        "genus": "Athalia"
+    },
+    "Tetrastichus cumulus": {
+        "order": "Hymenoptera",
+        "family": "Eulophidae",
+        "genus": "Tetrastichus"
+    },
+    "Drosophila putrida": {
+        "order": "Diptera",
+        "family": "Drosophilidae",
+        "genus": "Drosophila"
+    },
+    "Lestica clypeata": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Lestica"
+    },
+    "Megarthrus sinuatocollis": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Megarthrus"
+    },
+    "Olibrus aeneus": {
+        "order": "Coleoptera",
+        "family": "Phalacridae",
+        "genus": "Olibrus"
+    },
+    "Pseudosmittia albipennis": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Pseudosmittia"
+    },
+    "Hoplitis leucomelana": {
+        "order": "Hymenoptera",
+        "family": "Megachilidae",
+        "genus": "Hoplitis"
+    },
+    "Cantharis lateralis": {
+        "order": "Coleoptera",
+        "family": "Cantharidae",
+        "genus": "Cantharis"
+    },
+    "Bembidion velox": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Bembidion"
+    },
+    "Aedes albopictus": {
+        "order": "Diptera",
+        "family": "Culicidae",
+        "genus": "Aedes"
+    },
+    "Aedes angustivittatus": {
+        "order": "Diptera",
+        "family": "Culicidae",
+        "genus": "Ochlerotatus"
+    },
+    "Anthaxia quadripunctata": {
+        "order": "Coleoptera",
+        "family": "Buprestidae",
+        "genus": "Anthaxia"
+    },
+    "Pyrochroa coccinea": {
+        "order": "Coleoptera",
+        "family": "Pyrochroidae",
+        "genus": "Pyrochroa"
+    },
+    "Hoplocampa fulvicornis": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Hoplocampa"
+    },
+    "Micropsectra nigripila": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Micropsectra"
+    },
+    "Dalopius marginatus": {
+        "order": "Coleoptera",
+        "family": "Elateridae",
+        "genus": "Dalopius"
+    },
+    "Heterarthrus nemoratus": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Heterarthrus"
+    },
+    "Dolerus aericeps": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Dolerus"
+    },
+    "Dasytes plumbeus": {
+        "order": "Coleoptera",
+        "family": "Melyridae",
+        "genus": "Dasytes"
+    },
+    "Diplolepis fusiformans": {
+        "order": "Hymenoptera",
+        "family": "Cynipidae",
+        "genus": "Diplolepis"
+    },
+    "Cratyna nobilis": {
+        "order": "Diptera",
+        "family": "Sciaridae",
+        "genus": "Cratyna"
+    },
+    "Plectophloeus nitidus": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Plectophloeus"
+    },
+    "Tenuipetiolus ruber": {
+        "order": "Hymenoptera",
+        "family": "Eurytomidae",
+        "genus": "Tenuipetiolus"
+    },
+    "Chauliognathus marginatus": {
+        "order": "Coleoptera",
+        "family": "Cantharidae",
+        "genus": "Chauliognathus"
+    },
+    "Rhagonycha atra": {
+        "order": "Coleoptera",
+        "family": "Cantharidae",
+        "genus": "Rhagonycha"
+    },
+    "Ampedus pomonae": {
+        "order": "Coleoptera",
+        "family": "Elateridae",
+        "genus": "Ampedus"
+    },
+    "Deporaus betulae": {
+        "order": "Coleoptera",
+        "family": "Attelabidae",
+        "genus": "Deporaus"
+    },
+    "Claremontia brevicornis": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Claremontia"
+    },
+    "Hydrotaea ignava": {
+        "order": "Diptera",
+        "family": "Muscidae",
+        "genus": "Hydrotaea"
+    },
+    "Monochamus sutor": {
+        "order": "Coleoptera",
+        "family": "Cerambycidae",
+        "genus": "Monochamus"
+    },
+    "Hylaeus hyalinatus": {
+        "order": "Hymenoptera",
+        "family": "Colletidae",
+        "genus": "Hylaeus"
+    },
+    "Lucilia sericata": {
+        "order": "Diptera",
+        "family": "Calliphoridae",
+        "genus": "Lucilia"
+    },
+    "Empria liturata": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Empria"
+    },
+    "Apis mellifera": {
+        "order": "Hymenoptera",
+        "family": "Apidae",
+        "genus": "Apis"
+    },
+    "Platycheirus pictipes": {
+        "order": "Diptera",
+        "family": "Syrphidae",
+        "genus": "Platycheirus"
+    },
+    "Pseudocistela ceramboides": {
+        "order": "Coleoptera",
+        "family": "Tenebrionidae",
+        "genus": "Pseudocistela"
+    },
+    "Aedes euplocamus": {
+        "order": "Diptera",
+        "family": "Culicidae",
+        "genus": "Ochlerotatus"
+    },
+    "Coelioxys conica": {
+        "order": "Hymenoptera",
+        "family": "Megachilidae",
+        "genus": "Coelioxys"
+    },
+    "Chaetocladius holmgreni": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Chaetocladius"
+    },
+    "Phormia regina": {
+        "order": "Diptera",
+        "family": "Calliphoridae",
+        "genus": "Phormia"
+    },
+    "Polistes metricus": {
+        "order": "Hymenoptera",
+        "family": "Vespidae",
+        "genus": "Polistes"
+    },
+    "Enochrus affinis": {
+        "order": "Coleoptera",
+        "family": "Hydrophilidae",
+        "genus": "Enochrus"
+    },
+    "Aedes vexans": {
+        "order": "Diptera",
+        "family": "Culicidae",
+        "genus": "Aedes"
+    },
+    "Dolerus nitens": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Dolerus"
+    },
+    "Euplectrus bicolor": {
+        "order": "Hymenoptera",
+        "family": "Eulophidae",
+        "genus": "Euplectrus"
+    },
+    "Sphaerophoria philanthus": {
+        "order": "Diptera",
+        "family": "Syrphidae",
+        "genus": "Sphaerophoria"
+    },
+    "Spilogona aerea": {
+        "order": "Diptera",
+        "family": "Muscidae",
+        "genus": "Spilogona"
+    },
+    "Phyllotreta atra": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Phyllotreta"
+    },
+    "Tenthredo flaveola": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Tenthredo"
+    },
+    "Simulium ganalesense": {
+        "order": "Diptera",
+        "family": "Simuliidae",
+        "genus": "Simulium"
+    },
+    "Stomoxys calcitrans": {
+        "order": "Diptera",
+        "family": "Muscidae",
+        "genus": "Stomoxys"
+    },
+    "Anisodactylus binotatus": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Anisodactylus"
+    },
+    "Lebia viridis": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Lebia"
+    },
+    "Cerceris arenaria": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Cerceris"
+    },
+    "Aulacophora indica": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Aulacophora"
+    },
+    "Phratora vitellinae": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Phratora"
+    },
+    "Alloxysta castanea": {
+        "order": "Hymenoptera",
+        "family": "Figitidae",
+        "genus": "Alloxysta"
+    },
+    "Rhinoncus pericarpius": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Rhinoncus"
+    },
+    "Symplecta pilipes": {
+        "order": "Diptera",
+        "family": "Limoniidae",
+        "genus": "Symplecta"
+    },
+    "Trypoxylon figulus": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Trypoxylon"
+    },
+    "Atrichopogon levis": {
+        "order": "Diptera",
+        "family": "Ceratopogonidae",
+        "genus": "Atrichopogon"
+    },
+    "Hylaeus variegatus": {
+        "order": "Hymenoptera",
+        "family": "Colletidae",
+        "genus": "Hylaeus"
+    },
+    "Mansonia uniformis": {
+        "order": "Diptera",
+        "family": "Culicidae",
+        "genus": "Mansonia"
+    },
+    "Phyllotreta striolata": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Phyllotreta"
+    },
+    "Athous haemorrhoidalis": {
+        "order": "Coleoptera",
+        "family": "Elateridae",
+        "genus": "Athous"
+    },
+    "Coccinella undecimpunctata": {
+        "order": "Coleoptera",
+        "family": "Coccinellidae",
+        "genus": "Coccinella"
+    },
+    "Drosophila subobscura": {
+        "order": "Diptera",
+        "family": "Drosophilidae",
+        "genus": "Drosophila"
+    },
+    "Bactrocera nigrotibialis": {
+        "order": "Diptera",
+        "family": "Tephritidae",
+        "genus": "Bactrocera"
+    },
+    "Andrena flavipes": {
+        "order": "Hymenoptera",
+        "family": "Andrenidae",
+        "genus": "Andrena"
+    },
+    "Nematinus fuscipennis": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Nematinus"
+    },
+    "Neocrepidodera ferruginea": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Neocrepidodera"
+    },
+    "Myrmica scabrinodis": {
+        "order": "Hymenoptera",
+        "family": "Formicidae",
+        "genus": "Myrmica"
+    },
+    "Philonthus decorus": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Philonthus"
+    },
+    "Bembidion litorale": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Bembidion"
+    },
+    "Atheta sodalis": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Atheta"
+    },
+    "Phyllobius pyri": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Phyllobius"
+    },
+    "Bembidion obtusum": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Bembidion"
+    },
+    "Coccidula rufa": {
+        "order": "Coleoptera",
+        "family": "Coccinellidae",
+        "genus": "Coccidula"
+    },
+    "Acordulecera dorsalis": {
+        "order": "Hymenoptera",
+        "family": "Pergidae",
+        "genus": "Acordulecera"
+    },
+    "Empria longicornis": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Empria"
+    },
+    "Gonioctena linnaeana": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Gonioctena"
+    },
+    "Ochlerotatus vigilax": {
+        "order": "Diptera",
+        "family": "Culicidae",
+        "genus": "Ochlerotatus"
+    },
+    "Pterostichus multipunctatus": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Pterostichus"
+    },
+    "Tenthredopsis scutellaris": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Tenthredopsis"
+    },
+    "Selandria serva": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Selandria"
+    },
+    "Agonum fuliginosum": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Agonum"
+    },
+    "Bodilopsis rufa": {
+        "order": "Coleoptera",
+        "family": "Scarabaeidae",
+        "genus": "Aphodius"
+    },
+    "Carabus nemoralis": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Carabus"
+    },
+    "Harpactus elegans": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Harpactus"
+    },
+    "Fannia manicata": {
+        "order": "Diptera",
+        "family": "Fanniidae",
+        "genus": "Fannia"
+    },
+    "Siphona paludosa": {
+        "order": "Diptera",
+        "family": "Tachinidae",
+        "genus": "Siphona"
+    },
+    "Agonum sexpunctatum": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Agonum"
+    },
+    "Agapanthia pannonica": {
+        "order": "Coleoptera",
+        "family": "Cerambycidae",
+        "genus": "Agapanthia"
+    },
+    "Oulema gallaeciana": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Oulema"
+    },
+    "Polypedilum cultellatum": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Polypedilum"
+    },
+    "Olibrus bicolor": {
+        "order": "Coleoptera",
+        "family": "Phalacridae",
+        "genus": "Olibrus"
+    },
+    "Pamphilius hortorum": {
+        "order": "Hymenoptera",
+        "family": "Pamphiliidae",
+        "genus": "Pamphilius"
+    },
+    "Tenthredo notha": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Tenthredo"
+    },
+    "Anthrenus museorum": {
+        "order": "Coleoptera",
+        "family": "Dermestidae",
+        "genus": "Anthrenus"
+    },
+    "Bembidion tetracolum": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Bembidion"
+    },
+    "Dicheirotrichus placidus": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Dicheirotrichus"
+    },
+    "Microcara testacea": {
+        "order": "Coleoptera",
+        "family": "Scirtidae",
+        "genus": "Microcara"
+    },
+    "Amara quenseli": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Amara"
+    },
+    "Contacyphon variabilis": {
+        "order": "Coleoptera",
+        "family": "Scirtidae",
+        "genus": "Contacyphon"
+    },
+    "Bradycellus verbasci": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Bradycellus"
+    },
+    "Cricotopus tibialis": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Cricotopus"
+    },
+    "Leptothorax canadensis": {
+        "order": "Hymenoptera",
+        "family": "Formicidae",
+        "genus": "Leptothorax"
+    },
+    "Stenus flavipalpis": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Stenus"
+    },
+    "Paralucilia fulvinota": {
+        "order": "Diptera",
+        "family": "Calliphoridae",
+        "genus": "Paralucilia"
+    },
+    "Adrastus pallens": {
+        "order": "Coleoptera",
+        "family": "Elateridae",
+        "genus": "Adrastus"
+    },
+    "Cicindela hybrida": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Cicindela"
+    },
+    "Drosophila simulans": {
+        "order": "Diptera",
+        "family": "Drosophilidae",
+        "genus": "Drosophila"
+    },
+    "Megachile versicolor": {
+        "order": "Hymenoptera",
+        "family": "Megachilidae",
+        "genus": "Megachile"
+    },
+    "Bembidion modestum": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Bembidion"
+    },
+    "Lasioglossum costulatum": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Lasioglossum"
+    },
+    "Metriocnemus brusti": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Metriocnemus"
+    },
+    "Olophrum consimile": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Olophrum"
+    },
+    "Prionocera turcica": {
+        "order": "Diptera",
+        "family": "Tipulidae",
+        "genus": "Prionocera"
+    },
+    "Aloconota gregaria": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Aloconota"
+    },
+    "Alosterna tabacicolor": {
+        "order": "Coleoptera",
+        "family": "Cerambycidae",
+        "genus": "Alosterna"
+    },
+    "Arge ciliaris": {
+        "order": "Hymenoptera",
+        "family": "Argidae",
+        "genus": "Arge"
+    },
+    "Colletes cunicularius": {
+        "order": "Hymenoptera",
+        "family": "Colletidae",
+        "genus": "Colletes"
+    },
+    "Bactrocera kraussi": {
+        "order": "Diptera",
+        "family": "Tephritidae",
+        "genus": "Bactrocera"
+    },
+    "Contacyphon padi": {
+        "order": "Coleoptera",
+        "family": "Scirtidae",
+        "genus": "Contacyphon"
+    },
+    "Cryptocephalus labiatus": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Cryptocephalus"
+    },
+    "Harpalus latus": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Harpalus"
+    },
+    "Helophilus hybridus": {
+        "order": "Diptera",
+        "family": "Syrphidae",
+        "genus": "Helophilus"
+    },
+    "Polypedilum xianjuensis": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Polypedilum"
+    },
+    "Tetrastichus agonus": {
+        "order": "Hymenoptera",
+        "family": "Eulophidae",
+        "genus": "Tetrastichus"
+    },
+    "Stictoleptura rubra": {
+        "order": "Coleoptera",
+        "family": "Cerambycidae",
+        "genus": "Stictoleptura"
+    },
+    "Tetrastichus inscitus": {
+        "order": "Hymenoptera",
+        "family": "Eulophidae",
+        "genus": "Tetrastichus"
+    },
+    "Oxybelus argentatus": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Oxybelus"
+    },
+    "Agonum viduum": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Agonum"
+    },
+    "Dolichosoma lineare": {
+        "order": "Coleoptera",
+        "family": "Melyridae",
+        "genus": "Dolichosoma"
+    },
+    "Brachinus explodens": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Brachinus"
+    },
+    "Macrophya montana": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Macrophya"
+    },
+    "Nemorimyza posticata": {
+        "order": "Diptera",
+        "family": "Agromyzidae",
+        "genus": "Nemorimyza"
+    },
+    "Vincenzellus ruficollis": {
+        "order": "Coleoptera",
+        "family": "Salpingidae",
+        "genus": "Vincenzellus"
+    },
+    "Loricera pilicornis": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Loricera"
+    },
+    "Lucilia eximia": {
+        "order": "Diptera",
+        "family": "Calliphoridae",
+        "genus": "Lucilia"
+    },
+    "Cerceris quadrifasciata": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Cerceris"
+    },
+    "Adalia bipunctata": {
+        "order": "Coleoptera",
+        "family": "Coccinellidae",
+        "genus": "Adalia"
+    },
+    "Chironomus nipponensis": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Chironomus"
+    },
+    "Polydrusus tereticollis": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Polydrusus"
+    },
+    "Rhagium mordax": {
+        "order": "Coleoptera",
+        "family": "Cerambycidae",
+        "genus": "Rhagium"
+    },
+    "Cerylon histeroides": {
+        "order": "Coleoptera",
+        "family": "Cerylonidae",
+        "genus": "Cerylon"
+    },
+    "Phyllotreta procera": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Phyllotreta"
+    },
+    "Camponotus herculeanus": {
+        "order": "Hymenoptera",
+        "family": "Formicidae",
+        "genus": "Camponotus"
+    },
+    "Dasyhelea modesta": {
+        "order": "Diptera",
+        "family": "Ceratopogonidae",
+        "genus": "Dasyhelea"
+    },
+    "Haliplus lineatocollis": {
+        "order": "Coleoptera",
+        "family": "Haliplidae",
+        "genus": "Haliplus"
+    },
+    "Hypera postica": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Hypera"
+    },
+    "Halictus quadricinctus": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Halictus"
+    },
+    "Metriocnemus eurynotus": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Metriocnemus"
+    },
+    "Simulium tarsatum": {
+        "order": "Diptera",
+        "family": "Simuliidae",
+        "genus": "Simulium"
+    },
+    "Psychoda lativentris": {
+        "order": "Diptera",
+        "family": "Psychodidae",
+        "genus": "Psychoda"
+    },
+    "Aleochara bipustulata": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Aleochara"
+    },
+    "Atheta laevana": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Atheta"
+    },
+    "Andrena minutuloides": {
+        "order": "Hymenoptera",
+        "family": "Andrenidae",
+        "genus": "Andrena"
+    },
+    "Monostegia abdominalis": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Monostegia"
+    },
+    "Eurytoma calcarea": {
+        "order": "Hymenoptera",
+        "family": "Eurytomidae",
+        "genus": "Eurytoma"
+    },
+    "Oedemera podagrariae": {
+        "order": "Coleoptera",
+        "family": "Oedemeridae",
+        "genus": "Oedemera"
+    },
+    "Andrena ampla": {
+        "order": "Hymenoptera",
+        "family": "Andrenidae",
+        "genus": "Andrena"
+    },
+    "Crossocerus annulipes": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Crossocerus"
+    },
+    "Gyrophaena boleti": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Gyrophaena"
+    },
+    "Ilybius subaeneus": {
+        "order": "Coleoptera",
+        "family": "Dytiscidae",
+        "genus": "Ilybius"
+    },
+    "Microrhagus triangularis": {
+        "order": "Coleoptera",
+        "family": "Eucnemidae",
+        "genus": "Microrhagus"
+    },
+    "Phymatodes testaceus": {
+        "order": "Coleoptera",
+        "family": "Cerambycidae",
+        "genus": "Phymatodes"
+    },
+    "Phyllobius argentatus": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Phyllobius"
+    },
+    "Deleaster dichrous": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Deleaster"
+    },
+    "Caenorhinus pauxillus": {
+        "order": "Coleoptera",
+        "family": "Attelabidae",
+        "genus": "Neocoenorrhinus"
+    },
+    "Clinocera fuscipennis": {
+        "order": "Diptera",
+        "family": "Empididae",
+        "genus": "Clinocera"
+    },
+    "Stenocorus cinnamopterus": {
+        "order": "Coleoptera",
+        "family": "Cerambycidae",
+        "genus": "Stenocorus"
+    },
+    "Tachinus elongatus": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Tachinus"
+    },
+    "Ochthephilum fracticorne": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Ochthephilum"
+    },
+    "Aedes aegypti": {
+        "order": "Diptera",
+        "family": "Culicidae",
+        "genus": "Aedes"
+    },
+    "Cerodontha dorsalis": {
+        "order": "Diptera",
+        "family": "Agromyzidae",
+        "genus": "Cerodontha"
+    },
+    "Atheta incognita": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Atheta"
+    },
+    "Blennocampa phyllocolpa": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Blennocampa"
+    },
+    "Macrophya ribis": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Macrophya"
+    },
+    "Melanotus castanipes": {
+        "order": "Coleoptera",
+        "family": "Elateridae",
+        "genus": "Melanotus"
+    },
+    "Habrocerus capillaricornis": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Habrocerus"
+    },
+    "Chironomus kiiensis": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Chironomus"
+    },
+    "Oedemera subulata": {
+        "order": "Coleoptera",
+        "family": "Oedemeridae",
+        "genus": "Oedemera"
+    },
+    "Anisosticta novemdecimpunctata": {
+        "order": "Coleoptera",
+        "family": "Coccinellidae",
+        "genus": "Anisosticta"
+    },
+    "Stenus similis": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Stenus"
+    },
+    "Arge berberidis": {
+        "order": "Hymenoptera",
+        "family": "Argidae",
+        "genus": "Arge"
+    },
+    "Mumetopia occipitalis": {
+        "order": "Diptera",
+        "family": "Anthomyzidae",
+        "genus": "Mumetopia"
+    },
+    "Hypera nigrirostris": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Hypera"
+    },
+    "Bembidion biguttatum": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Bembidion"
+    },
+    "Abax parallelepipedus": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Abax"
+    },
+    "Bembecinus tridens": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Bembecinus"
+    },
+    "Syrphus vitripennis": {
+        "order": "Diptera",
+        "family": "Syrphidae",
+        "genus": "Syrphus"
+    },
+    "Crossocerus megacephalus": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Crossocerus"
+    },
+    "Entomognathus brevis": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Entomognathus"
+    },
+    "Chironomus nippodorsalis": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Chironomus"
+    },
+    "Micropsectra logani": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Micropsectra"
+    },
+    "Panurgus dentipes": {
+        "order": "Hymenoptera",
+        "family": "Andrenidae",
+        "genus": "Panurgus"
+    },
+    "Tipula caliginosa": {
+        "order": "Diptera",
+        "family": "Tipulidae",
+        "genus": "Tipula"
+    },
+    "Delia platura": {
+        "order": "Diptera",
+        "family": "Anthomyiidae",
+        "genus": "Delia"
+    },
+    "Diamesa aberrata": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Diamesa"
+    },
+    "Tenthredo campestris": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Tenthredo"
+    },
+    "Aphaenogaster subterranea": {
+        "order": "Hymenoptera",
+        "family": "Formicidae",
+        "genus": "Aphaenogaster"
+    },
+    "Coelioxys conoidea": {
+        "order": "Hymenoptera",
+        "family": "Megachilidae",
+        "genus": "Coelioxys"
+    },
+    "Andrena pilipes": {
+        "order": "Hymenoptera",
+        "family": "Andrenidae",
+        "genus": "Andrena"
+    },
+    "Polistes wattii": {
+        "order": "Hymenoptera",
+        "family": "Vespidae",
+        "genus": "Polistes"
+    },
+    "Prionocera dimidiata": {
+        "order": "Diptera",
+        "family": "Tipulidae",
+        "genus": "Prionocera"
+    },
+    "Oxytelus piceus": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Oxytelus"
+    },
+    "Culex quinquefasciatus": {
+        "order": "Diptera",
+        "family": "Culicidae",
+        "genus": "Culex"
+    },
+    "Amara ovata": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Amara"
+    },
+    "Chaetocnema hortensis": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Chaetocnema"
+    },
+    "Chilocorus renipustulatus": {
+        "order": "Coleoptera",
+        "family": "Coccinellidae",
+        "genus": "Chilocorus"
+    },
+    "Pemphredon lethifer": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Pemphredon"
+    },
+    "Cerceris ruficornis": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Cerceris"
+    },
+    "Notoxus monoceros": {
+        "order": "Coleoptera",
+        "family": "Anthicidae",
+        "genus": "Notoxus"
+    },
+    "Parakiefferiella bathophila": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Parakiefferiella"
+    },
+    "Scaptomyza adusta": {
+        "order": "Diptera",
+        "family": "Drosophilidae",
+        "genus": "Scaptomyza"
+    },
+    "Laccobius cinereus": {
+        "order": "Coleoptera",
+        "family": "Hydrophilidae",
+        "genus": "Laccobius"
+    },
+    "Orthocladius decoratus": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Orthocladius"
+    },
+    "Dinetus pictus": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Dinetus"
+    },
+    "Hydroporus sinuatipes": {
+        "order": "Coleoptera",
+        "family": "Dytiscidae",
+        "genus": "Hydroporus"
+    },
+    "Olibrus liquidus": {
+        "order": "Coleoptera",
+        "family": "Phalacridae",
+        "genus": "Olibrus"
+    },
+    "Coelosynapha loici": {
+        "order": "Diptera",
+        "family": "Mycetophilidae",
+        "genus": "Coelosynapha"
+    },
+    "Dolerus sanguinicollis": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Dolerus"
+    },
+    "Mycetophila fungorum": {
+        "order": "Diptera",
+        "family": "Mycetophilidae",
+        "genus": "Mycetophila"
+    },
+    "Xantholinus tricolor": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Xantholinus"
+    },
+    "Alloxysta ramulifera": {
+        "order": "Hymenoptera",
+        "family": "Figitidae",
+        "genus": "Alloxysta"
+    },
+    "Megaselia ruficornis": {
+        "order": "Diptera",
+        "family": "Phoridae",
+        "genus": "Megaselia"
+    },
+    "Dicrotendipes tritomus": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Dicrotendipes"
+    },
+    "Lathrobium longulum": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Lathrobium"
+    },
+    "Rugilus rufipes": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Rugilus"
+    },
+    "Coelioxys aurolimbata": {
+        "order": "Hymenoptera",
+        "family": "Megachilidae",
+        "genus": "Coelioxys"
+    },
+    "Cantharis fusca": {
+        "order": "Coleoptera",
+        "family": "Cantharidae",
+        "genus": "Cantharis"
+    },
+    "Culex tritaeniorhynchus": {
+        "order": "Diptera",
+        "family": "Culicidae",
+        "genus": "Culex"
+    },
+    "Cassida vibex": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Cassida"
+    },
+    "Polydrusus formosus": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Polydrusus"
+    },
+    "Carpelimus halophilus": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Carpelimus"
+    },
+    "Ceutorhynchus turbatus": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Ceutorhynchus"
+    },
+    "Psychoda alternata": {
+        "order": "Diptera",
+        "family": "Psychodidae",
+        "genus": "Psychoda"
+    },
+    "Gastrophysa viridula": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Gastrophysa"
+    },
+    "Anastrangalia sanguinolenta": {
+        "order": "Coleoptera",
+        "family": "Cerambycidae",
+        "genus": "Anastrangalia"
+    },
+    "Andrena potentillae": {
+        "order": "Hymenoptera",
+        "family": "Andrenidae",
+        "genus": "Andrena"
+    },
+    "Bromius obscurus": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Bromius"
+    },
+    "Anastrepha distincta": {
+        "order": "Diptera",
+        "family": "Tephritidae",
+        "genus": "Anastrepha"
+    },
+    "Calliphora vicina": {
+        "order": "Diptera",
+        "family": "Calliphoridae",
+        "genus": "Calliphora"
+    },
+    "Dolerus yukonensis": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Dolerus"
+    },
+    "Agabus infuscatus": {
+        "order": "Coleoptera",
+        "family": "Dytiscidae",
+        "genus": "Agabus"
+    },
+    "Cantharis rufa": {
+        "order": "Coleoptera",
+        "family": "Cantharidae",
+        "genus": "Cantharis"
+    },
+    "Pachynematus obductus": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Euura"
+    },
+    "Chrysolina hyperici": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Chrysolina"
+    },
+    "Phyllotreta armoraciae": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Phyllotreta"
+    },
+    "Simulium samboni": {
+        "order": "Diptera",
+        "family": "Simuliidae",
+        "genus": "Simulium"
+    },
+    "Tanytarsus heliomesonyctios": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Tanytarsus"
+    },
+    "Cicindela punctulata": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Cicindela"
+    },
+    "Arge ustulata": {
+        "order": "Hymenoptera",
+        "family": "Argidae",
+        "genus": "Arge"
+    },
+    "Otiorhynchus singularis": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Otiorhynchus"
+    },
+    "Aoplus groenlandicus": {
+        "order": "Hymenoptera",
+        "family": "Ichneumonidae",
+        "genus": "Aoplus"
+    },
+    "Poecilus chalcites": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Poecilus"
+    },
+    "Dolerus vestigialis": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Dolerus"
+    },
+    "Bradysia ocellaris": {
+        "order": "Diptera",
+        "family": "Sciaridae",
+        "genus": "Bradysia"
+    },
+    "Proatta butteli": {
+        "order": "Hymenoptera",
+        "family": "Formicidae",
+        "genus": "Proatta"
+    },
+    "Scaptomyza pallida": {
+        "order": "Diptera",
+        "family": "Drosophilidae",
+        "genus": "Scaptomyza"
+    },
+    "Gaurotes virginea": {
+        "order": "Coleoptera",
+        "family": "Cerambycidae",
+        "genus": "Gaurotes"
+    },
+    "Bembidion lampros": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Bembidion"
+    },
+    "Ectemnius rubicola": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Ectemnius"
+    },
+    "Prenolepis imparis": {
+        "order": "Hymenoptera",
+        "family": "Formicidae",
+        "genus": "Prenolepis"
+    },
+    "Crabro scutellatus": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Crabro"
+    },
+    "Coelophora inaequalis": {
+        "order": "Coleoptera",
+        "family": "Coccinellidae",
+        "genus": "Coelophora"
+    },
+    "Phyllobius virideaeris": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Phyllobius"
+    },
+    "Silpha tyrolensis": {
+        "order": "Coleoptera",
+        "family": "Silphidae",
+        "genus": "Silpha"
+    },
+    "Omphalapion hookerorum": {
+        "order": "Coleoptera",
+        "family": "Apionidae",
+        "genus": "Omphalapion"
+    },
+    "Nephrotoma lundbecki": {
+        "order": "Diptera",
+        "family": "Tipulidae",
+        "genus": "Nephrotoma"
+    },
+    "Oulema melanopus": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Oulema"
+    },
+    "Sericoides lineolata": {
+        "order": "Lineolatales",
+        "family": "Lineolataceae"
+    },
+    "Chironomus plumosus": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Chironomus"
+    },
+    "Hylaeus brevicornis": {
+        "order": "Hymenoptera",
+        "family": "Colletidae",
+        "genus": "Hylaeus"
+    },
+    "Calathus fuscipes": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Calathus"
+    },
+    "Nedyus quadrimaculatus": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Nedyus"
+    },
+    "Lasioglossum versatum": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Lasioglossum"
+    },
+    "Scathophaga furcata": {
+        "order": "Diptera",
+        "family": "Scathophagidae",
+        "genus": "Scathophaga"
+    },
+    "Dyschirius politus": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Dyschirius"
+    },
+    "Pachynematus vagus": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Euura"
+    },
+    "Cantharis livida": {
+        "order": "Coleoptera",
+        "family": "Cantharidae",
+        "genus": "Cantharis"
+    },
+    "Sphecodes miniatus": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Sphecodes"
+    },
+    "Stenichnus scutellaris": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Stenichnus"
+    },
+    "Heterarthrus vagans": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Heterarthrus"
+    },
+    "Psilota cuprea": {
+        "order": "Diptera",
+        "family": "Syrphidae",
+        "genus": "Psilota"
+    },
+    "Agriotes lineatus": {
+        "order": "Coleoptera",
+        "family": "Elateridae",
+        "genus": "Agriotes"
+    },
+    "Hippodamia notata": {
+        "order": "Coleoptera",
+        "family": "Coccinellidae",
+        "genus": "Hippodamia"
+    },
+    "Agonum micans": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Agonum"
+    },
+    "Ophonus puncticeps": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Ophonus"
+    },
+    "Coccinula quatuordecimpustulata": {
+        "order": "Coleoptera",
+        "family": "Coccinellidae",
+        "genus": "Coccinula"
+    },
+    "Simulium simile": {
+        "order": "Diptera",
+        "family": "Simuliidae",
+        "genus": "Simulium"
+    },
+    "Oedemera virescens": {
+        "order": "Coleoptera",
+        "family": "Oedemeridae",
+        "genus": "Oedemera"
+    },
+    "Bembidion dentellum": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Bembidion"
+    },
+    "Amara consularis": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Amara"
+    },
+    "Lasioglossum fulvicorne": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Lasioglossum"
+    },
+    "Atomaria fuscata": {
+        "order": "Coleoptera",
+        "family": "Cryptophagidae",
+        "genus": "Atomaria"
+    },
+    "Limonius minutus": {
+        "order": "Coleoptera",
+        "family": "Elateridae",
+        "genus": "Limonius"
+    },
+    "Ordobrevia nubifera": {
+        "order": "Coleoptera",
+        "family": "Elmidae",
+        "genus": "Ordobrevia"
+    },
+    "Saprinus semistriatus": {
+        "order": "Coleoptera",
+        "family": "Histeridae",
+        "genus": "Saprinus"
+    },
+    "Sceliphron caementarium": {
+        "order": "Hymenoptera",
+        "family": "Sphecidae",
+        "genus": "Sceliphron"
+    },
+    "Tipula triplex": {
+        "order": "Diptera",
+        "family": "Tipulidae",
+        "genus": "Tipula"
+    },
+    "Cricotopus sylvestris": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Cricotopus"
+    },
+    "Brassicogethes viridescens": {
+        "order": "Coleoptera",
+        "family": "Nitidulidae",
+        "genus": "Brassicogethes"
+    },
+    "Protapion fulvipes": {
+        "order": "Coleoptera",
+        "family": "Apionidae",
+        "genus": "Protapion"
+    },
+    "Trypoxylon minus": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Trypoxylon"
+    },
+    "Anatis ocellata": {
+        "order": "Coleoptera",
+        "family": "Coccinellidae",
+        "genus": "Anatis"
+    },
+    "Omophron limbatum": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Omophron"
+    },
+    "Harpalus smaragdinus": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Harpalus"
+    },
+    "Agrilus viridis": {
+        "order": "Coleoptera",
+        "family": "Buprestidae",
+        "genus": "Agrilus"
+    },
+    "Harpalus rubripes": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Harpalus"
+    },
+    "Sphaeridium scarabaeoides": {
+        "order": "Coleoptera",
+        "family": "Hydrophilidae",
+        "genus": "Sphaeridium"
+    },
+    "Bembidion punctulatum": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Bembidion"
+    },
+    "Coelioxys afra": {
+        "order": "Hymenoptera",
+        "family": "Megachilidae",
+        "genus": "Coelioxys"
+    },
+    "Tetrastichus halidayi": {
+        "order": "Hymenoptera",
+        "family": "Eulophidae",
+        "genus": "Tetrastichus"
+    },
+    "Myriochila melancholica": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Myriochila"
+    },
+    "Tenthredo arcuata": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Tenthredo"
+    },
+    "Tachinus laticollis": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Tachinus"
+    },
+    "Paradromius linearis": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Paradromius"
+    },
+    "Cheilomenes sexmaculata": {
+        "order": "Coleoptera",
+        "family": "Coccinellidae",
+        "genus": "Cheilomenes"
+    },
+    "Notosemus bohemani": {
+        "order": "Hymenoptera",
+        "family": "Ichneumonidae",
+        "genus": "Notosemus"
+    },
+    "Philopedon plagiatum": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Philopedon"
+    },
+    "Gastrophysa polygoni": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Gastrophysa"
+    },
+    "Pamphilius sylvaticus": {
+        "order": "Hymenoptera",
+        "family": "Pamphiliidae",
+        "genus": "Pamphilius"
+    },
+    "Pogonomyrmex rugosus": {
+        "order": "Hymenoptera",
+        "family": "Formicidae",
+        "genus": "Pogonomyrmex"
+    },
+    "Ochthephilus aureus": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Ochthephilus"
+    },
+    "Tipula guizhouensis": {
+        "order": "Diptera",
+        "family": "Tipulidae",
+        "genus": "Tipula"
+    },
+    "Tipula salicetorum": {
+        "order": "Diptera",
+        "family": "Tipulidae",
+        "genus": "Tipula"
+    },
+    "Lathrobium fulvipenne": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Lathrobium"
+    },
+    "Anisotoma humeralis": {
+        "order": "Coleoptera",
+        "family": "Leiodidae",
+        "genus": "Anisotoma"
+    },
+    "Chrysanthia geniculata": {
+        "order": "Coleoptera",
+        "family": "Oedemeridae",
+        "genus": "Chrysanthia"
+    },
+    "Anthonomus rubi": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Anthonomus"
+    },
+    "Osmia bicornis": {
+        "order": "Hymenoptera",
+        "family": "Megachilidae",
+        "genus": "Osmia"
+    },
+    "Tanypus neopunctipennis": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Tanypus"
+    },
+    "Trypoxylon attenuatum": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Trypoxylon"
+    },
+    "Necrodes littoralis": {
+        "order": "Coleoptera",
+        "family": "Silphidae",
+        "genus": "Necrodes"
+    },
+    "Pterostichus melanarius": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Pterostichus"
+    },
+    "Philonthus micans": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Philonthus"
+    },
+    "Elaphropus parvulus": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Elaphropus"
+    },
+    "Bembidion minimum": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Bembidion"
+    },
+    "Nebria brevicollis": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Nebria"
+    },
+    "Tachinus pallipes": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Tachinus"
+    },
+    "Bembidion mannerheimii": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Bembidion"
+    },
+    "Nematus bergmanni": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Euura"
+    },
+    "Podabrus alpinus": {
+        "order": "Coleoptera",
+        "family": "Cantharidae",
+        "genus": "Podabrus"
+    },
+    "Cricotopus tricinctus": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Cricotopus"
+    },
+    "Cephus pygmeus": {
+        "order": "Hymenoptera",
+        "family": "Cephidae",
+        "genus": "Cephus"
+    },
+    "Diamesa hyperborea": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Diamesa"
+    },
+    "Cryptocephalus fulvus": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Cryptocephalus"
+    },
+    "Atheta elongatula": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Atheta"
+    },
+    "Eurytoma discordans": {
+        "order": "Hymenoptera",
+        "family": "Eurytomidae",
+        "genus": "Eurytoma"
+    },
+    "Ichneumon discoensis": {
+        "order": "Hymenoptera",
+        "family": "Ichneumonidae",
+        "genus": "Ichneumon"
+    },
+    "Mordella holomelaena": {
+        "order": "Coleoptera",
+        "family": "Mordellidae",
+        "genus": "Mordella"
+    },
+    "Notiophilus aquaticus": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Notiophilus"
+    },
+    "Anthobium atrocephalum": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Anthobium"
+    },
+    "Oedemera femorata": {
+        "order": "Coleoptera",
+        "family": "Oedemeridae",
+        "genus": "Oedemera"
+    },
+    "Parametriocnemus stylatus": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Parametriocnemus"
+    },
+    "Pachyprotasis rapae": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Pachyprotasis"
+    },
+    "Sphecodes albilabris": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Sphecodes"
+    },
+    "Andrena minutula": {
+        "order": "Hymenoptera",
+        "family": "Andrenidae",
+        "genus": "Andrena"
+    },
+    "Oxysarcodexia ventricosa": {
+        "order": "Diptera",
+        "family": "Sarcophagidae",
+        "genus": "Oxysarcodexia"
+    },
+    "Dolerus puncticollis": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Dolerus"
+    },
+    "Paederus fuscipes": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Paederus"
+    },
+    "Sphecodes pellucidus": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Sphecodes"
+    },
+    "Tenthredopsis stigma": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Tenthredopsis"
+    },
+    "Longitarsus luridus": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Longitarsus"
+    },
+    "Syritta pipiens": {
+        "order": "Diptera",
+        "family": "Syrphidae",
+        "genus": "Syritta"
+    },
+    "Bembidion tenellum": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Bembidion"
+    },
+    "Polistes mongolicus": {
+        "order": "Hymenoptera",
+        "family": "Vespidae",
+        "genus": "Polistes"
+    },
+    "Tachinus marginellus": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Tachinus"
+    },
+    "Brachypogon nitidulus": {
+        "order": "Diptera",
+        "family": "Ceratopogonidae",
+        "genus": "Brachypogon"
+    },
+    "Cryptocephalus nitidus": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Cryptocephalus"
+    },
+    "Amara plebeja": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Amara"
+    },
+    "Heterotanytarsus apicalis": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Heterotanytarsus"
+    },
+    "Spilogona denudata": {
+        "order": "Diptera",
+        "family": "Muscidae",
+        "genus": "Spilogona"
+    },
+    "Halictus scabiosae": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Halictus"
+    },
+    "Hydroporus lapponum": {
+        "order": "Coleoptera",
+        "family": "Dytiscidae",
+        "genus": "Hydroporus"
+    },
+    "Amara aenea": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Amara"
+    },
+    "Chaoborus punctipennis": {
+        "order": "Diptera",
+        "family": "Chaoboridae",
+        "genus": "Chaoborus"
+    },
+    "Eusterinx argutula": {
+        "order": "Hymenoptera",
+        "family": "Ichneumonidae",
+        "genus": "Eusterinx"
+    },
+    "Otiorhynchus scaber": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Otiorhynchus"
+    },
+    "Phyllotreta pusilla": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Phyllotreta"
+    },
+    "Atheta procera": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Atheta"
+    },
+    "Contacyphon ochraceus": {
+        "order": "Coleoptera",
+        "family": "Scirtidae",
+        "genus": "Contacyphon"
+    },
+    "Empria immersa": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Empria"
+    },
+    "Halictus subauratus": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Seladonia"
+    },
+    "Lasioglossum villosulum": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Lasioglossum"
+    },
+    "Pristiphora pallidiventris": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Pristiphora"
+    },
+    "Polydrusus cervinus": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Polydrusus"
+    },
+    "Rybaxis longicornis": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Rybaxis"
+    },
+    "Pterostichus vernalis": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Pterostichus"
+    },
+    "Heterocerus obsoletus": {
+        "order": "Coleoptera",
+        "family": "Heteroceridae",
+        "genus": "Heterocerus"
+    },
+    "Sepedophilus testaceus": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Sepedophilus"
+    },
+    "Cantharis obscura": {
+        "order": "Coleoptera",
+        "family": "Cantharidae",
+        "genus": "Cantharis"
+    },
+    "Clogmia albipunctata": {
+        "order": "Diptera",
+        "family": "Psychodidae",
+        "genus": "Clogmia"
+    },
+    "Limnophyes asquamatus": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Limnophyes"
+    },
+    "Ophonus rufibarbis": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Ophonus"
+    },
+    "Cidnopus pilosus": {
+        "order": "Coleoptera",
+        "family": "Elateridae",
+        "genus": "Cidnopus"
+    },
+    "Phyllobius roboretanus": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Phyllobius"
+    },
+    "Amara aulica": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Amara"
+    },
+    "Betulapion simile": {
+        "order": "Coleoptera",
+        "family": "Apionidae",
+        "genus": "Betulapion"
+    },
+    "Arge enodis": {
+        "order": "Hymenoptera",
+        "family": "Argidae",
+        "genus": "Arge"
+    },
+    "Notiobia terminata": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Notiobia"
+    },
+    "Xylostiba bosnica": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Xylostiba"
+    },
+    "Tenthredo temula": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Tenthredo"
+    },
+    "Andrena nasonii": {
+        "order": "Hymenoptera",
+        "family": "Andrenidae",
+        "genus": "Andrena"
+    },
+    "Crossocerus podagricus": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Crossocerus"
+    },
+    "Mycetophagus quadripustulatus": {
+        "order": "Coleoptera",
+        "family": "Mycetophagidae",
+        "genus": "Mycetophagus"
+    },
+    "Bledius erraticus": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Bledius"
+    },
+    "Pristiphora cincta": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Pristiphora"
+    },
+    "Megaselia cirriventris": {
+        "order": "Diptera",
+        "family": "Phoridae",
+        "genus": "Megaselia"
+    },
+    "Stictotarsus griseostriatus": {
+        "order": "Coleoptera",
+        "family": "Dytiscidae",
+        "genus": "Boreonectes"
+    },
+    "Tenthredo solitaria": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Tenthredo"
+    },
+    "Athalia liberta": {
+        "order": "Hymenoptera",
+        "family": "Athaliidae",
+        "genus": "Athalia"
+    },
+    "Ilybius churchillensis": {
+        "order": "Coleoptera",
+        "family": "Dytiscidae",
+        "genus": "Ilybius"
+    },
+    "Rhimphoctona rufocoxalis": {
+        "order": "Hymenoptera",
+        "family": "Ichneumonidae",
+        "genus": "Rhimphoctona"
+    },
+    "Diodontus luperus": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Diodontus"
+    },
+    "Harpalus atratus": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Harpalus"
+    },
+    "Sarcophaga misera": {
+        "order": "Diptera",
+        "family": "Sarcophagidae",
+        "genus": "Sarcophaga"
+    },
+    "Poecilus versicolor": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Poecilus"
+    },
+    "Sitona lineatus": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Sitona"
+    },
+    "Coelambus novemlineatus": {
+        "order": "Coleoptera",
+        "family": "Dytiscidae",
+        "genus": "Hygrotus"
+    },
+    "Metriocnemus albolineatus": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Metriocnemus"
+    },
+    "Oedemera lurida": {
+        "order": "Coleoptera",
+        "family": "Oedemeridae",
+        "genus": "Oedemera"
+    },
+    "Neocoenorrhinus germanicus": {
+        "order": "Coleoptera",
+        "family": "Attelabidae",
+        "genus": "Neocoenorrhinus"
+    },
+    "Bembidion properans": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Bembidion"
+    },
+    "Polistes bucharensis": {
+        "order": "Hymenoptera",
+        "family": "Vespidae",
+        "genus": "Polistes"
+    },
+    "Drosophila melanogaster": {
+        "order": "Diptera",
+        "family": "Drosophilidae",
+        "genus": "Drosophila"
+    },
+    "Aglaostigma fulvipes": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Aglaostigma"
+    },
+    "Calliphora latifrons": {
+        "order": "Diptera",
+        "family": "Calliphoridae",
+        "genus": "Eucalliphora"
+    },
+    "Brachythops flavens": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Brachythops"
+    },
+    "Oxypoda opaca": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Oxypoda"
+    },
+    "Atheta cinnamoptera": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Atheta"
+    },
+    "Orthocladius nitidoscutellatus": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Orthocladius"
+    },
+    "Nematus myosotidis": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Euura"
+    },
+    "Tenthredo zonula": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Tenthredo"
+    },
+    "Laccobius minutus": {
+        "order": "Coleoptera",
+        "family": "Hydrophilidae",
+        "genus": "Laccobius"
+    },
+    "Polistes gallicus": {
+        "order": "Hymenoptera",
+        "family": "Vespidae",
+        "genus": "Polistes"
+    },
+    "Tenthredopsis nassata": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Tenthredopsis"
+    },
+    "Cantharis figurata": {
+        "order": "Coleoptera",
+        "family": "Cantharidae",
+        "genus": "Cantharis"
+    },
+    "Trichosirocalus troglodytes": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Trichosirocalus"
+    },
+    "Hylemyza partita": {
+        "order": "Diptera",
+        "family": "Anthomyiidae",
+        "genus": "Hylemyza"
+    },
+    "Aneugmenus padi": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Aneugmenus"
+    },
+    "Anthicus flavipes": {
+        "order": "Coleoptera",
+        "family": "Anthicidae",
+        "genus": "Anthicus"
+    },
+    "Omalium rugatum": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Omalium"
+    },
+    "Parachironomus tenuicaudatus": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Parachironomus"
+    },
+    "Lasioglossum malachurum": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Lasioglossum"
+    },
+    "Ilybius ater": {
+        "order": "Coleoptera",
+        "family": "Dytiscidae",
+        "genus": "Ilybius"
+    },
+    "Andrena floricola": {
+        "order": "Hymenoptera",
+        "family": "Andrenidae",
+        "genus": "Andrena"
+    },
+    "Eucnecosum brachypterum": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Eucnecosum"
+    },
+    "Euglenes pygmaeus": {
+        "order": "Coleoptera",
+        "family": "Aderidae",
+        "genus": "Euglenes"
+    },
+    "Crossocerus quadrimaculatus": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Crossocerus"
+    },
+    "Halocladius variabilis": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Halocladius"
+    },
+    "Hylaeus gredleri": {
+        "order": "Hymenoptera",
+        "family": "Colletidae",
+        "genus": "Hylaeus"
+    },
+    "Lordithon thoracicus": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Lordithon"
+    },
+    "Muscina levida": {
+        "order": "Diptera",
+        "family": "Muscidae",
+        "genus": "Muscina"
+    },
+    "Claremontia tenuicornis": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Claremontia"
+    },
+    "Lasioglossum calceatum": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Lasioglossum"
+    },
+    "Orthocladius telochaetus": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Orthocladius"
+    },
+    "Limnophyes minimus": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Limnophyes"
+    },
+    "Perapion violaceum": {
+        "order": "Coleoptera",
+        "family": "Apionidae",
+        "genus": "Perapion"
+    },
+    "Nysson distinguendus": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Nysson"
+    },
+    "Cicindela trifasciata": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Cicindela"
+    },
+    "Perineura rubi": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Perineura"
+    },
+    "Bledius gallicus": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Bledius"
+    },
+    "Agapanthia villosoviridescens": {
+        "order": "Coleoptera",
+        "family": "Cerambycidae",
+        "genus": "Agapanthia"
+    },
+    "Bradycellus caucasicus": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Bradycellus"
+    },
+    "Mogulones geographicus": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Mogulones"
+    },
+    "Amara apricaria": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Amara"
+    },
+    "Idolus picipennis": {
+        "order": "Coleoptera",
+        "family": "Elateridae",
+        "genus": "Idolus"
+    },
+    "Bembidion assimile": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Bembidion"
+    },
+    "Agonum thoreyi": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Agonum"
+    },
+    "Andrena barbilabris": {
+        "order": "Hymenoptera",
+        "family": "Andrenidae",
+        "genus": "Andrena"
+    },
+    "Heriades crenulatus": {
+        "order": "Hymenoptera",
+        "family": "Megachilidae",
+        "genus": "Heriades"
+    },
+    "Anacaena lutescens": {
+        "order": "Coleoptera",
+        "family": "Hydrophilidae",
+        "genus": "Anacaena"
+    },
+    "Lasioglossum albipes": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Lasioglossum"
+    },
+    "Andrena semilaevis": {
+        "order": "Hymenoptera",
+        "family": "Andrenidae",
+        "genus": "Andrena"
+    },
+    "Aromia moschata": {
+        "order": "Coleoptera",
+        "family": "Cerambycidae",
+        "genus": "Aromia"
+    },
+    "Cnesia dissimilis": {
+        "order": "Diptera",
+        "family": "Simuliidae",
+        "genus": "Cnesia"
+    },
+    "Damaromyia clivosa": {
+        "order": "Diptera",
+        "family": "Stratiomyidae",
+        "genus": "Damaromyia"
+    },
+    "Limodromus assimilis": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Limodromus"
+    },
+    "Pimpla insignatoria": {
+        "order": "Hymenoptera",
+        "family": "Ichneumonidae",
+        "genus": "Pimpla"
+    },
+    "Callidium violaceum": {
+        "order": "Coleoptera",
+        "family": "Cerambycidae",
+        "genus": "Callidium"
+    },
+    "Claremontia alternipes": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Claremontia"
+    },
+    "Colletes fodiens": {
+        "order": "Hymenoptera",
+        "family": "Colletidae",
+        "genus": "Colletes"
+    },
+    "Pterostichus cristatus": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Pterostichus"
+    },
+    "Oodes helopioides": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Oodes"
+    },
+    "Cidnopus quercus": {
+        "order": "Coleoptera",
+        "family": "Elateridae",
+        "genus": "Pheletes"
+    },
+    "Phaedon cochleariae": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Phaedon"
+    },
+    "Prosternon tessellatum": {
+        "order": "Coleoptera",
+        "family": "Elateridae",
+        "genus": "Prosternon"
+    },
+    "Symplecta stictica": {
+        "order": "Diptera",
+        "family": "Limoniidae",
+        "genus": "Symplecta"
+    },
+    "Tatianaerhynchites aequatus": {
+        "order": "Coleoptera",
+        "family": "Attelabidae",
+        "genus": "Tatianaerhynchites"
+    },
+    "Micropsectra radialis": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Micropsectra"
+    },
+    "Pristiphora saxesenii": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Pristiphora"
+    },
+    "Andrena labiata": {
+        "order": "Hymenoptera",
+        "family": "Andrenidae",
+        "genus": "Andrena"
+    },
+    "Coenosia attenuata": {
+        "order": "Diptera",
+        "family": "Muscidae",
+        "genus": "Coenosia"
+    },
+    "Cyclodinus humilis": {
+        "order": "Coleoptera",
+        "family": "Anthicidae",
+        "genus": "Cyclodinus"
+    },
+    "Dioxyna picciola": {
+        "order": "Diptera",
+        "family": "Tephritidae",
+        "genus": "Campiglossa"
+    },
+    "Dorylomorpha simplex": {
+        "order": "Diptera",
+        "family": "Pipunculidae",
+        "genus": "Dorylomorpha"
+    },
+    "Megachile pilidens": {
+        "order": "Hymenoptera",
+        "family": "Megachilidae",
+        "genus": "Megachile"
+    },
+    "Pseudovadonia livida": {
+        "order": "Coleoptera",
+        "family": "Cerambycidae",
+        "genus": "Pseudovadonia"
+    },
+    "Prionocera subserricornis": {
+        "order": "Diptera",
+        "family": "Tipulidae",
+        "genus": "Prionocera"
+    },
+    "Toxomerus marginatus": {
+        "order": "Diptera",
+        "family": "Syrphidae",
+        "genus": "Toxomerus"
+    },
+    "Euplectrus intactus": {
+        "order": "Hymenoptera",
+        "family": "Eulophidae",
+        "genus": "Euplectrus"
+    },
+    "Lindenius albilabris": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Lindenius"
+    },
+    "Dasytes virens": {
+        "order": "Coleoptera",
+        "family": "Melyridae",
+        "genus": "Dasytes"
+    },
+    "Bembidion genei": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Bembidion"
+    },
+    "Andrena tibialis": {
+        "order": "Hymenoptera",
+        "family": "Andrenidae",
+        "genus": "Andrena"
+    },
+    "Exochomus quadripustulatus": {
+        "order": "Coleoptera",
+        "family": "Coccinellidae",
+        "genus": "Exochomus"
+    },
+    "Sphecodes ferruginatus": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Sphecodes"
+    },
+    "Omalium rivulare": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Omalium"
+    },
+    "Allantus didymus": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Allantus"
+    },
+    "Demetrias imperialis": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Demetrias"
+    },
+    "Hyposoter inquinatus": {
+        "order": "Hymenoptera",
+        "family": "Ichneumonidae",
+        "genus": "Hyposoter"
+    },
+    "Atheta graminicola": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Atheta"
+    },
+    "Microtendipes brevitarsis": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Microtendipes"
+    },
+    "Pheidole pugnax": {
+        "order": "Hymenoptera",
+        "family": "Formicidae",
+        "genus": "Pheidole"
+    },
+    "Andrena gravida": {
+        "order": "Hymenoptera",
+        "family": "Andrenidae",
+        "genus": "Andrena"
+    },
+    "Bembidion varicolor": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Bembidion"
+    },
+    "Tetrastichus brevicalcar": {
+        "order": "Hymenoptera",
+        "family": "Eulophidae",
+        "genus": "Tetrastichus"
+    },
+    "Andrena haemorrhoa": {
+        "order": "Hymenoptera",
+        "family": "Andrenidae",
+        "genus": "Andrena"
+    },
+    "Hyposoter deichmanni": {
+        "order": "Hymenoptera",
+        "family": "Ichneumonidae",
+        "genus": "Hyposoter"
+    },
+    "Agabus sturmii": {
+        "order": "Coleoptera",
+        "family": "Dytiscidae",
+        "genus": "Agabus"
+    },
+    "Andrena ventralis": {
+        "order": "Hymenoptera",
+        "family": "Andrenidae",
+        "genus": "Andrena"
+    },
+    "Amblycerus cistelinus": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Amblycerus"
+    },
+    "Harpalus serripes": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Harpalus"
+    },
+    "Dasytes niger": {
+        "order": "Coleoptera",
+        "family": "Melyridae",
+        "genus": "Dasytes"
+    },
+    "Axinotarsus pulicarius": {
+        "order": "Coleoptera",
+        "family": "Melyridae",
+        "genus": "Axinotarsus"
+    },
+    "Ceutorhynchus contractus": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Ceutorhynchus"
+    },
+    "Delia planipalpis": {
+        "order": "Diptera",
+        "family": "Anthomyiidae",
+        "genus": "Delia"
+    },
+    "Mimesa bicolor": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Mimesa"
+    },
+    "Ectemnius sexcinctus": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Ectemnius"
+    },
+    "Heriades truncorum": {
+        "order": "Hymenoptera",
+        "family": "Megachilidae",
+        "genus": "Heriades"
+    },
+    "Cephalcia arvensis": {
+        "order": "Hymenoptera",
+        "family": "Pamphiliidae",
+        "genus": "Cephalcia"
+    },
+    "Lilioceris lilii": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Lilioceris"
+    },
+    "Osmia rufohirta": {
+        "order": "Hymenoptera",
+        "family": "Megachilidae",
+        "genus": "Osmia"
+    },
+    "Saperda scalaris": {
+        "order": "Coleoptera",
+        "family": "Cerambycidae",
+        "genus": "Saperda"
+    },
+    "Musca domestica": {
+        "order": "Diptera",
+        "family": "Muscidae",
+        "genus": "Musca"
+    },
+    "Diplolepis bicolor": {
+        "order": "Hymenoptera",
+        "family": "Cynipidae",
+        "genus": "Diplolepis"
+    },
+    "Pselaphus heisei": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Pselaphus"
+    },
+    "Simulium gonzalezi": {
+        "order": "Diptera",
+        "family": "Simuliidae",
+        "genus": "Simulium"
+    },
+    "Helina troene": {
+        "order": "Diptera",
+        "family": "Muscidae",
+        "genus": "Helina"
+    },
+    "Cis boleti": {
+        "order": "Coleoptera",
+        "family": "Ciidae",
+        "genus": "Cis"
+    },
+    "Lagria atripes": {
+        "order": "Coleoptera",
+        "family": "Tenebrionidae",
+        "genus": "Lagria"
+    },
+    "Anopheles albimanus": {
+        "order": "Diptera",
+        "family": "Culicidae",
+        "genus": "Anopheles"
+    },
+    "Lasioglossum morio": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Lasioglossum"
+    },
+    "Andrena nitida": {
+        "order": "Hymenoptera",
+        "family": "Andrenidae",
+        "genus": "Andrena"
+    },
+    "Limnophyes edwardsi": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Limnophyes"
+    },
+    "Philhygra palustris": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Philhygra"
+    },
+    "Plateumaris sericea": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Plateumaris"
+    },
+    "Amara lunicollis": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Amara"
+    },
+    "Bembidion incognitum": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Bembidion"
+    },
+    "Ceutorhynchus floralis": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Ceutorhynchus"
+    },
+    "Andrena vaga": {
+        "order": "Hymenoptera",
+        "family": "Andrenidae",
+        "genus": "Andrena"
+    },
+    "Cordylepherus viridis": {
+        "order": "Coleoptera",
+        "family": "Melyridae",
+        "genus": "Cordylepherus"
+    },
+    "Cerceris sabulosa": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Cerceris"
+    },
+    "Amara convexior": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Amara"
+    },
+    "Anopheles crucians": {
+        "order": "Diptera",
+        "family": "Culicidae",
+        "genus": "Anopheles"
+    },
+    "Culex nigripalpus": {
+        "order": "Diptera",
+        "family": "Culicidae",
+        "genus": "Culex"
+    },
+    "Mordella aculeata": {
+        "order": "Coleoptera",
+        "family": "Mordellidae",
+        "genus": "Mordella"
+    },
+    "Agabus uliginosus": {
+        "order": "Coleoptera",
+        "family": "Dytiscidae",
+        "genus": "Agabus"
+    },
+    "Atheta gagatina": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Atheta"
+    },
+    "Megachile centuncularis": {
+        "order": "Hymenoptera",
+        "family": "Megachilidae",
+        "genus": "Megachile"
+    },
+    "Odontomachus rixosus": {
+        "order": "Hymenoptera",
+        "family": "Formicidae",
+        "genus": "Odontomachus"
+    },
+    "Trixagus dermestoides": {
+        "order": "Coleoptera",
+        "family": "Throscidae",
+        "genus": "Trixagus"
+    },
+    "Tyrus mucronatus": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Tyrus"
+    },
+    "Olibrus millefolii": {
+        "order": "Coleoptera",
+        "family": "Phalacridae",
+        "genus": "Olibrus"
+    },
+    "Strophosoma melanogrammum": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Strophosoma"
+    },
+    "Saperda populnea": {
+        "order": "Coleoptera",
+        "family": "Cerambycidae",
+        "genus": "Saperda"
+    },
+    "Poecilus lepidus": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Poecilus"
+    },
+    "Tetrastichus mixtus": {
+        "order": "Hymenoptera",
+        "family": "Eulophidae",
+        "genus": "Tetrastichus"
+    },
+    "Cephus nigrinus": {
+        "order": "Hymenoptera",
+        "family": "Cephidae",
+        "genus": "Cephus"
+    },
+    "Rhyzopertha dominica": {
+        "order": "Coleoptera",
+        "family": "Bostrichidae",
+        "genus": "Rhyzopertha"
+    },
+    "Bradysia trivittata": {
+        "order": "Diptera",
+        "family": "Sciaridae",
+        "genus": "Bradysia"
+    },
+    "Dolerus aeneus": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Dolerus"
+    },
+    "Phyllopertha horticola": {
+        "order": "Coleoptera",
+        "family": "Scarabaeidae",
+        "genus": "Phyllopertha"
+    },
+    "Bactrocera aquilonis": {
+        "order": "Diptera",
+        "family": "Tephritidae",
+        "genus": "Bactrocera"
+    },
+    "Crossocerus exiguus": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Crossocerus"
+    },
+    "Epuraea binotata": {
+        "order": "Coleoptera",
+        "family": "Nitidulidae",
+        "genus": "Epuraea"
+    },
+    "Halictus langobardicus": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Halictus"
+    },
+    "Hoplitis anthocopoides": {
+        "order": "Hymenoptera",
+        "family": "Megachilidae",
+        "genus": "Hoplitis"
+    },
+    "Andrena carantonica": {
+        "order": "Hymenoptera",
+        "family": "Andrenidae",
+        "genus": "Andrena"
+    },
+    "Amara similata": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Amara"
+    },
+    "Mononychus punctumalbum": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Mononychus"
+    },
+    "Bembix rostrata": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Bembix"
+    },
+    "Osmia aurulenta": {
+        "order": "Hymenoptera",
+        "family": "Megachilidae",
+        "genus": "Osmia"
+    },
+    "Stenus boops": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Stenus"
+    },
+    "Tenthredo brevicornis": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Tenthredo"
+    },
+    "Cicindela campestris": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Cicindela"
+    },
+    "Platycheirus naso": {
+        "order": "Diptera",
+        "family": "Syrphidae",
+        "genus": "Platycheirus"
+    },
+    "Thinodromus arcuatus": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Thinodromus"
+    },
+    "Cytilus auricomus": {
+        "order": "Coleoptera",
+        "family": "Byrrhidae",
+        "genus": "Cytilus"
+    },
+    "Thoracochaeta seticosta": {
+        "order": "Diptera",
+        "family": "Sphaeroceridae",
+        "genus": "Thoracochaeta"
+    },
+    "Monomorium floricola": {
+        "order": "Hymenoptera",
+        "family": "Formicidae",
+        "genus": "Monomorium"
+    },
+    "Anthidium punctatum": {
+        "order": "Hymenoptera",
+        "family": "Megachilidae",
+        "genus": "Anthidium"
+    },
+    "Sphecodes gibbus": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Sphecodes"
+    },
+    "Psylliodes affinis": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Psylliodes"
+    },
+    "Litargus connexus": {
+        "order": "Coleoptera",
+        "family": "Mycetophagidae",
+        "genus": "Litargus"
+    },
+    "Rhagium inquisitor": {
+        "order": "Coleoptera",
+        "family": "Cerambycidae",
+        "genus": "Rhagium"
+    },
+    "Syntomus truncatellus": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Syntomus"
+    },
+    "Hippodamia variegata": {
+        "order": "Coleoptera",
+        "family": "Coccinellidae",
+        "genus": "Hippodamia"
+    },
+    "Uloma rufa": {
+        "order": "Coleoptera",
+        "family": "Tenebrionidae",
+        "genus": "Uloma"
+    },
+    "Amara erratica": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Amara"
+    },
+    "Acrolyta glacialis": {
+        "order": "Hymenoptera",
+        "family": "Ichneumonidae",
+        "genus": "Acrolyta"
+    },
+    "Helicobia rapax": {
+        "order": "Diptera",
+        "family": "Sarcophagidae",
+        "genus": "Helicobia"
+    },
+    "Heterarthrus vikbergi": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Heterarthrus"
+    },
+    "Dicranota guerini": {
+        "order": "Diptera",
+        "family": "Pediciidae",
+        "genus": "Dicranota"
+    },
+    "Cerceris interrupta": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Cerceris"
+    },
+    "Amara curta": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Amara"
+    },
+    "Anopheles minimus": {
+        "order": "Diptera",
+        "family": "Culicidae",
+        "genus": "Anopheles"
+    },
+    "Sepedophilus littoreus": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Sepedophilus"
+    },
+    "Chilothorax distinctus": {
+        "order": "Coleoptera",
+        "family": "Scarabaeidae",
+        "genus": "Aphodius"
+    },
+    "Oxytelus laqueatus": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Oxytelus"
+    },
+    "Rhagonycha limbata": {
+        "order": "Coleoptera",
+        "family": "Cantharidae",
+        "genus": "Rhagonycha"
+    },
+    "Athalia lugens": {
+        "order": "Hymenoptera",
+        "family": "Athaliidae",
+        "genus": "Athalia"
+    },
+    "Smaragdina salicina": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Smaragdina"
+    },
+    "Calvia quatuordecimguttata": {
+        "order": "Coleoptera",
+        "family": "Coccinellidae",
+        "genus": "Calvia"
+    },
+    "Eleodes longicollis": {
+        "order": "Coleoptera",
+        "family": "Tenebrionidae",
+        "genus": "Eleodes"
+    },
+    "Anthocomus fasciatus": {
+        "order": "Coleoptera",
+        "family": "Melyridae",
+        "genus": "Anthocomus"
+    },
+    "Andrena hattorfiana": {
+        "order": "Hymenoptera",
+        "family": "Andrenidae",
+        "genus": "Andrena"
+    },
+    "Tetrastichus julis": {
+        "order": "Hymenoptera",
+        "family": "Eulophidae",
+        "genus": "Tetrastichus"
+    },
+    "Platycheirus hyperboreus": {
+        "order": "Diptera",
+        "family": "Syrphidae",
+        "genus": "Platycheirus"
+    },
+    "Euplectrus flavipes": {
+        "order": "Hymenoptera",
+        "family": "Eulophidae",
+        "genus": "Euplectrus"
+    },
+    "Heterocerus flexuosus": {
+        "order": "Coleoptera",
+        "family": "Heteroceridae",
+        "genus": "Heterocerus"
+    },
+    "Barypeithes pellucidus": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Barypeithes"
+    },
+    "Cochliomyia macellaria": {
+        "order": "Diptera",
+        "family": "Calliphoridae",
+        "genus": "Cochliomyia"
+    },
+    "Polistes foederatus": {
+        "order": "Hymenoptera",
+        "family": "Vespidae",
+        "genus": "Polistes"
+    },
+    "Agrypnus murinus": {
+        "order": "Coleoptera",
+        "family": "Elateridae",
+        "genus": "Agrypnus"
+    },
+    "Monophadnoides rubi": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Monophadnoides"
+    },
+    "Lathrobium brunnipes": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Lathrobium"
+    },
+    "Tetrastichus incanus": {
+        "order": "Hymenoptera",
+        "family": "Eulophidae",
+        "genus": "Tetrastichus"
+    },
+    "Phyllotreta nigripes": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Phyllotreta"
+    },
+    "Lestica alata": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Lestica"
+    },
+    "Lygistopterus sanguineus": {
+        "order": "Coleoptera",
+        "family": "Lycidae",
+        "genus": "Lygistopterus"
+    },
+    "Tribolium castaneum": {
+        "order": "Coleoptera",
+        "family": "Tenebrionidae",
+        "genus": "Tribolium"
+    },
+    "Simulium callidum": {
+        "order": "Diptera",
+        "family": "Simuliidae",
+        "genus": "Simulium"
+    },
+    "Scathophaga stercoraria": {
+        "order": "Diptera",
+        "family": "Scathophagidae",
+        "genus": "Scathophaga"
+    },
+    "Coelambus unguicularis": {
+        "order": "Coleoptera",
+        "family": "Dytiscidae",
+        "genus": "Hygrotus"
+    },
+    "Quedius cinctus": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Quedius"
+    },
+    "Culicoides grisescens": {
+        "order": "Diptera",
+        "family": "Ceratopogonidae",
+        "genus": "Culicoides"
+    },
+    "Aphidecta obliterata": {
+        "order": "Coleoptera",
+        "family": "Coccinellidae",
+        "genus": "Aphidecta"
+    },
+    "Crypticus quisquilius": {
+        "order": "Coleoptera",
+        "family": "Tenebrionidae",
+        "genus": "Crypticus"
+    },
+    "Galerucella nymphaeae": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Galerucella"
+    },
+    "Odontomachus brunneus": {
+        "order": "Hymenoptera",
+        "family": "Formicidae",
+        "genus": "Odontomachus"
+    },
+    "Eristalis stipator": {
+        "order": "Diptera",
+        "family": "Syrphidae",
+        "genus": "Eristalis"
+    },
+    "Tachina fera": {
+        "order": "Diptera",
+        "family": "Tachinidae",
+        "genus": "Tachina"
+    },
+    "Eriocampa ovata": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Eriocampa"
+    },
+    "Andrena subopaca": {
+        "order": "Hymenoptera",
+        "family": "Andrenidae",
+        "genus": "Andrena"
+    },
+    "Ocalea picata": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Ocalea"
+    },
+    "Cardiophorus vestigialis": {
+        "order": "Coleoptera",
+        "family": "Elateridae",
+        "genus": "Cardiophorus"
+    },
+    "Tipula shirakii": {
+        "order": "Diptera",
+        "family": "Tipulidae",
+        "genus": "Tipula"
+    },
+    "Lasioglossum parvulum": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Lasioglossum"
+    },
+    "Cercyon marinus": {
+        "order": "Coleoptera",
+        "family": "Hydrophilidae",
+        "genus": "Cercyon"
+    },
+    "Rhagonycha lutea": {
+        "order": "Coleoptera",
+        "family": "Cantharidae",
+        "genus": "Rhagonycha"
+    },
+    "Halictus simplex": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Halictus"
+    },
+    "Gilpinia frutetorum": {
+        "order": "Hymenoptera",
+        "family": "Diprionidae",
+        "genus": "Gilpinia"
+    },
+    "Rhimphoctona teredo": {
+        "order": "Myida",
+        "family": "Teredinidae"
+    },
+    "Athous subfuscus": {
+        "order": "Coleoptera",
+        "family": "Elateridae",
+        "genus": "Athous"
+    },
+    "Cantharis rustica": {
+        "order": "Coleoptera",
+        "family": "Cantharidae",
+        "genus": "Cantharis"
+    },
+    "Trypoxylon clavicerum": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Trypoxylon"
+    },
+    "Macrophya albicincta": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Macrophya"
+    },
+    "Sarconesiopsis magellanica": {
+        "order": "Diptera",
+        "family": "Calliphoridae",
+        "genus": "Sarconesiopsis"
+    },
+    "Limonius poneli": {
+        "order": "Coleoptera",
+        "family": "Elateridae",
+        "genus": "Limonius"
+    },
+    "Halictus rubicundus": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Halictus"
+    },
+    "Omonadus floralis": {
+        "order": "Coleoptera",
+        "family": "Anthicidae",
+        "genus": "Omonadus"
+    },
+    "Chaetarthria seminulum": {
+        "order": "Coleoptera",
+        "family": "Hydrophilidae",
+        "genus": "Chaetarthria"
+    },
+    "Lasioglossum punctatissimum": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Lasioglossum"
+    },
+    "Macrophya duodecimpunctata": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Macrophya"
+    },
+    "Pterostichus minor": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Pterostichus"
+    },
+    "Atomaria lewisi": {
+        "order": "Coleoptera",
+        "family": "Cryptophagidae",
+        "genus": "Atomaria"
+    },
+    "Philanthus triangulum": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Philanthus"
+    },
+    "Crepidodera aurea": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Crepidodera"
+    },
+    "Empria sexpunctata": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Empria"
+    },
+    "Podalonia hirsuta": {
+        "order": "Hymenoptera",
+        "family": "Sphecidae",
+        "genus": "Podalonia"
+    },
+    "Limnophyes natalensis": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Limnophyes"
+    },
+    "Andrena falsifica": {
+        "order": "Hymenoptera",
+        "family": "Andrenidae",
+        "genus": "Andrena"
+    },
+    "Limnophyes pumilio": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Limnophyes"
+    },
+    "Megachile rotundata": {
+        "order": "Hymenoptera",
+        "family": "Megachilidae",
+        "genus": "Megachile"
+    },
+    "Clivina collaris": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Clivina"
+    },
+    "Clivina fossor": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Clivina"
+    },
+    "Sericomyia sexfasciata": {
+        "order": "Diptera",
+        "family": "Syrphidae",
+        "genus": "Sericomyia"
+    },
+    "Philonthus politus": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Philonthus"
+    },
+    "Pogonus chalceus": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Pogonus"
+    },
+    "Agathidium seminulum": {
+        "order": "Coleoptera",
+        "family": "Leiodidae",
+        "genus": "Agathidium"
+    },
+    "Cratyna uliginosa": {
+        "order": "Diptera",
+        "family": "Sciaridae",
+        "genus": "Cratyna"
+    },
+    "Cryptocephalus bipunctatus": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Cryptocephalus"
+    },
+    "Gelis maesticolor": {
+        "order": "Hymenoptera",
+        "family": "Ichneumonidae",
+        "genus": "Gelis"
+    },
+    "Araptus carinifrons": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Araptus"
+    },
+    "Cerceris quadricincta": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Cerceris"
+    },
+    "Cortinicara gibbosa": {
+        "order": "Coleoptera",
+        "family": "Latridiidae",
+        "genus": "Cortinicara"
+    },
+    "Cis nitidus": {
+        "order": "Coleoptera",
+        "family": "Ciidae",
+        "genus": "Cis"
+    },
+    "Cratyna uliginosoides": {
+        "order": "Diptera",
+        "family": "Sciaridae",
+        "genus": "Cratyna"
+    },
+    "Trichosia lengersdorfi": {
+        "order": "Diptera",
+        "family": "Sciaridae",
+        "genus": "Trichosia"
+    },
+    "Syntomus foveatus": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Syntomus"
+    },
+    "Protapion apricans": {
+        "order": "Coleoptera",
+        "family": "Apionidae",
+        "genus": "Protapion"
+    },
+    "Bradysia vagans": {
+        "order": "Diptera",
+        "family": "Sciaridae",
+        "genus": "Bradysia"
+    },
+    "Ametastegia glabrata": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Ametastegia"
+    },
+    "Lasius alienus": {
+        "order": "Hymenoptera",
+        "family": "Formicidae",
+        "genus": "Lasius"
+    },
+    "Leptosciarella fuscipalpa": {
+        "order": "Diptera",
+        "family": "Sciaridae",
+        "genus": "Leptosciarella"
+    },
+    "Denticollis linearis": {
+        "order": "Coleoptera",
+        "family": "Elateridae",
+        "genus": "Denticollis"
+    },
+    "Neomyia cornicina": {
+        "order": "Diptera",
+        "family": "Muscidae",
+        "genus": "Neomyia"
+    },
+    "Syrphus torvus": {
+        "order": "Diptera",
+        "family": "Syrphidae",
+        "genus": "Syrphus"
+    },
+    "Trypoxylon deceptorium": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Trypoxylon"
+    },
+    "Ectemnius lituratus": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Ectemnius"
+    },
+    "Cerceris rybyensis": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Cerceris"
+    },
+    "Exochus pullatus": {
+        "order": "Hymenoptera",
+        "family": "Ichneumonidae",
+        "genus": "Exochus"
+    },
+    "Paranchus albipes": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Paranchus"
+    },
+    "Pheidole longiscapa": {
+        "order": "Hymenoptera",
+        "family": "Formicidae",
+        "genus": "Pheidole"
+    },
+    "Anopheles sundaicus": {
+        "order": "Diptera",
+        "family": "Culicidae",
+        "genus": "Anopheles"
+    },
+    "Phyllobius pomaceus": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Phyllobius"
+    },
+    "Agabus bipustulatus": {
+        "order": "Coleoptera",
+        "family": "Dytiscidae",
+        "genus": "Agabus"
+    },
+    "Gorytes laticinctus": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Gorytes"
+    },
+    "Cephalotes atratus": {
+        "order": "Hymenoptera",
+        "family": "Formicidae",
+        "genus": "Cephalotes"
+    },
+    "Eurytoma longavena": {
+        "order": "Hymenoptera",
+        "family": "Eurytomidae",
+        "genus": "Eurytoma"
+    },
+    "Arhopalus rusticus": {
+        "order": "Coleoptera",
+        "family": "Cerambycidae",
+        "genus": "Arhopalus"
+    },
+    "Ophonus melletii": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Ophonus"
+    },
+    "Orthocladius gelidorum": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Orthocladius"
+    },
+    "Cychramus luteus": {
+        "order": "Coleoptera",
+        "family": "Nitidulidae",
+        "genus": "Cychramus"
+    },
+    "Halyzia sedecimguttata": {
+        "order": "Coleoptera",
+        "family": "Coccinellidae",
+        "genus": "Halyzia"
+    },
+    "Hyposoter frigidus": {
+        "order": "Hymenoptera",
+        "family": "Ichneumonidae",
+        "genus": "Hyposoter"
+    },
+    "Osmia cornuta": {
+        "order": "Hymenoptera",
+        "family": "Megachilidae",
+        "genus": "Osmia"
+    },
+    "Nephrotoma ferruginea": {
+        "order": "Diptera",
+        "family": "Tipulidae",
+        "genus": "Nephrotoma"
+    },
+    "Brachypogon incompletus": {
+        "order": "Diptera",
+        "family": "Ceratopogonidae",
+        "genus": "Brachypogon"
+    },
+    "Coelioxys mandibularis": {
+        "order": "Hymenoptera",
+        "family": "Megachilidae",
+        "genus": "Coelioxys"
+    },
+    "Syrphus ribesii": {
+        "order": "Diptera",
+        "family": "Syrphidae",
+        "genus": "Syrphus"
+    },
+    "Bembix oculata": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Bembix"
+    },
+    "Carpelimus corticinus": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Carpelimus"
+    },
+    "Hydroporus striola": {
+        "order": "Coleoptera",
+        "family": "Dytiscidae",
+        "genus": "Hydroporus"
+    },
+    "Calliphora terraenovae": {
+        "order": "Diptera",
+        "family": "Calliphoridae",
+        "genus": "Calliphora"
+    },
+    "Badister bullatus": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Badister"
+    },
+    "Anthidium oblongatum": {
+        "order": "Hymenoptera",
+        "family": "Megachilidae",
+        "genus": "Anthidium"
+    },
+    "Psylliodes napi": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Psylliodes"
+    },
+    "Oxybelus lamellatus": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Oxybelus"
+    },
+    "Sepedophilus marshami": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Sepedophilus"
+    },
+    "Simulium quadrivittatum": {
+        "order": "Diptera",
+        "family": "Simuliidae",
+        "genus": "Simulium"
+    },
+    "Smittia longicosta": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Smittia"
+    },
+    "Tetrastichus lyridice": {
+        "order": "Hymenoptera",
+        "family": "Eulophidae",
+        "genus": "Tetrastichus"
+    },
+    "Sphecodes monilicornis": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Sphecodes"
+    },
+    "Eutrichapion viciae": {
+        "order": "Coleoptera",
+        "family": "Apionidae",
+        "genus": "Eutrichapion"
+    },
+    "Philorhizus sigma": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Philorhizus"
+    },
+    "Pachyta quadrimaculata": {
+        "order": "Coleoptera",
+        "family": "Cerambycidae",
+        "genus": "Pachyta"
+    },
+    "Andrena wilkella": {
+        "order": "Hymenoptera",
+        "family": "Andrenidae",
+        "genus": "Andrena"
+    },
+    "Bradysia nitidicollis": {
+        "order": "Diptera",
+        "family": "Sciaridae",
+        "genus": "Bradysia"
+    },
+    "Simulium pseudocallidum": {
+        "order": "Diptera",
+        "family": "Simuliidae",
+        "genus": "Simulium"
+    },
+    "Cryptocephalus bameuli": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Cryptocephalus"
+    },
+    "Agonum emarginatum": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Agonum"
+    },
+    "Ectemnius lapidarius": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Ectemnius"
+    },
+    "Leistus ferrugineus": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Leistus"
+    },
+    "Chironomus maturus": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Chironomus"
+    },
+    "Philonthus cognatus": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Philonthus"
+    },
+    "Podalonia tydei": {
+        "order": "Hymenoptera",
+        "family": "Sphecidae",
+        "genus": "Podalonia"
+    },
+    "Harpactus laevis": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Harpactus"
+    },
+    "Melanotus brunnipes": {
+        "order": "Coleoptera",
+        "family": "Elateridae",
+        "genus": "Melanotus"
+    },
+    "Hylaeus communis": {
+        "order": "Hymenoptera",
+        "family": "Colletidae",
+        "genus": "Hylaeus"
+    },
+    "Polistes albellus": {
+        "order": "Hymenoptera",
+        "family": "Vespidae",
+        "genus": "Polistes"
+    },
+    "Quedius brevicornis": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Quedius"
+    },
+    "Aglaostigma discolor": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Aglaostigma"
+    },
+    "Augochlora pura": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Augochlora"
+    },
+    "Tenthredo korabica": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Tenthredo"
+    },
+    "Cricotopus obnixus": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Cricotopus"
+    },
+    "Drosophila neotestacea": {
+        "order": "Diptera",
+        "family": "Drosophilidae",
+        "genus": "Drosophila"
+    },
+    "Megachile ericetorum": {
+        "order": "Hymenoptera",
+        "family": "Megachilidae",
+        "genus": "Megachile"
+    },
+    "Cryptotendipes darbyi": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Cryptotendipes"
+    },
+    "Tenthredopsis ornata": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Tenthredopsis"
+    },
+    "Athalia rosae": {
+        "order": "Hymenoptera",
+        "family": "Athaliidae",
+        "genus": "Athalia"
+    },
+    "Lochmaea caprea": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Lochmaea"
+    },
+    "Osmia bicolor": {
+        "order": "Hymenoptera",
+        "family": "Megachilidae",
+        "genus": "Osmia"
+    },
+    "Myrmica fracticornis": {
+        "order": "Hymenoptera",
+        "family": "Formicidae",
+        "genus": "Myrmica"
+    },
+    "Thanatophilus sinuatus": {
+        "order": "Coleoptera",
+        "family": "Silphidae",
+        "genus": "Thanatophilus"
+    },
+    "Harpalus affinis": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Harpalus"
+    },
+    "Calathus melanocephalus": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Calathus"
+    },
+    "Crabro cribrarius": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Crabro"
+    },
+    "Heleniella ornaticollis": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Heleniella"
+    },
+    "Hippodamia convergens": {
+        "order": "Coleoptera",
+        "family": "Coccinellidae",
+        "genus": "Hippodamia"
+    },
+    "Protapion trifolii": {
+        "order": "Coleoptera",
+        "family": "Apionidae",
+        "genus": "Protapion"
+    },
+    "Tanypus kraatzi": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Tanypus"
+    },
+    "Oxypselaphus obscurus": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Oxypselaphus"
+    },
+    "Pterostichus strenuus": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Pterostichus"
+    },
+    "Tetraopes annulatus": {
+        "order": "Coleoptera",
+        "family": "Cerambycidae",
+        "genus": "Tetraopes"
+    },
+    "Leptocera erythrocera": {
+        "order": "Diptera",
+        "family": "Sphaeroceridae",
+        "genus": "Leptocera"
+    },
+    "Sphecodes geoffrellus": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Sphecodes"
+    },
+    "Macrophya sanguinolenta": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Macrophya"
+    },
+    "Atheta crassicornis": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Atheta"
+    },
+    "Leptura quadrifasciata": {
+        "order": "Coleoptera",
+        "family": "Cerambycidae",
+        "genus": "Leptura"
+    },
+    "Hylaeus gibbus": {
+        "order": "Hymenoptera",
+        "family": "Colletidae",
+        "genus": "Hylaeus"
+    },
+    "Arge cyanocrocea": {
+        "order": "Hymenoptera",
+        "family": "Argidae",
+        "genus": "Arge"
+    },
+    "Oreodytes laevis": {
+        "order": "Coleoptera",
+        "family": "Dytiscidae",
+        "genus": "Oreodytes"
+    },
+    "Bruchus affinis": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Bruchus"
+    },
+    "Atheta laticollis": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Atheta"
+    },
+    "Dacne bipustulata": {
+        "order": "Coleoptera",
+        "family": "Erotylidae",
+        "genus": "Dacne"
+    },
+    "Eurytoma iniquus": {
+        "order": "Hymenoptera",
+        "family": "Eurytomidae",
+        "genus": "Eurytoma"
+    },
+    "Nysson tridens": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Nysson"
+    },
+    "Miscophus ater": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Miscophus"
+    },
+    "Trichocoelina vitticollis": {
+        "order": "Diptera",
+        "family": "Sciaridae",
+        "genus": "Trichocoelina"
+    },
+    "Scaeva pyrastri": {
+        "order": "Diptera",
+        "family": "Syrphidae",
+        "genus": "Scaeva"
+    },
+    "Rhagonycha testacea": {
+        "order": "Coleoptera",
+        "family": "Cantharidae",
+        "genus": "Rhagonycha"
+    },
+    "Amara majuscula": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Amara"
+    },
+    "Andrena dorsata": {
+        "order": "Hymenoptera",
+        "family": "Andrenidae",
+        "genus": "Andrena"
+    },
+    "Chrysomela populi": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Chrysomela"
+    },
+    "Exorista thula": {
+        "order": "Diptera",
+        "family": "Tachinidae",
+        "genus": "Exorista"
+    },
+    "Scatopsciara atomaria": {
+        "order": "Diptera",
+        "family": "Sciaridae",
+        "genus": "Scatopsciara"
+    },
+    "Helophilus lapponicus": {
+        "order": "Diptera",
+        "family": "Syrphidae",
+        "genus": "Helophilus"
+    },
+    "Lasioglossum politum": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Lasioglossum"
+    },
+    "Panurgus calcaratus": {
+        "order": "Hymenoptera",
+        "family": "Andrenidae",
+        "genus": "Panurgus"
+    },
+    "Colletes daviesanus": {
+        "order": "Hymenoptera",
+        "family": "Colletidae",
+        "genus": "Colletes"
+    },
+    "Lipotriches flavoviridis": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Lipotriches"
+    },
+    "Rhagonycha fulva": {
+        "order": "Coleoptera",
+        "family": "Cantharidae",
+        "genus": "Rhagonycha"
+    },
+    "Nebrioporus macronychus": {
+        "order": "Coleoptera",
+        "family": "Dytiscidae",
+        "genus": "Nebrioporus"
+    },
+    "Notiophilus biguttatus": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Notiophilus"
+    },
+    "Oedemera nobilis": {
+        "order": "Coleoptera",
+        "family": "Oedemeridae",
+        "genus": "Oedemera"
+    },
+    "Lasioglossum apocyni": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Lasioglossum"
+    },
+    "Amara communis": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Amara"
+    },
+    "Pterostichus madidus": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Pterostichus"
+    },
+    "Bembidion quadrimaculatum": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Bembidion"
+    },
+    "Calomicrus circumfusus": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Calomicrus"
+    },
+    "Anthicus antherinus": {
+        "order": "Coleoptera",
+        "family": "Anthicidae",
+        "genus": "Anthicus"
+    },
+    "Anotylus rugosus": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Anotylus"
+    },
+    "Ametastegia carpini": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Ametastegia"
+    },
+    "Chrysomya albiceps": {
+        "order": "Diptera",
+        "family": "Calliphoridae",
+        "genus": "Chrysomya"
+    },
+    "Amara municipalis": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Amara"
+    },
+    "Creophilus maxillosus": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Creophilus"
+    },
+    "Hemicrepidius hirtus": {
+        "order": "Coleoptera",
+        "family": "Elateridae",
+        "genus": "Hemicrepidius"
+    },
+    "Cladius pectinicornis": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Cladius"
+    },
+    "Chrysomela vigintipunctata": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Chrysomela"
+    },
+    "Dolerus haematodes": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Dolerus"
+    },
+    "Episyrphus balteatus": {
+        "order": "Diptera",
+        "family": "Syrphidae",
+        "genus": "Episyrphus"
+    },
+    "Andrena florea": {
+        "order": "Hymenoptera",
+        "family": "Andrenidae",
+        "genus": "Andrena"
+    },
+    "Cladopelma edwardsi": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Cladopelma"
+    },
+    "Tachyta nana": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Tachyta"
+    },
+    "Cyclocephala amblyopsis": {
+        "order": "Coleoptera",
+        "family": "Scarabaeidae",
+        "genus": "Cyclocephala"
+    },
+    "Podagrica fuscipes": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Podagrica"
+    },
+    "Paraphaenocladius impensus": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Paraphaenocladius"
+    },
+    "Platycheirus clypeatus": {
+        "order": "Diptera",
+        "family": "Syrphidae",
+        "genus": "Platycheirus"
+    },
+    "Tetrastichus miser": {
+        "order": "Hymenoptera",
+        "family": "Eulophidae",
+        "genus": "Tetrastichus"
+    },
+    "Tenthredopsis sordida": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Tenthredopsis"
+    },
+    "Hylaeus confusus": {
+        "order": "Hymenoptera",
+        "family": "Colletidae",
+        "genus": "Hylaeus"
+    },
+    "Phyllotreta vittula": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Phyllotreta"
+    },
+    "Oedoparena glauca": {
+        "order": "Diptera",
+        "family": "Dryomyzidae",
+        "genus": "Oedoparena"
+    },
+    "Gyrinus cavatus": {
+        "order": "Coleoptera",
+        "family": "Gyrinidae",
+        "genus": "Gyrinus"
+    },
+    "Hylaeus clypearis": {
+        "order": "Hymenoptera",
+        "family": "Colletidae",
+        "genus": "Hylaeus"
+    },
+    "Agonum muelleri": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Agonum"
+    },
+    "Carpelimus elongatulus": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Carpelimus"
+    },
+    "Pseudoanthidium scapulare": {
+        "order": "Hymenoptera",
+        "family": "Megachilidae",
+        "genus": "Pseudoanthidium"
+    },
+    "Fletcherimyia fletcheri": {
+        "order": "Diptera",
+        "family": "Sarcophagidae",
+        "genus": "Fletcherimyia"
+    },
+    "Dicrotendipes modestus": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Dicrotendipes"
+    },
+    "Dryophthorus corticalis": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Dryophthorus"
+    },
+    "Ceutorhynchus pallidactylus": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Ceutorhynchus"
+    },
+    "Eristalis tenax": {
+        "order": "Diptera",
+        "family": "Syrphidae",
+        "genus": "Eristalis"
+    },
+    "Brachyta interrogationis": {
+        "order": "Coleoptera",
+        "family": "Cerambycidae",
+        "genus": "Brachyta"
+    },
+    "Schizotus pectinicornis": {
+        "order": "Coleoptera",
+        "family": "Pyrochroidae",
+        "genus": "Schizotus"
+    },
+    "Macrophya punctumalbum": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Macrophya"
+    },
+    "Tenthredo maxima": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Tenthredo"
+    },
+    "Cryptocephalus moraei": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Cryptocephalus"
+    },
+    "Bembidion articulatum": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Bembidion"
+    },
+    "Longitarsus exsoletus": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Longitarsus"
+    },
+    "Tetrastichus bledius": {
+        "order": "Hymenoptera",
+        "family": "Eulophidae",
+        "genus": "Tetrastichus"
+    },
+    "Oryzaephilus surinamensis": {
+        "order": "Coleoptera",
+        "family": "Silvanidae",
+        "genus": "Oryzaephilus"
+    },
+    "Cercyon analis": {
+        "order": "Coleoptera",
+        "family": "Hydrophilidae",
+        "genus": "Cercyon"
+    },
+    "Anthidium manicatum": {
+        "order": "Hymenoptera",
+        "family": "Megachilidae",
+        "genus": "Anthidium"
+    },
+    "Technomyrmex horni": {
+        "order": "Hymenoptera",
+        "family": "Formicidae",
+        "genus": "Technomyrmex"
+    },
+    "Tetrastichus ulmi": {
+        "order": "Hymenoptera",
+        "family": "Eulophidae",
+        "genus": "Tetrastichus"
+    },
+    "Agonum lugens": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Agonum"
+    },
+    "Osmia niveata": {
+        "order": "Hymenoptera",
+        "family": "Megachilidae",
+        "genus": "Osmia"
+    },
+    "Cassida rubiginosa": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Cassida"
+    },
+    "Oxybelus haemorrhoidalis": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Oxybelus"
+    },
+    "Baris artemisiae": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Baris"
+    },
+    "Pterostichus niger": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Pterostichus"
+    },
+    "Hemichroa crocea": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Hemichroa"
+    },
+    "Bembidion normannum": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Bembidion"
+    },
+    "Anoplodera sexguttata": {
+        "order": "Coleoptera",
+        "family": "Cerambycidae",
+        "genus": "Anoplodera"
+    },
+    "Gonioctena nivosa": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Gonioctena"
+    },
+    "Dasypoda hirtipes": {
+        "order": "Hymenoptera",
+        "family": "Melittidae",
+        "genus": "Dasypoda"
+    },
+    "Limnophyes brachytomus": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Limnophyes"
+    },
+    "Lathrobium terminatum": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Tetartopeus"
+    },
+    "Eutomostethus punctatus": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Eutomostethus"
+    },
+    "Donacia hypoleuca": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Donacia"
+    },
+    "Rhogogaster viridis": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Rhogogaster"
+    },
+    "Ampedus balteatus": {
+        "order": "Coleoptera",
+        "family": "Elateridae",
+        "genus": "Ampedus"
+    },
+    "Simulium nemorale": {
+        "order": "Diptera",
+        "family": "Simuliidae",
+        "genus": "Simulium"
+    },
+    "Macrophya alboannulata": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Macrophya"
+    },
+    "Ampedus pomorum": {
+        "order": "Coleoptera",
+        "family": "Elateridae",
+        "genus": "Ampedus"
+    },
+    "Ametastegia equiseti": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Ametastegia"
+    },
+    "Batophila rubi": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Batophila"
+    },
+    "Adalia decempunctata": {
+        "order": "Coleoptera",
+        "family": "Coccinellidae",
+        "genus": "Adalia"
+    },
+    "Trichius fasciatus": {
+        "order": "Coleoptera",
+        "family": "Scarabaeidae",
+        "genus": "Trichius"
+    },
+    "Proteinus brachypterus": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Proteinus"
+    },
+    "Bradysia radicum": {
+        "order": "Diptera",
+        "family": "Sciaridae",
+        "genus": "Bradysia"
+    },
+    "Osmia gallarum": {
+        "order": "Hymenoptera",
+        "family": "Megachilidae",
+        "genus": "Osmia"
+    },
+    "Cerceris quinquefasciata": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Cerceris"
+    },
+    "Euarestoides acutangulus": {
+        "order": "Diptera",
+        "family": "Tephritidae",
+        "genus": "Euarestoides"
+    },
+    "Chrysolina fastuosa": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Chrysolina"
+    },
+    "Chrysanthia viridissima": {
+        "order": "Coleoptera",
+        "family": "Oedemeridae",
+        "genus": "Chrysanthia"
+    },
+    "Harpalus tardus": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Harpalus"
+    },
+    "Eutomostethus gagathinus": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Eutomostethus"
+    },
+    "Athalia bicolor": {
+        "order": "Hymenoptera",
+        "family": "Athaliidae",
+        "genus": "Athalia"
+    },
+    "Amara convexiuscula": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Amara"
+    },
+    "Agabus arcticus": {
+        "order": "Coleoptera",
+        "family": "Dytiscidae",
+        "genus": "Agabus"
+    },
+    "Sphecodes ephippius": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Sphecodes"
+    },
+    "Drosophila suzukii": {
+        "order": "Diptera",
+        "family": "Drosophilidae",
+        "genus": "Drosophila"
+    },
+    "Carpelimus rivularis": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Carpelimus"
+    },
+    "Ectemnius ruficornis": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Ectemnius"
+    },
+    "Tetrastichus temporalis": {
+        "order": "Hymenoptera",
+        "family": "Eulophidae",
+        "genus": "Tetrastichus"
+    },
+    "Hylaeus cornutus": {
+        "order": "Hymenoptera",
+        "family": "Colletidae",
+        "genus": "Hylaeus"
+    },
+    "Zygoneura sciarina": {
+        "order": "Diptera",
+        "family": "Sciaridae",
+        "genus": "Zygoneura"
+    },
+    "Polydrusus fulvicornis": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Polydrusus"
+    },
+    "Cantharis pellucida": {
+        "order": "Coleoptera",
+        "family": "Cantharidae",
+        "genus": "Cantharis"
+    },
+    "Calvia decemguttata": {
+        "order": "Coleoptera",
+        "family": "Coccinellidae",
+        "genus": "Calvia"
+    },
+    "Polistes bischoffi": {
+        "order": "Hymenoptera",
+        "family": "Vespidae",
+        "genus": "Polistes"
+    },
+    "Hydrobius fuscipes": {
+        "order": "Coleoptera",
+        "family": "Hydrophilidae",
+        "genus": "Hydrobius"
+    },
+    "Oulimnius latiusculus": {
+        "order": "Coleoptera",
+        "family": "Elmidae",
+        "genus": "Oulimnius"
+    },
+    "Diodontus minutus": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Diodontus"
+    },
+    "Peleteria aenea": {
+        "order": "Diptera",
+        "family": "Tachinidae",
+        "genus": "Peleteria"
+    },
+    "Fannia canicularis": {
+        "order": "Diptera",
+        "family": "Fanniidae",
+        "genus": "Fannia"
+    },
+    "Halictus sexcinctus": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Halictus"
+    },
+    "Spilogona dorsata": {
+        "order": "Diptera",
+        "family": "Muscidae",
+        "genus": "Spilogona"
+    },
+    "Roptrocerus mirus": {
+        "order": "Stylommatophora",
+        "family": "Enidae"
+    },
+    "Carpelimus pusillus": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Carpelimus"
+    },
+    "Parasyrphus tarsatus": {
+        "order": "Diptera",
+        "family": "Syrphidae",
+        "genus": "Parasyrphus"
+    },
+    "Ophonus azureus": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Ophonus"
+    },
+    "Pteromalus albipennis": {
+        "order": "Hymenoptera",
+        "family": "Pteromalidae",
+        "genus": "Pteromalus"
+    },
+    "Sinechostictus ruficornis": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Sinechostictus"
+    },
+    "Athalia rufoscutellata": {
+        "order": "Hymenoptera",
+        "family": "Athaliidae",
+        "genus": "Athalia"
+    },
+    "Eupsophulus castaneus": {
+        "order": "Coleoptera",
+        "family": "Tenebrionidae",
+        "genus": "Eupsophulus"
+    },
+    "Isodontia mexicana": {
+        "order": "Hymenoptera",
+        "family": "Sphecidae",
+        "genus": "Isodontia"
+    },
+    "Notiophilus palustris": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Notiophilus"
+    },
+    "Orthocladius frigidus": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Orthocladius"
+    },
+    "Buathra laborator": {
+        "order": "Hymenoptera",
+        "family": "Ichneumonidae",
+        "genus": "Buathra"
+    },
+    "Polyrhachis mackayi": {
+        "order": "Hymenoptera",
+        "family": "Formicidae",
+        "genus": "Polyrhachis"
+    },
+    "Harpalus rufipes": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Harpalus"
+    },
+    "Xantholinus linearis": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Xantholinus"
+    },
+    "Phyllotreta undulata": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Phyllotreta"
+    },
+    "Chaoborus flavicans": {
+        "order": "Diptera",
+        "family": "Chaoboridae",
+        "genus": "Chaoborus"
+    },
+    "Ceutorhynchus obstrictus": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Ceutorhynchus"
+    },
+    "Lasioglossum creberrimum": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Lasioglossum"
+    },
+    "Pseudoperapion brevirostre": {
+        "order": "Coleoptera",
+        "family": "Apionidae",
+        "genus": "Pseudoperapion"
+    },
+    "Lythraria salicariae": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Lythraria"
+    },
+    "Tenthredo olivacea": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Tenthredo"
+    },
+    "Podalonia alpina": {
+        "order": "Hymenoptera",
+        "family": "Sphecidae",
+        "genus": "Podalonia"
+    },
+    "Harpalus griseus": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Harpalus"
+    },
+    "Brassicogethes aeneus": {
+        "order": "Coleoptera",
+        "family": "Nitidulidae",
+        "genus": "Brassicogethes"
+    },
+    "Crossocerus cetratus": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Crossocerus"
+    },
+    "Gorytes quinquecinctus": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Gorytes"
+    },
+    "Cercyon lateralis": {
+        "order": "Coleoptera",
+        "family": "Hydrophilidae",
+        "genus": "Cercyon"
+    },
+    "Tenthredo scrophulariae": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Tenthredo"
+    },
+    "Scopaeus laevigatus": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Scopaeus"
+    },
+    "Ravinia derelicta": {
+        "order": "Diptera",
+        "family": "Sarcophagidae",
+        "genus": "Ravinia"
+    },
+    "Nysson trimaculatus": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Nysson"
+    },
+    "Eutomostethus ephippium": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Eutomostethus"
+    },
+    "Gyrinus opacus": {
+        "order": "Coleoptera",
+        "family": "Gyrinidae",
+        "genus": "Gyrinus"
+    },
+    "Halictus maculatus": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Halictus"
+    },
+    "Crematogaster carinata": {
+        "order": "Hymenoptera",
+        "family": "Formicidae",
+        "genus": "Crematogaster"
+    },
+    "Propylea quatuordecimpunctata": {
+        "order": "Coleoptera",
+        "family": "Coccinellidae",
+        "genus": "Propylea"
+    },
+    "Myrrha octodecimguttata": {
+        "order": "Coleoptera",
+        "family": "Coccinellidae",
+        "genus": "Myrrha"
+    },
+    "Apion frumentarium": {
+        "order": "Coleoptera",
+        "family": "Apionidae",
+        "genus": "Apion"
+    },
+    "Eupeodes corollae": {
+        "order": "Diptera",
+        "family": "Syrphidae",
+        "genus": "Eupeodes"
+    },
+    "Stethomostus fuliginosus": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Stethomostus"
+    },
+    "Nysson dimidiatus": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Nysson"
+    },
+    "Ammophila sabulosa": {
+        "order": "Hymenoptera",
+        "family": "Sphecidae",
+        "genus": "Ammophila"
+    },
+    "Nysson maculosus": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Nysson"
+    },
+    "Tenthredo amoena": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Tenthredo"
+    },
+    "Bradysia fungicola": {
+        "order": "Diptera",
+        "family": "Sciaridae",
+        "genus": "Bradysia"
+    },
+    "Platycheirus scambus": {
+        "order": "Diptera",
+        "family": "Syrphidae",
+        "genus": "Platycheirus"
+    },
+    "Diglyphus isaea": {
+        "order": "Hymenoptera",
+        "family": "Eulophidae",
+        "genus": "Diglyphus"
+    },
+    "Megachile maritima": {
+        "order": "Hymenoptera",
+        "family": "Megachilidae",
+        "genus": "Megachile"
+    },
+    "Melanostoma mellinum": {
+        "order": "Diptera",
+        "family": "Syrphidae",
+        "genus": "Melanostoma"
+    },
+    "Phloeostiba plana": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Phloeostiba"
+    },
+    "Polistes aurifer": {
+        "order": "Hymenoptera",
+        "family": "Vespidae",
+        "genus": "Polistes"
+    },
+    "Polypedilum nubifer": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Polypedilum"
+    },
+    "Lucilia caesar": {
+        "order": "Diptera",
+        "family": "Calliphoridae",
+        "genus": "Lucilia"
+    },
+    "Abax parallelus": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Abax"
+    },
+    "Benthalia dissidens": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Benthalia"
+    },
+    "Cryptocephalus pusillus": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Cryptocephalus"
+    },
+    "Tenthredo crassa": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Tenthredo"
+    },
+    "Tenthredo velox": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Tenthredo"
+    },
+    "Ceutorhynchus inaffectatus": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Ceutorhynchus"
+    },
+    "Stenus clavicornis": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Stenus"
+    },
+    "Anastrangalia reyi": {
+        "order": "Coleoptera",
+        "family": "Cerambycidae",
+        "genus": "Anastrangalia"
+    },
+    "Bitoma crenata": {
+        "order": "Coleoptera",
+        "family": "Zopheridae",
+        "genus": "Bitoma"
+    },
+    "Chironomus flaviplumus": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Chironomus"
+    },
+    "Leptogenys elongata": {
+        "order": "Hymenoptera",
+        "family": "Formicidae",
+        "genus": "Leptogenys"
+    },
+    "Lasioglossum marginatum": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Lasioglossum"
+    },
+    "Molorchus minor": {
+        "order": "Coleoptera",
+        "family": "Cerambycidae",
+        "genus": "Molorchus"
+    },
+    "Stereonychus fraxini": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Stereonychus"
+    },
+    "Hedobia imperialis": {
+        "order": "Coleoptera",
+        "family": "Ptinidae",
+        "genus": "Ptinomorphus"
+    },
+    "Dolerus picipes": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Dolerus"
+    },
+    "Mycodrosophila aqua": {
+        "order": "Diptera",
+        "family": "Drosophilidae",
+        "genus": "Mycodrosophila"
+    },
+    "Bembidion varium": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Bembidion"
+    },
+    "Pheidole biconstricta": {
+        "order": "Hymenoptera",
+        "family": "Formicidae",
+        "genus": "Pheidole"
+    },
+    "Ammophila campestris": {
+        "order": "Hymenoptera",
+        "family": "Sphecidae",
+        "genus": "Ammophila"
+    },
+    "Lasioglossum laticeps": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Lasioglossum"
+    },
+    "Limnophila poetica": {
+        "order": "Diptera",
+        "family": "Limoniidae",
+        "genus": "Limnophila"
+    },
+    "Mecinus pascuorum": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Mecinus"
+    },
+    "Philonthus carbonarius": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Philonthus"
+    },
+    "Dolerus bimaculatus": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Dolerus"
+    },
+    "Amara familiaris": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Amara"
+    },
+    "Sericomyia chalcopyga": {
+        "order": "Diptera",
+        "family": "Syrphidae",
+        "genus": "Sericomyia"
+    },
+    "Apallates neocoxendix": {
+        "order": "Diptera",
+        "family": "Chloropidae",
+        "genus": "Apallates"
+    },
+    "Steganopsis melanogaster": {
+        "order": "Diptera",
+        "family": "Lauxaniidae",
+        "genus": "Steganopsis"
+    },
+    "Bembidion bipunctatum": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Bembidion"
+    },
+    "Pimpla sodalis": {
+        "order": "Hymenoptera",
+        "family": "Ichneumonidae",
+        "genus": "Pimpla"
+    },
+    "Pterostichus diligens": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Pterostichus"
+    },
+    "Forcipomyia palustris": {
+        "order": "Diptera",
+        "family": "Ceratopogonidae",
+        "genus": "Forcipomyia"
+    },
+    "Epuraea unicolor": {
+        "order": "Coleoptera",
+        "family": "Nitidulidae",
+        "genus": "Epuraea"
+    },
+    "Coccidula scutellata": {
+        "order": "Coleoptera",
+        "family": "Coccinellidae",
+        "genus": "Coccidula"
+    },
+    "Formica subaenescens": {
+        "order": "Hymenoptera",
+        "family": "Formicidae",
+        "genus": "Formica"
+    },
+    "Phyllotreta cruciferae": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Phyllotreta"
+    },
+    "Hylaeus sinuatus": {
+        "order": "Hymenoptera",
+        "family": "Colletidae",
+        "genus": "Hylaeus"
+    },
+    "Tenthredopsis litterata": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Tenthredopsis"
+    },
+    "Crepidodera aurata": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Crepidodera"
+    },
+    "Psilota tristis": {
+        "order": "Diptera",
+        "family": "Syrphidae",
+        "genus": "Psilota"
+    },
+    "Brachypterus glaber": {
+        "order": "Coleoptera",
+        "family": "Kateretidae",
+        "genus": "Brachypterus"
+    },
+    "Haliplus falli": {
+        "order": "Coleoptera",
+        "family": "Haliplidae",
+        "genus": "Haliplus"
+    },
+    "Phyllobius glaucus": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Phyllobius"
+    },
+    "Tenthredo atra": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Tenthredo"
+    },
+    "Tipula serta": {
+        "order": "Diptera",
+        "family": "Tipulidae",
+        "genus": "Tipula"
+    },
+    "Epuraea aestiva": {
+        "order": "Coleoptera",
+        "family": "Nitidulidae",
+        "genus": "Epuraea"
+    },
+    "Charopus graminicola": {
+        "order": "Coleoptera",
+        "family": "Melyridae",
+        "genus": "Charopus"
+    },
+    "Dryocoetes villosus": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Dryocoetes"
+    },
+    "Badister dilatatus": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Badister"
+    },
+    "Psyllobora vigintiduopunctata": {
+        "order": "Coleoptera",
+        "family": "Coccinellidae",
+        "genus": "Psyllobora"
+    },
+    "Amara fulva": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Amara"
+    },
+    "Miscophus bicolor": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Miscophus"
+    },
+    "Lasioglossum zonulum": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Lasioglossum"
+    },
+    "Salpingus planirostris": {
+        "order": "Coleoptera",
+        "family": "Salpingidae",
+        "genus": "Salpingus"
+    },
+    "Propsilocerus akamusi": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Propsilocerus"
+    },
+    "Eutomostethus luteiventris": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Eutomostethus"
+    },
+    "Sitona humeralis": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Sitona"
+    },
+    "Helina evecta": {
+        "order": "Diptera",
+        "family": "Muscidae",
+        "genus": "Helina"
+    },
+    "Lithocharis nigriceps": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Lithocharis"
+    },
+    "Anopheles vestitipennis": {
+        "order": "Diptera",
+        "family": "Culicidae",
+        "genus": "Anopheles"
+    },
+    "Eristalinus aeneus": {
+        "order": "Diptera",
+        "family": "Syrphidae",
+        "genus": "Eristalinus"
+    },
+    "Harpalus pensylvanicus": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Harpalus"
+    },
+    "Forcipomyia nigra": {
+        "order": "Diptera",
+        "family": "Ceratopogonidae",
+        "genus": "Forcipomyia"
+    },
+    "Hylaeus lineolatus": {
+        "order": "Hymenoptera",
+        "family": "Colletidae",
+        "genus": "Hylaeus"
+    },
+    "Pipunculus hertzogi": {
+        "order": "Diptera",
+        "family": "Pipunculidae",
+        "genus": "Pipunculus"
+    },
+    "Isomira semiflava": {
+        "order": "Coleoptera",
+        "family": "Tenebrionidae",
+        "genus": "Isomira"
+    },
+    "Dinoptera collaris": {
+        "order": "Coleoptera",
+        "family": "Cerambycidae",
+        "genus": "Dinoptera"
+    },
+    "Myrmica alaskensis": {
+        "order": "Hymenoptera",
+        "family": "Formicidae",
+        "genus": "Myrmica"
+    },
+    "Paratanytarsus laccophilus": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Paratanytarsus"
+    },
+    "Stelis breviuscula": {
+        "order": "Hymenoptera",
+        "family": "Megachilidae",
+        "genus": "Stelis"
+    },
+    "Donacia cincticornis": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Donacia"
+    },
+    "Cryptus arcticus": {
+        "order": "Hymenoptera",
+        "family": "Ichneumonidae",
+        "genus": "Cryptus"
+    },
+    "Dyschirius globosus": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Dyschirius"
+    },
+    "Hoplia philanthus": {
+        "order": "Coleoptera",
+        "family": "Scarabaeidae",
+        "genus": "Hoplia"
+    },
+    "Cantharis decipiens": {
+        "order": "Coleoptera",
+        "family": "Cantharidae",
+        "genus": "Cantharis"
+    },
+    "Agriotes pallidulus": {
+        "order": "Coleoptera",
+        "family": "Elateridae",
+        "genus": "Agriotes"
+    },
+    "Paratanytarsus austriacus": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Paratanytarsus"
+    },
+    "Diamesa bertrami": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Diamesa"
+    },
+    "Tetrastichus scardiae": {
+        "order": "Hymenoptera",
+        "family": "Eulophidae",
+        "genus": "Tetrastichus"
+    },
+    "Necrobia violacea": {
+        "order": "Coleoptera",
+        "family": "Cleridae",
+        "genus": "Necrobia"
+    },
+    "Anthidiellum strigatum": {
+        "order": "Hymenoptera",
+        "family": "Megachilidae",
+        "genus": "Anthidiellum"
+    },
+    "Coccinella septempunctata": {
+        "order": "Coleoptera",
+        "family": "Coccinellidae",
+        "genus": "Coccinella"
+    },
+    "Oxybelus variegatus": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Oxybelus"
+    },
+    "Sciara humeralis": {
+        "order": "Diptera",
+        "family": "Sciaridae",
+        "genus": "Sciara"
+    },
+    "Siphona geniculata": {
+        "order": "Diptera",
+        "family": "Tachinidae",
+        "genus": "Siphona"
+    },
+    "Colenis immunda": {
+        "order": "Coleoptera",
+        "family": "Leiodidae",
+        "genus": "Colenis"
+    },
+    "Harpalus calceatus": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Harpalus"
+    },
+    "Tachyporus nitidulus": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Tachyporus"
+    },
+    "Dolerus subarcticus": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Dolerus"
+    },
+    "Longitarsus melanocephalus": {
+        "order": "Coleoptera",
+        "family": "Chrysomelidae",
+        "genus": "Longitarsus"
+    },
+    "Macrophya albipuncta": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Macrophya"
+    },
+    "Halictus tumulorum": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Seladonia"
+    },
+    "Rhagonycha lignosa": {
+        "order": "Coleoptera",
+        "family": "Cantharidae",
+        "genus": "Rhagonycha"
+    },
+    "Diamesa arctica": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Diamesa"
+    },
+    "Zaprionus indianus": {
+        "order": "Diptera",
+        "family": "Drosophilidae",
+        "genus": "Zaprionus"
+    },
+    "Oxystoma ochropus": {
+        "order": "Coleoptera",
+        "family": "Apionidae",
+        "genus": "Oxystoma"
+    },
+    "Halictus leucaheneus": {
+        "order": "Hymenoptera",
+        "family": "Halictidae",
+        "genus": "Seladonia"
+    },
+    "Metriocnemus fuscipes": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Metriocnemus"
+    },
+    "Labrundinia tenata": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Labrundinia"
+    },
+    "Pemphredon lugens": {
+        "order": "Hymenoptera",
+        "family": "Crabronidae",
+        "genus": "Pemphredon"
+    },
+    "Amischa analis": {
+        "order": "Coleoptera",
+        "family": "Staphylinidae",
+        "genus": "Amischa"
+    },
+    "Dioxyna sororcula": {
+        "order": "Diptera",
+        "family": "Tephritidae",
+        "genus": "Campiglossa"
+    },
+    "Amphimallon solstitiale": {
+        "order": "Coleoptera",
+        "family": "Scarabaeidae",
+        "genus": "Amphimallon"
+    },
+    "Hexacola hexatoma": {
+        "order": "Hymenoptera",
+        "family": "Figitidae",
+        "genus": "Hexacola"
+    },
+    "Lixus iridis": {
+        "order": "Coleoptera",
+        "family": "Curculionidae",
+        "genus": "Lixus"
+    },
+    "Chironomus hyperboreus": {
+        "order": "Diptera",
+        "family": "Chironomidae",
+        "genus": "Chironomus"
+    },
+    "Athous bicolor": {
+        "order": "Coleoptera",
+        "family": "Elateridae",
+        "genus": "Athous"
+    },
+    "Harpalus froelichii": {
+        "order": "Coleoptera",
+        "family": "Carabidae",
+        "genus": "Harpalus"
+    },
+    "Monophadnus pallescens": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Monophadnus"
+    },
+    "Ametastegia albipes": {
+        "order": "Hymenoptera",
+        "family": "Tenthredinidae",
+        "genus": "Ametastegia"
+    },
+    "Eupelmus australiensis": {
+        "order": "not_classified",
+        "family": "not_classified",
+        "genus": "not_classified"
+    },
+    "Dicranomyia (Dicranomyia) longipennis": {
+        "order": "not_classified",
+        "family": "not_classified",
+        "genus": "not_classified"
+    },
+    "Sericoides viridis": {
+        "order": "not_classified",
+        "family": "not_classified",
+        "genus": "not_classified"
+    },
+    "Lasioglossum zingowli": {
+        "order": "not_classified",
+        "family": "not_classified",
+        "genus": "not_classified"
+    },
+    "Liotryphon punctulatus": {
+        "order": "not_classified",
+        "family": "not_classified",
+        "genus": "not_classified"
+    },
+    "Euplectrus carinifer": {
+        "order": "not_classified",
+        "family": "not_classified",
+        "genus": "not_classified"
+    },
+    "Omalisus fontisbellaquaei": {
+        "order": "not_classified",
+        "family": "not_classified",
+        "genus": "not_classified"
+    },
+    "Lasioglossum urbanum": {
+        "order": "not_classified",
+        "family": "not_classified",
+        "genus": "not_classified"
+    },
+    "Nimbus contaminatus": {
+        "order": "not_classified",
+        "family": "not_classified",
+        "genus": "not_classified"
+    },
+    "Simulium nr. albilineatum": {
+        "order": "not_classified",
+        "family": "not_classified",
+        "genus": "not_classified"
+    },
+    "Simulium escomeli": {
+        "order": "not_classified",
+        "family": "not_classified",
+        "genus": "not_classified"
+    },
+    "Dicranomyia (Idiopyga) intricata": {
+        "order": "not_classified",
+        "family": "not_classified",
+        "genus": "not_classified"
+    },
+    "Lasioglossum tannaense": {
+        "order": "not_classified",
+        "family": "not_classified",
+        "genus": "not_classified"
+    },
+    "Clastobasis tryoni": {
+        "order": "not_classified",
+        "family": "not_classified",
+        "genus": "not_classified"
+    },
+    "Tipula (Beringotipula) coloradensis": {
+        "order": "not_classified",
+        "family": "not_classified",
+        "genus": "not_classified"
+    },
+    "Psilopa singaporensis": {
+        "order": "not_classified",
+        "family": "not_classified",
+        "genus": "not_classified"
+    },
+    "Euplectrus geometricida": {
+        "order": "not_classified",
+        "family": "not_classified",
+        "genus": "not_classified"
+    },
+    "Myriochila semicincta": {
+        "order": "not_classified",
+        "family": "not_classified",
+        "genus": "not_classified"
+    },
+    "Prasocuris hannoveriana": {
+        "order": "not_classified",
+        "family": "not_classified",
+        "genus": "not_classified"
+    },
+    "Cis tridentatus": {
+        "order": "not_classified",
+        "family": "not_classified",
+        "genus": "not_classified"
+    },
+    "Thoracochaeta johnsoni": {
+        "order": "not_classified",
+        "family": "not_classified",
+        "genus": "not_classified"
+    },
+    "Chaoborus rotundifolius": {
+        "order": "not_classified",
+        "family": "not_classified",
+        "genus": "not_classified"
+    },
+    "Melanimon tibialis": {
+        "order": "not_classified",
+        "family": "not_classified",
+        "genus": "not_classified"
+    },
+    "Lamiogethes difficilis": {
+        "order": "not_classified",
+        "family": "not_classified",
+        "genus": "not_classified"
+    },
+    "Polistes quadricingulatus": {
+        "order": "not_classified",
+        "family": "not_classified",
+        "genus": "not_classified"
+    },
+    "Diamesa chorea": {
+        "order": "not_classified",
+        "family": "not_classified",
+        "genus": "not_classified"
+    },
+    "Pristiphora resinicolor": {
+        "order": "not_classified",
+        "family": "not_classified",
+        "genus": "not_classified"
+    },
+    "Cnesia nr. dissimilis": {
+        "order": "not_classified",
+        "family": "not_classified",
+        "genus": "not_classified"
+    },
+    "Lasioglossum epiense": {
+        "order": "not_classified",
+        "family": "not_classified",
+        "genus": "not_classified"
+    },
+    "Anasimyia anausis": {
+        "order": "not_classified",
+        "family": "not_classified",
+        "genus": "not_classified"
+    },
+    "Hymenorus heteropygus": {
+        "order": "not_classified",
+        "family": "not_classified",
+        "genus": "not_classified"
+    },
+    "Anasimyia bilinearis": {
+        "order": "not_classified",
+        "family": "not_classified",
+        "genus": "not_classified"
+    },
+    "Metalimnobia (Metalimnobia) solitaria": {
+        "order": "not_classified",
+        "family": "not_classified",
+        "genus": "not_classified"
+    },
+    "Lobopoda erythrocnemis": {
+        "order": "not_classified",
+        "family": "not_classified",
+        "genus": "not_classified"
+    },
+    "Sericoides germaini": {
+        "order": "not_classified",
+        "family": "not_classified",
+        "genus": "not_classified"
+    }
+}
