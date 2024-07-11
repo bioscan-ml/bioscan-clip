@@ -17,6 +17,6 @@ language:
 load_ckpt: false
 model_output_name: no_align_5m
 evaluation_period: 1
-ckpt_path: ${project_root_path}/ckpt/bioscan_clip/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400_5m/best.pth
+ckpt_path: ${project_root_path}/ckpt/bioscan_clip/trained_with_bioscan_5m/image_dna_text.pth
 output_dim: 768
 port: 12316

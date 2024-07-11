@@ -14,8 +14,13 @@ language:
   input_type: sequence
   model: lora_bert
 
-model_output_name: lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400_5m
+bioscan_bert_checkpoint: ${project_root_path}/ckpt/BarcodeBERT/5_mer/model_41.pth
+model_output_dir: ${project_root_path}/ckpt/bioscan_clip
+model_output_name: trained_with_bioscan_5m_image_dna_text
 evaluation_period: 1
-ckpt_path: ${project_root_path}/ckpt/bioscan_clip/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400_5m/best.pth
+
+ckpt_path: ${project_root_path}/ckpt/bioscan_clip/trained_with_bioscan_5m/image_dna_text.pth
+
 output_dim: 768
+num_workers: 8
 port: 12316
