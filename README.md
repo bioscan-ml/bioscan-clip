@@ -20,8 +20,6 @@ conda create -n bioscan-clip python=3.10
 conda activate bioscan-clip
 conda install pytorch=2.0.1 torchvision=0.15.2 torchtext=0.15.2 pytorch-cuda=11.7 -c pytorch -c nvidia
 pip install -r requirements.txt
-# pip install biopython
-# pip install git+https://github.com/openai/CLIP.git
 conda install -c conda-forge faiss
 pip install .
 ```
@@ -51,6 +49,7 @@ For example, evaluate with model that pre-trained with Image+DNA+Text from BIOSC
 mkdir -p ckpt/bioscan_clip_5m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400
 cd ckpt/bioscan_clip_5m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400
 wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/ckpt/trained_with_bioscan_5m/image_dna_text.pth
+mv image_dna_text.pth best.pth
 cd ../../..
 python scripts/inference_and_eval.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_5m'
 ```
@@ -212,8 +211,26 @@ cd data/INSECT
 wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_clip_for_downloading/INSECT_data/unprocessed_data.zip
 unzip unprocessed_data.zip
 
-# Note that as INSECT dataset only have the species label, we need to get the other three labels.
+# Note that as the INSECT dataset only has the species label, we need to get the other three labels.
+# For that, please edit get_all_species_taxo_labels_dict_and_save_to_json.py, change Entrez.email = None to your email 
+python get_all_species_taxo_labels_dict_and_save_to_json.py
+
+# Then, generate CSV and hdf5 file for the dataset.
+python process_insect_dataset.py
 ```
+You can also download the processed file with:
+```shell
+wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_clip_for_downloading/INSECT_data/processed_data.zip
+unzip processed_data.zip
+```
+
+### Train
+
+```shell
+python scripts/train_cl_on_insect_dataset.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_ssl'
+```
+
+
 
 
 # Conclusion
