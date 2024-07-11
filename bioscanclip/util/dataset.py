@@ -13,6 +13,8 @@ import torchvision.transforms as transforms
 from bioscanclip.model.dna_encoder import get_sequence_pipeline
 from torch.utils.data.distributed import DistributedSampler
 import json
+import time
+from transformers import AutoTokenizer
 
 def get_label_ids(input_labels):
     label_to_id = {}
