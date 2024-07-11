@@ -5,6 +5,7 @@ import numpy as np
 from PIL import Image
 import io
 import pandas as pd
+import scipy.io as sio
 
 
 def save_list_of_images_into_hdf5(class_name, file_name):
