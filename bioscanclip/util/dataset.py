@@ -12,6 +12,7 @@ from torch.utils.data import Dataset
 import torchvision.transforms as transforms
 from bioscanclip.model.dna_encoder import get_sequence_pipeline
 from torch.utils.data.distributed import DistributedSampler
+import json
 
 def get_label_ids(input_labels):
     label_to_id = {}
