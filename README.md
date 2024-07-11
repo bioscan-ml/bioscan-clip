@@ -159,6 +159,7 @@ mkdir -p ckpt/bioscan_clip/trained_with_bioscan_5m
 cd ckpt/bioscan_clip/trained_with_bioscan_5m
 wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/ckpt/trained_with_bioscan_5m/image_dna_text.pth
 ```
+For downloading all BIOSCAN-CLIP pre-trained models: [Link](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/ckpt.zip)
 
 ## Train
 
