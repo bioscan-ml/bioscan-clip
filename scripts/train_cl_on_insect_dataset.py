@@ -18,8 +18,6 @@ from bioscanclip.util.dataset import load_insect_dataloader
 import numpy as np
 
 
-
-
 def save_prediction(pred_list, gt_list, json_path):
     data = {
         "gt_labels": gt_list,
