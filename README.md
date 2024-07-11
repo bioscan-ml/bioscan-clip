@@ -151,12 +151,12 @@ mkdir -p ckpt/BarcodeBERT/5_mer
 cd ckpt/BarcodeBERT/5_mer
 wget https://aspis.cmpt.sfu.ca/projects/bioscan/clip_project/ckpt/BarcodeBERT/model_41.pth
 cd ../../..
-mkdir -p ckpt/bioscan_clip/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400
-cd ckpt/bioscan_clip/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400
+mkdir -p ckpt/bioscan_clip/trained_with_bioscan_1m
+cd ckpt/bioscan_clip/trained_with_bioscan_1m
 wget https://aspis.cmpt.sfu.ca/projects/bioscan//version_0_1_0/lora_vit_lora_bert_ssl_batch_size_400/best.pth
 cd ..
-mkdir bioscan_clip/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400_5m
-cd bioscan_clip/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400_5m
+mkdir -p ckpt/bioscan_clip/trained_with_bioscan_5m
+cd ckpt/bioscan_clip/trained_with_bioscan_5m
 wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/ckpt/best.pth
 ```
 
