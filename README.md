@@ -153,11 +153,11 @@ wget https://aspis.cmpt.sfu.ca/projects/bioscan/clip_project/ckpt/BarcodeBERT/mo
 cd ../../..
 mkdir -p ckpt/bioscan_clip/trained_with_bioscan_1m
 cd ckpt/bioscan_clip/trained_with_bioscan_1m
-wget https://aspis.cmpt.sfu.ca/projects/bioscan//version_0_1_0/lora_vit_lora_bert_ssl_batch_size_400/best.pth
-cd ..
+wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/ckpt/trained_with_bioscan_1m/image_dna_text.pth
+cd ../../..
 mkdir -p ckpt/bioscan_clip/trained_with_bioscan_5m
 cd ckpt/bioscan_clip/trained_with_bioscan_5m
-wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/ckpt/best.pth
+wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/ckpt/trained_with_bioscan_5m/image_dna_text.pth
 ```
 
 ## Train
