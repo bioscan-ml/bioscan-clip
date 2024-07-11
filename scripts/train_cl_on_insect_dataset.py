@@ -14,7 +14,7 @@ from bioscanclip.epoch.train_epoch import train_epoch
 from inference_and_eval import get_features_and_label, inference_and_print_result
 from bioscanclip.model.loss_func import ContrastiveLoss
 from bioscanclip.model.simple_clip import load_clip_model
-from bioscanclip.util.dataset_for_insect_dataset import load_insect_dataloader
+from bioscanclip.util.dataset import load_insect_dataloader
 import numpy as np
 
 
