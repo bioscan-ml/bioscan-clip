@@ -46,10 +46,9 @@ To evaluate with a pre-trained model or pre-extracted embeddings, you need to pl
 
 For example, evaluate with model that pre-trained with Image+DNA+Text from BIOSCAN-5M:
 ```shell
-mkdir -p ckpt/bioscan_clip_5m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400
-cd ckpt/bioscan_clip_5m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400
+mkdir -p ckpt/bioscan_clip/trained_with_bioscan_5m
+cd ckpt/bioscan_clip/trained_with_bioscan_5m
 wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/ckpt/trained_with_bioscan_5m/image_dna_text.pth
-mv image_dna_text.pth best.pth
 cd ../../..
 python scripts/inference_and_eval.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_5m'
 ```
@@ -58,6 +57,7 @@ Note: Running `inference_and_eval.py` with pre-trained model with generate the e
 Evaluate with extracted embeddings:
 ```shell
 mkdir -p extracted_embedding/bioscan_5m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400_5m
+cd extracted_embedding/bioscan_5m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400_5m
 wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/extracted_embedding/bioscan_5m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400_5m/extracted_feature_from_val_split.hdf5
 wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/extracted_embedding/bioscan_5m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400_5m/labels_val.json
 cd ../../..
