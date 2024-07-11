@@ -20,7 +20,8 @@ conda create -n bioscan-clip python=3.10
 conda activate bioscan-clip
 conda install pytorch=2.0.1 torchvision=0.15.2 torchtext=0.15.2 pytorch-cuda=11.7 -c pytorch -c nvidia
 pip install -r requirements.txt
-#pip install git+https://github.com/openai/CLIP.git
+# pip install biopython
+# pip install git+https://github.com/openai/CLIP.git
 conda install -c conda-forge faiss
 pip install .
 ```
@@ -33,12 +34,12 @@ We provide pretrained embeddings and model weights.  We evaluate our models by e
 
 | Training data |  Aligned modalities |  Embeddings |  Model  | Config |
 |---------------|---------------------|-------------|---------|--------|
-| BIOSCAN-1M    |  None               |  [Embedding](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/extracted_embedding/bioscan_1m/no_align_1m/extracted_feature_from_val_split.hdf5) [Label](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/extracted_embedding/bioscan_1m/no_align_1m/labels_val.json)         |  N/A   |  [Link](/localhome/zmgong/Desktop/projects/bioscan/www/BIOSCAN_5M_for_downloading/config_files/for_bioscan_1m/lora_vit_lora_barcode_bert_lora_bert_ssl_no_loading.yaml)  |
-| BIOSCAN-1M    |  **I**mage + **D**NA        |  [Embedding](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/extracted_embedding/bioscan_1m/lora_vit_lora_barcode_bert_ssl_batch_size_400/extracted_feature_from_val_split.hdf5) [Label](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/extracted_embedding/bioscan_1m/lora_vit_lora_barcode_bert_ssl_batch_size_400/labels_val.json)|  [Link](https://aspis.cmpt.sfu.ca/projects/bioscan//BIOSCAN_5M_for_downloading/ckpt/trained_with_bioscan_1m/image_dna.pth)   |  [Link](/localhome/zmgong/Desktop/projects/bioscan/www/BIOSCAN_5M_for_downloading/config_files/for_bioscan_1m/lora_vit_lora_barcode_bert_ssl.yaml)  |
-| BIOSCAN-1M    |  **I**mage + **D**NA + **T**ax  |  [Embedding](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/extracted_embedding/bioscan_1m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400/extracted_feature_from_val_split.hdf5) [Label](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/extracted_embedding/bioscan_1m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400/labels_val.json)       |  [Link](https://aspis.cmpt.sfu.ca/projects/bioscan//BIOSCAN_5M_for_downloading/ckpt/trained_with_bioscan_1m/image_dna_text.pth) |  [Link](/localhome/zmgong/Desktop/projects/bioscan/www/BIOSCAN_5M_for_downloading/config_files/for_bioscan_1m/lora_vit_lora_barcode_bert_lora_bert_ssl.yaml) |
-| BIOSCAN-5M    |  None               |  [Embedding](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/extracted_embedding/bioscan_5m/no_align_5m/extracted_feature_from_val_split.hdf5) [Label](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/extracted_embedding/bioscan_5m/no_align_5m/labels_val.json)       |  N/A   |  [Link](/localhome/zmgong/Desktop/projects/bioscan/www/BIOSCAN_5M_for_downloading/config_files/for_bioscan_5m/lora_vit_lora_barcode_bert_lora_bert_5m_no_loading.yaml)  |
-| BIOSCAN-5M    |  **I**mage + **D**NA        |  [Embedding](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/extracted_embedding/bioscan_5m/lora_vit_lora_barcode_bert_ssl_batch_size_400_5m/extracted_feature_from_val_split.hdf5) [Label](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/extracted_embedding/bioscan_5m/lora_vit_lora_barcode_bert_ssl_batch_size_400_5m/labels_val.json)       |  [Link](https://aspis.cmpt.sfu.ca/projects/bioscan//BIOSCAN_5M_for_downloading/ckpt/trained_with_bioscan_5m/image_dna.pth)    |  [Link](/localhome/zmgong/Desktop/projects/bioscan/www/BIOSCAN_5M_for_downloading/config_files/for_bioscan_5m/lora_vit_lora_barcode_bert_5m.yaml)  |
-| BIOSCAN-5M    |  **I**mage + **D**NA + **T**ax  |  [Embedding](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/extracted_embedding/bioscan_5m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400_5m/extracted_feature_from_val_split.hdf5) [Label](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/extracted_embedding/bioscan_5m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400_5m/labels_val.json)      |  [Link](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/ckpt/trained_with_bioscan_5m/image_dna_text.pth)|   [Link](/localhome/zmgong/Desktop/projects/bioscan/www/BIOSCAN_5M_for_downloading/config_files/for_bioscan_5m/lora_vit_lora_barcode_bert_lora_bert_5m.yaml)  |
+| BIOSCAN-1M    |  None               |  [Embedding](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/extracted_embedding/bioscan_1m/no_align_1m/extracted_feature_from_val_split.hdf5) [Label](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/extracted_embedding/bioscan_1m/no_align_1m/labels_val.json)         |  N/A   |  [Link](/localhome/zmgong/Desktop/projects/bioscan/www/BIOSCAN_CLIP_for_downloading/config_files/for_bioscan_1m/lora_vit_lora_barcode_bert_lora_bert_ssl_no_loading.yaml)  |
+| BIOSCAN-1M    |  **I**mage + **D**NA        |  [Embedding](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/extracted_embedding/bioscan_1m/lora_vit_lora_barcode_bert_ssl_batch_size_400/extracted_feature_from_val_split.hdf5) [Label](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/extracted_embedding/bioscan_1m/lora_vit_lora_barcode_bert_ssl_batch_size_400/labels_val.json)|  [Link](https://aspis.cmpt.sfu.ca/projects/bioscan//BIOSCAN_CLIP_for_downloading/ckpt/trained_with_bioscan_1m/image_dna.pth)   |  [Link](/localhome/zmgong/Desktop/projects/bioscan/www/BIOSCAN_CLIP_for_downloading/config_files/for_bioscan_1m/lora_vit_lora_barcode_bert_ssl.yaml)  |
+| BIOSCAN-1M    |  **I**mage + **D**NA + **T**ax  |  [Embedding](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/extracted_embedding/bioscan_1m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400/extracted_feature_from_val_split.hdf5) [Label](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/extracted_embedding/bioscan_1m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400/labels_val.json)       |  [Link](https://aspis.cmpt.sfu.ca/projects/bioscan//BIOSCAN_CLIP_for_downloading/ckpt/trained_with_bioscan_1m/image_dna_text.pth) |  [Link](/localhome/zmgong/Desktop/projects/bioscan/www/BIOSCAN_CLIP_for_downloading/config_files/for_bioscan_1m/lora_vit_lora_barcode_bert_lora_bert_ssl.yaml) |
+| BIOSCAN-5M    |  None               |  [Embedding](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/extracted_embedding/bioscan_5m/no_align_5m/extracted_feature_from_val_split.hdf5) [Label](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/extracted_embedding/bioscan_5m/no_align_5m/labels_val.json)       |  N/A   |  [Link](/localhome/zmgong/Desktop/projects/bioscan/www/BIOSCAN_CLIP_for_downloading/config_files/for_bioscan_5m/lora_vit_lora_barcode_bert_lora_bert_5m_no_loading.yaml)  |
+| BIOSCAN-5M    |  **I**mage + **D**NA        |  [Embedding](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/extracted_embedding/bioscan_5m/lora_vit_lora_barcode_bert_ssl_batch_size_400_5m/extracted_feature_from_val_split.hdf5) [Label](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/extracted_embedding/bioscan_5m/lora_vit_lora_barcode_bert_ssl_batch_size_400_5m/labels_val.json)       |  [Link](https://aspis.cmpt.sfu.ca/projects/bioscan//BIOSCAN_CLIP_for_downloading/ckpt/trained_with_bioscan_5m/image_dna.pth)    |  [Link](/localhome/zmgong/Desktop/projects/bioscan/www/BIOSCAN_CLIP_for_downloading/config_files/for_bioscan_5m/lora_vit_lora_barcode_bert_5m.yaml)  |
+| BIOSCAN-5M    |  **I**mage + **D**NA + **T**ax  |  [Embedding](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/extracted_embedding/bioscan_5m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400_5m/extracted_feature_from_val_split.hdf5) [Label](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/extracted_embedding/bioscan_5m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400_5m/labels_val.json)      |  [Link](https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/ckpt/trained_with_bioscan_5m/image_dna_text.pth)|   [Link](/localhome/zmgong/Desktop/projects/bioscan/www/BIOSCAN_CLIP_for_downloading/config_files/for_bioscan_5m/lora_vit_lora_barcode_bert_lora_bert_5m.yaml)  |
 
 ## Quick start
 Instead of conducting a full training, you can choose to download pre-trained models or pre-extracted embeddings for evaluation.
@@ -49,7 +50,7 @@ For example, evaluate with model that pre-trained with Image+DNA+Text from BIOSC
 ```shell
 mkdir -p ckpt/bioscan_clip_5m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400
 cd ckpt/bioscan_clip_5m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400
-wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/ckpt/trained_with_bioscan_5m/image_dna_text.pth
+wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/ckpt/trained_with_bioscan_5m/image_dna_text.pth
 cd ../../..
 python scripts/inference_and_eval.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_5m'
 ```
@@ -58,8 +59,8 @@ Note: Running `inference_and_eval.py` with pre-trained model with generate the e
 Evaluate with extracted embeddings:
 ```shell
 mkdir -p extracted_embedding/bioscan_5m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400_5m
-wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/extracted_embedding/bioscan_5m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400_5m/extracted_feature_from_val_split.hdf5
-wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/extracted_embedding/bioscan_5m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400_5m/labels_val.json
+wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/extracted_embedding/bioscan_5m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400_5m/extracted_feature_from_val_split.hdf5
+wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/extracted_embedding/bioscan_5m/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400_5m/labels_val.json
 cd ../../..
 python scripts/inference_and_eval.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_5m'
 ```
@@ -85,7 +86,7 @@ wget https://aspis.cmpt.sfu.ca/projects/bioscan/clip_project/data/version_0.2.1/
 # From project folder
 mkdir -p data/BOSCAN_5M/split_data
 cd data/BOSCAN_5M
-wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/BIOSCAN_5M.hdf5
+wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/BIOSCAN_5M.hdf5
 ```
 ### Download data for generating hdf5 files
 
@@ -157,7 +158,7 @@ wget https://aspis.cmpt.sfu.ca/projects/bioscan//version_0_1_0/lora_vit_lora_ber
 cd ..
 mkdir bioscan_clip/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400_5m
 cd bioscan_clip/lora_vit_lora_barcode_bert_lora_bert_ssl_batch_size_400_5m
-wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_5M_for_downloading/ckpt/best.pth
+wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/ckpt/best.pth
 ```
 
 ## Train
@@ -198,6 +199,20 @@ python scripts/inference_and_eval.py 'model_config=lora_vit_lora_barcode_bert_lo
 To run evaluation for BIOSCAN-5M:
 ```shell
 python scripts/inference_and_eval.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_5m'
+```
+
+## Experiment with INSECT dataset.
+TODO add some acknowledgement about the INSECT dataset. Also, the description of the BZSL experiments should be added.
+
+To download unprocessed INSECT dataset, you can reference [BZSL](https://github.com/sbadirli/Fine-Grained-ZSL-with-DNA) or: 
+
+```shell
+mkdir -p data/INSECT
+cd data/INSECT
+wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_clip_for_downloading/INSECT_data/unprocessed_data.zip
+unzip unprocessed_data.zip
+
+# Note that as INSECT dataset only have the species label, we need to get the other three labels.
 ```
 
 
