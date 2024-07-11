@@ -223,6 +223,13 @@ wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_clip_for_downloading/INS
 unzip processed_data.zip
 ```
 
+### Train
+
+```shell
+python scripts/train_cl_on_insect_dataset.py 'model_config=lora_vit_lora_barcode_bert_lora_bert'
+```
+
+
 
 
 # Conclusion
