@@ -212,8 +212,19 @@ cd data/INSECT
 wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_clip_for_downloading/INSECT_data/unprocessed_data.zip
 unzip unprocessed_data.zip
 
-# Note that as INSECT dataset only have the species label, we need to get the other three labels.
+# Note that as the INSECT dataset only has the species label, we need to get the other three labels.
+# For that, please edit get_all_species_taxo_labels_dict_and_save_to_json.py, change Entrez.email = None to your email 
+python get_all_species_taxo_labels_dict_and_save_to_json.py
+
+# Then, generate CSV and hdf5 file for the dataset.
+python process_insect_dataset.py
 ```
+You can also download the processed file with:
+```shell
+wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_clip_for_downloading/INSECT_data/processed_data.zip
+unzip processed_data.zip
+```
+
 
 
 # Conclusion
