@@ -162,10 +162,10 @@ def main_process(rank: int, world_size: int, args):
                 wandb.log(dict_for_wandb,
                           commit=True)
 
-            if args.save_ckpt:
-                last_ckpt_path = os.path.join(folder_path, f'last_device_{rank}.pth')
-                torch.save(model.state_dict(), last_ckpt_path)
-                print(f'Last ckpt: {last_ckpt_path}')
+        if args.save_ckpt:
+            last_ckpt_path = os.path.join(folder_path, f'last_device_{rank}.pth')
+            torch.save(model.state_dict(), last_ckpt_path)
+            print(f'Last ckpt: {last_ckpt_path}')
 
 
 
