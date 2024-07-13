@@ -681,8 +681,6 @@ def species_list_to_labels(species_list, species_to_others):
     return array_of_dicts
 
 class INSECTDataset(Dataset):
-
-
     def __init__(self, path_to_att_splits_mat, path_to_res_101_mat, image_hdf5_path, dna_transforms, species_to_others,
                  split, for_training=False, cl_label=False, **kwargs) -> None:
         super().__init__()
@@ -819,7 +817,7 @@ def load_insect_dataloader(args, world_size=None, rank=None, num_workers=8, load
             args.insect_data.path_to_att_splits_mat, args.insect_data.path_to_res_101_mat,
             species_to_others=specie_to_other_labels, split="train_loc",
             image_hdf5_path=args.insect_data.path_to_image_hdf5,
-            dna_transforms=sequence_pipeline, for_training=True
+            dna_transforms=sequence_pipeline, for_training=True, cl_label=True
         )
 
         train_dataset_for_key = INSECTDataset(

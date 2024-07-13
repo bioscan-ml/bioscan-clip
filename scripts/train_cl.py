@@ -77,8 +77,6 @@ def main_process(rank: int, world_size: int, args):
         args.save_inference = False
         args.save_ckpt = False
 
-
-
     current_datetime = datetime.datetime.now()
     formatted_datetime = current_datetime.strftime("%Y-%m-%d_%H%M%S")
     args = copy.deepcopy(args)

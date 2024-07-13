@@ -90,15 +90,10 @@ def convert_acc_dict_to_wandb_dict(acc_dict):
 
 def main_process(rank: int, world_size: int, args):
 
-    # # Set up for debug, delete when you see it!
-
-    args.debug_flag = False
-    # # Set up for debug, delete when you see it!
-
     # special set up for train on INSECT dataset
-    args.model_config.batch_size = 350
+    args.model_config.batch_size = 400
     args.model_config.epochs = 80
-    args.model_config.evaluation_period = 75
+    args.model_config.evaluation_period = 40
 
 
     if args.debug_flag:
