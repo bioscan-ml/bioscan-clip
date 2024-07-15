@@ -9,11 +9,10 @@ import torch.distributed as dist
 
 
 def train_epoch(activate_wandb, total_epochs, epoch, dataloader, model, optimizer, criterion, device, open_clip_ver=False, rank=None, check_cuda_memory=False):
-    # if rank is not None and rank == 0:
-    #     pbar = tqdm(enumerate(dataloader), total=len(dataloader))
-    # else:
-    #     pbar = enumerate(dataloader)
-    pbar = tqdm(enumerate(dataloader), total=len(dataloader))
+    if rank is not None and rank == 0:
+        pbar = tqdm(enumerate(dataloader), total=len(dataloader))
+    else:
+        pbar = enumerate(dataloader)
     epoch_loss = 0.0
     total_step = len(dataloader)
 

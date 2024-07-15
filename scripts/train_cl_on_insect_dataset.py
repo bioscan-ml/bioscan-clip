@@ -31,8 +31,10 @@ def save_prediction(pred_list, gt_list, json_path):
         json.dump(data, json_file)
 
 def ddp_setup(rank: int, world_size: int, port):
-    os.environ['MASTER_ADDR'] = 'localhost'
+    os.environ['MASTER_ADDR'] = '127.0.0.1'
     os.environ['MASTER_PORT'] = str(port)
+    os.environ['GLOO_SOCKET_IFNAME'] = 'lo'
+    os.environ['NCCL_SOCKET_IFNAME'] = 'lo'
     torch.distributed.init_process_group("nccl", rank=rank, world_size=world_size)
     torch.cuda.set_device(rank)
 
