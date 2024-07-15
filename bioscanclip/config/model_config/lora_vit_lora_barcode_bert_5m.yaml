@@ -19,4 +19,4 @@ evaluation_period: 1
 ckpt_path: ${project_root_path}/ckpt/bioscan_clip/trained_with_bioscan_5m/image_dna.pth
 output_dim: 768
 num_workers: 8
-port: 12318
+port: 29500
