@@ -54,12 +54,9 @@ def train_epoch(activate_wandb, total_epochs, epoch, dataloader, model, optimize
         cached_memory = torch.cuda.memory_reserved(device)
 
         total_used_memory = allocated_memory + cached_memory
-        if rank is not None and rank == 0:
+        if rank is None or rank == 0:
             pbar.set_description(
                 f'Epoch: {epoch}||Step: {step}/{total_step}||Loss: {loss.item()} || Total Used CUDA Memory: {total_used_memory / (1024 ** 3):.2f} GB || Total CUDA Memory: {memory_total / (1024 ** 3):.2f} GB')
-        # just_check_cuda_memory
-        if step == 100 and check_cuda_memory:
-            exit()
 
         if activate_wandb:
             wandb.log({"loss": loss.item(), "step": step + epoch * len(dataloader)})

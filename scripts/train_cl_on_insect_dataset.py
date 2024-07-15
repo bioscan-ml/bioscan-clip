@@ -17,6 +17,9 @@ from bioscanclip.model.simple_clip import load_clip_model
 from bioscanclip.util.dataset import load_insect_dataloader
 import numpy as np
 
+def print_when_rank_zero(message, rank=0):
+    if rank is None or rank == 0:
+        print(message)
 
 def save_prediction(pred_list, gt_list, json_path):
     data = {
@@ -86,8 +89,6 @@ def convert_acc_dict_to_wandb_dict(acc_dict):
 
     return dict_for_wandb
 
-
-
 def main_process(rank: int, world_size: int, args):
 
     # special set up for train on INSECT dataset
@@ -109,11 +110,11 @@ def main_process(rank: int, world_size: int, args):
     ddp_setup(rank, world_size, str(args.model_config.port))
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    print("Construct dataloader...")
+    print_when_rank_zero("Construct dataloader...", rank)
     insect_train_dataloader, insect_train_dataloader_for_key, insect_val_dataloader, insect_test_seen_dataloader, insect_test_unseen_dataloader = load_insect_dataloader(
         args, world_size=world_size, rank=rank)
 
-    print("Initialize model...")
+    print_when_rank_zero("Initialize model...", rank)
     model = load_clip_model(args)
     checkpoint = torch.load(args.model_config.ckpt_path, map_location='cuda:0')
     model.load_state_dict(checkpoint)
@@ -135,8 +136,7 @@ def main_process(rank: int, world_size: int, args):
     os.makedirs(folder_path, exist_ok=True)
 
     OmegaConf.save(args, os.path.join(folder_path, 'config.yaml'))
-
-    print("training...")
+    print_when_rank_zero("Start training...", rank)
 
     for epoch in range(args.model_config.epochs):
         train_epoch(args.activate_wandb, args.model_config.epochs, epoch, insect_train_dataloader, model, optimizer,
@@ -166,9 +166,6 @@ def main_process(rank: int, world_size: int, args):
             last_ckpt_path = os.path.join(folder_path, f'last_device_{rank}.pth')
             torch.save(model.state_dict(), last_ckpt_path)
             print(f'Last ckpt: {last_ckpt_path}')
-
-
-
 
 @hydra.main(config_path="../bioscanclip/config", config_name="global_config", version_base="1.1")
 def main(args: DictConfig) -> None:
