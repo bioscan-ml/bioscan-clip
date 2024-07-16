@@ -427,7 +427,7 @@ def make_prediction(query_feature, keys_feature, keys_label, with_similarity=Fal
                 try:
                     k_pred_in_diff_level[level].append(keys_label[i][level])
                 except:
-                    print(keys_label[i])
+                    print(keys_label)
                     exit()
         pred_list.append(k_pred_in_diff_level)
 
@@ -589,8 +589,9 @@ def inference_and_print_result(keys_dict, seen_dict, unseen_dict, small_species_
             curr_unseen_feature = unseen_dict[query_feature_type]
 
             curr_keys_feature = keys_dict[key_feature_type]
+            if curr_keys_feature is None:
+                continue
             if key_feature_type == "all_key_features":
-
                 keys_label = keys_dict["all_key_features_label"]
 
             if (

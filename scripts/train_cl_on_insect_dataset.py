@@ -31,13 +31,10 @@ def save_prediction(pred_list, gt_list, json_path):
         json.dump(data, json_file)
 
 def ddp_setup(rank: int, world_size: int, port):
-    os.environ['MASTER_ADDR'] = '127.0.0.1'
+    os.environ['MASTER_ADDR'] = 'localhost'
     os.environ['MASTER_PORT'] = str(port)
-    os.environ['GLOO_SOCKET_IFNAME'] = 'lo'
-    os.environ['NCCL_SOCKET_IFNAME'] = 'lo'
     torch.distributed.init_process_group("nccl", rank=rank, world_size=world_size)
     torch.cuda.set_device(rank)
-
 
 def construct_key_dict(list_of_dict):
     key_dict = {}
@@ -60,7 +57,6 @@ def construct_key_dict(list_of_dict):
 
 def eval_phase(model, device, insect_train_dataloader_for_key, insect_val_dataloader, insect_test_seen_dataloader, insect_test_unseen_dataloader, k_list,
                species_to_drop=None):
-    
     insect_train_dict = get_features_and_label(
         insect_train_dataloader_for_key, model, device)
     insect_val_dict = get_features_and_label(
@@ -97,7 +93,6 @@ def main_process(rank: int, world_size: int, args):
     args.model_config.batch_size = 400
     args.model_config.epochs = 80
     args.model_config.evaluation_period = 40
-
 
     if args.debug_flag:
         args.activate_wandb = False
