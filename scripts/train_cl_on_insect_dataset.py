@@ -89,6 +89,10 @@ def convert_acc_dict_to_wandb_dict(acc_dict):
 
 def main_process(rank: int, world_size: int, args):
 
+
+    print(rank)
+    exit()
+
     # special set up for train on INSECT dataset
     args.model_config.batch_size = 400
     args.model_config.epochs = 80
