@@ -138,8 +138,6 @@ def main_process(rank: int, world_size: int, args):
     print_when_rank_zero("Start training...", rank)
 
     for epoch in range(args.model_config.epochs):
-        acc_dict, pred_dict = eval_phase(model, device, insect_train_dataloader_for_key, insect_val_dataloader,
-                                         insect_test_seen_dataloader, insect_test_unseen_dataloader, k_list)
         dict_for_wandb = convert_acc_dict_to_wandb_dict(acc_dict)
         dict_for_wandb['epoch'] = epoch
         train_epoch(args.activate_wandb, args.model_config.epochs, epoch, insect_train_dataloader, model, optimizer,
