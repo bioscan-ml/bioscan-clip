@@ -130,7 +130,7 @@ def main_process(rank: int, world_size: int, args):
             dict_for_wandb['epoch'] = epoch
             # Find a way to calculate overall acc.
             # OR just use seen and unseen micro top-1 species acc. to determine the best ckpt.
-            overall_acc = (acc_dict['encoded_image_feature']['encoded_image_feature']['seen_val']['micro_acc'][1]['species'] + acc_dict['encoded_image_feature']['encoded_image_feature']['unseen_val']['micro_acc'][1]['species'])/2
+            overall_acc = (acc_dict['encoded_image_feature']['encoded_image_feature']['seen']['micro_acc'][1]['species'] + acc_dict['encoded_image_feature']['encoded_image_feature']['unseen']['micro_acc'][1]['species'])/2
             if best_overall_acc is None or best_overall_acc < overall_acc:
                 best_epoch = epoch
                 best_overall_acc = overall_acc

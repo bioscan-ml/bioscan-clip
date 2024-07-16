@@ -94,6 +94,8 @@ def main_process(rank: int, world_size: int, args):
     args.model_config.epochs = 80
     args.model_config.evaluation_period = 40
 
+    args.model_config.batch_size = 10
+
     if args.debug_flag:
         args.activate_wandb = False
         args.save_inference = False
@@ -136,16 +138,17 @@ def main_process(rank: int, world_size: int, args):
     print_when_rank_zero("Start training...", rank)
 
     for epoch in range(args.model_config.epochs):
+        acc_dict, pred_dict = eval_phase(model, device, insect_train_dataloader_for_key, insect_val_dataloader,
+                                         insect_test_seen_dataloader, insect_test_unseen_dataloader, k_list)
+        dict_for_wandb = convert_acc_dict_to_wandb_dict(acc_dict)
+        dict_for_wandb['epoch'] = epoch
         train_epoch(args.activate_wandb, args.model_config.epochs, epoch, insect_train_dataloader, model, optimizer,
                     criterion, device, rank=rank)
         if epoch != 0 and (epoch % args.model_config.evaluation_period == 0 or epoch == args.model_config.epochs - 1):
             acc_dict, pred_dict = eval_phase(model, device, insect_train_dataloader_for_key, insect_val_dataloader, insect_test_seen_dataloader, insect_test_unseen_dataloader, k_list)
             dict_for_wandb = convert_acc_dict_to_wandb_dict(acc_dict)
             dict_for_wandb['epoch'] = epoch
-            overall_acc = (acc_dict['encoded_image_feature']['encoded_image_feature']['seen_val']['micro_acc'][1][
-                               'species'] +
-                           acc_dict['encoded_image_feature']['encoded_image_feature']['unseen_val']['micro_acc'][1][
-                               'species']) / 2
+            overall_acc = (acc_dict['encoded_image_feature']['encoded_image_feature']['seen']['micro_acc'][1]['species'] + acc_dict['encoded_image_feature']['encoded_image_feature']['unseen']['micro_acc'][1]['species'])/2
             if best_overall_acc is None or best_overall_acc < overall_acc:
                 best_epoch = epoch
                 best_overall_acc = overall_acc
