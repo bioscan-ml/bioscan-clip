@@ -72,10 +72,6 @@ def broadcast_model(model, rank):
 
 def main_process(rank: int, world_size: int, args):
 
-    print(rank)
-    exit()
-
-
     if args.debug_flag or rank != 0:
         args.activate_wandb = False
         args.save_inference = False

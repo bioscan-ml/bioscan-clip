@@ -89,10 +89,6 @@ def convert_acc_dict_to_wandb_dict(acc_dict):
 
 def main_process(rank: int, world_size: int, args):
 
-
-    print(rank)
-    exit()
-
     # special set up for train on INSECT dataset
     args.model_config.batch_size = 400
     args.model_config.epochs = 80
@@ -141,7 +137,7 @@ def main_process(rank: int, world_size: int, args):
 
     for epoch in range(args.model_config.epochs):
         train_epoch(args.activate_wandb, args.model_config.epochs, epoch, insect_train_dataloader, model, optimizer,
-                    criterion, device)
+                    criterion, device, rank=rank)
         if epoch != 0 and (epoch % args.model_config.evaluation_period == 0 or epoch == args.model_config.epochs - 1):
             acc_dict, pred_dict = eval_phase(model, device, insect_train_dataloader_for_key, insect_val_dataloader, insect_test_seen_dataloader, insect_test_unseen_dataloader, k_list)
             dict_for_wandb = convert_acc_dict_to_wandb_dict(acc_dict)
