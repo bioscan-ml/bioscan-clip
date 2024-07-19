@@ -121,7 +121,12 @@ def main_process(rank: int, world_size: int, args):
 
     optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-    criterion = ContrastiveLoss(criterion=nn.CrossEntropyLoss(), logit_scale=1 / 0.07)
+    open_clip_ver = False
+    if hasattr(args.model_config, 'open_clip_ver') and args.model_config.open_clip_ver:
+        open_clip_ver = True
+        criterion = ClipLoss(local_loss=args.model_config.loss_setup.local_loss, gather_with_grad=args.model_config.loss_setup.gather_with_grad, rank=rank, world_size=world_size, use_horovod=args.model_config.loss_setup.use_horovod, criterion=nn.CrossEntropyLoss())
+    else:
+        criterion = ContrastiveLoss(criterion=nn.CrossEntropyLoss(), logit_scale=1 / 0.07)
 
     if args.activate_wandb:
         wandb.init(project=args.model_config.wandb_project_name + "_INSECT", name=args.model_config.model_output_name + "_INSECT")
