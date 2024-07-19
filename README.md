@@ -228,7 +228,7 @@ unzip processed_data.zip
 ### Train
 
 ```shell
-python scripts/train_cl_on_insect_dataset.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_ssl'
+python scripts/train_cl.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_ssl_on_insect.yaml'
 ```
 
 
