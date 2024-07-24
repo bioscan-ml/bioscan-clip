@@ -240,7 +240,7 @@ def get_unique_species_for_seen(dataloader):
     pbar = tqdm(dataloader)
     for batch in pbar:
         pbar.set_description("Getting unique species labels")
-        b, c, d, e, f, label_batch = batch
+        _, _, _, _, _, _, label_batch = batch
         all_species = all_species + label_batch['species']
 
     unique_species = list(set(all_species))
