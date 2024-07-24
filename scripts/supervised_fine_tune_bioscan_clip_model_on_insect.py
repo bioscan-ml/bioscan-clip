@@ -140,7 +140,7 @@ def main(args: DictConfig) -> None:
                 # save_image_embedding to “image_embedding_from_bioscan_clip.csv”
                 folder_to_save_embed = os.path.join(args.project_root_path, "embedding_from_=bsc_fine_tuned_on_insect",
                                                     formatted_datetime)
-
+                os.makedirs(folder_to_save_embed, exist_ok=True)
                 dna_embed_path = os.path.join(folder_to_save_embed, "dna_embedding_from_bioscan_clip.csv")
                 image_embed_path = os.path.join(folder_to_save_embed, "image_embedding_from_bioscan_clip.csv")
 
