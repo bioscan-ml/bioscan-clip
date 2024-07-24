@@ -15,7 +15,7 @@ language:
   model: lora_bert
 
 model_output_name: trained_with_insect_image_dna_text
-evaluation_period: 40
+evaluation_period: 50
 ckpt_path: ${project_root_path}/ckpt/bioscan_clip/trained_with_bioscan_1m/image_dna_text.pth
 ckpt_trained_with_insect_image_dna_text_path: ${project_root_path}/ckpt/bioscan_clip/trained_with_insect_image_dna_text
 output_dim: 768
