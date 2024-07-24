@@ -94,6 +94,8 @@ def main(args: DictConfig) -> None:
     folder_path = os.path.join(args.project_root_path, args.model_output_dir,
                                "supervised_fine_tune_bioscan_clip_model_on_insect", formatted_datetime)
 
+    os.makedirs(folder_path, exist_ok=True)
+
     image_last_ckpt_path = os.path.join(folder_path, 'image_last.ckpt')
     dna_last_ckpt_path = os.path.join(folder_path, 'dna_last.ckpt')
     OmegaConf.save(args, os.path.join(folder_path, 'config.yaml'))
