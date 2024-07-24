@@ -22,8 +22,8 @@ def fine_tuning_epoch(args, model, insect_train_dataloader,
             image_input_batch = image_input_batch.to(device)
             output = model(image_input_batch)
         elif modality == "dna":
-            dna_batch = dna_batch.to(device)
-            output = model(dna_batch)
+            dna_input_batch = dna_input_batch.to(device)
+            output = model(dna_input_batch)
         loss = criterion(output, target)
         loss.backward()
         optimizer.step()
@@ -55,8 +55,8 @@ def evaluate_epoch(model, dataloader, device, unique_species_for_seen, k_values=
                 image_input_batch = image_input_batch.to(device)
                 output = model(image_input_batch)
             elif modality == "dna":
-                dna_batch = dna_batch.to(device)
-                output = model(dna_batch)
+                dna_input_batch = dna_input_batch.to(device)
+                output = model(dna_input_batch)
             predictions = torch.argsort(output, dim=1, descending=True)[:, :max(k_values)]
 
             all_targets.append(target.cpu().numpy())
@@ -87,9 +87,9 @@ def fine_tuning_epoch_image_and_dna(args, image_classifier, dna_classifier, inse
         target = target.to(device)
         optimizer.zero_grad()
         image_input_batch = image_input_batch.to(device)
-        dna_batch = dna_batch.to(device)
+        dna_input_batch = dna_input_batch.to(device)
         image_output = image_classifier(image_input_batch)
-        dna_output = dna_classifier(dna_batch)
+        dna_output = dna_classifier(dna_input_batch)
         loss = criterion(image_output, target) + criterion(dna_output, target)
         loss.backward()
         optimizer.step()
