@@ -439,7 +439,6 @@ def main(args: DictConfig) -> None:
 
     # Custom batch size
     args.model_config.batch_size = args.general_fine_tune_setting.batch_size
-    # args.model_config.batch_size = 20
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 

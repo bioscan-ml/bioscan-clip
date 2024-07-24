@@ -2,10 +2,25 @@ import torch
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
-import torch.nn.functional as F
 import json
 import faiss
+from torch import nn
+from tqdm import tqdm
+from bioscanclip.epoch.inference_epoch import get_feature_and_label
 
+class EncoderWithExtraLayer(nn.Module):
+    def __init__(self, encoder, new_linear_layer):
+        super(EncoderWithExtraLayer, self).__init__()
+        self.encoder = encoder
+        self.new_linear_layer = new_linear_layer
+
+    def get_feature(self, x):
+        return self.encoder(x)
+
+    def forward(self, x):
+        outputs = self.encoder(x)
+        outputs = self.new_linear_layer(outputs)
+        return outputs
 
 class Table:
     def __init__(self, headers, data):
@@ -192,3 +207,91 @@ def categorical_cmap(nc, nsc, cmap="tab10", continuous=False):
         cols[i * nsc : (i + 1) * nsc, :] = rgb
     cmap = matplotlib.colors.ListedColormap(cols)
     return cmap
+
+def load_all_seen_species_name_and_create_label_map(train_seen_dataloader):
+    all_seen_species = []
+    species_to_other_labels = {}
+
+    for batch in train_seen_dataloader:
+        file_name_batch, image_input_batch, dna_batch, input_ids, token_type_ids, attention_mask, label_batch = batch
+        all_seen_species = all_seen_species + label_batch['species']
+        for curr_idx in range(len(label_batch['species'])):
+            if label_batch['species'][curr_idx] not in species_to_other_labels.keys():
+                species_to_other_labels[label_batch['species'][curr_idx]] = {'order': label_batch['order'][curr_idx],
+                                                                             'family': label_batch['family'][curr_idx],
+                                                                             'genus': label_batch['genus'][curr_idx]}
+
+    all_seen_species = list(set(all_seen_species))
+    all_seen_species.sort()
+
+    label_to_index_dict = {}
+    idx_to_all_labels = {}
+
+    for idx, species_label in enumerate(all_seen_species):
+        label_to_index_dict[species_label] = idx
+        idx_to_all_labels[idx] = {'species': species_label, 'order': species_to_other_labels[species_label]['order'],
+                                  'family': species_to_other_labels[species_label]['family'],
+                                  'genus': species_to_other_labels[species_label]['genus']}
+
+    return label_to_index_dict, idx_to_all_labels
+
+def get_unique_species_for_seen(dataloader):
+    all_species = []
+    pbar = tqdm(dataloader)
+    for batch in pbar:
+        pbar.set_description("Getting unique species labels")
+        b, c, d, e, f, label_batch = batch
+        all_species = all_species + label_batch['species']
+
+    unique_species = list(set(all_species))
+    return unique_species
+
+def get_features_and_label(dataloader, model, device, for_key_set=False):
+    _, encoded_language_feature, _ = get_feature_and_label(
+        dataloader, model, device, type_of_feature="text", multi_gpu=False
+    )
+
+    _, encoded_dna_feature, _ = get_feature_and_label(
+        dataloader, model, device, type_of_feature="dna", multi_gpu=False
+    )
+
+    file_name_list, encoded_image_feature, label_list = get_feature_and_label(
+        dataloader, model, device, type_of_feature="image", multi_gpu=False
+    )
+
+    averaged_feature = None
+    concatenated_feature = None
+    all_key_features = None
+    all_key_features_label = None
+    if encoded_dna_feature is not None and encoded_image_feature is not None:
+        averaged_feature = np.mean([encoded_image_feature, encoded_dna_feature], axis=0)
+        concatenated_feature = np.concatenate((encoded_image_feature, encoded_dna_feature), axis=1)
+
+    dictionary_of_split = {
+        "file_name_list": file_name_list,
+        "encoded_dna_feature": encoded_dna_feature,
+        "encoded_image_feature": encoded_image_feature,
+        "encoded_language_feature": encoded_language_feature,
+        "averaged_feature": averaged_feature,
+        "concatenated_feature": concatenated_feature,
+        "label_list": label_list,
+    }
+
+    if (
+        for_key_set
+        and encoded_image_feature is not None
+        and encoded_dna_feature is not None
+        and encoded_language_feature is not None
+    ):
+        for curr_feature in [encoded_image_feature, encoded_dna_feature, encoded_language_feature]:
+            if all_key_features is None:
+                all_key_features = curr_feature
+                all_key_features_label = label_list
+            else:
+                all_key_features = np.concatenate((all_key_features, curr_feature), axis=0)
+                all_key_features_label = all_key_features_label + label_list
+
+    dictionary_of_split["all_key_features"] = all_key_features
+    dictionary_of_split["all_key_features_label"] = all_key_features_label
+
+    return dictionary_of_split

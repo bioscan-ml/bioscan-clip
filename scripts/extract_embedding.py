@@ -138,8 +138,6 @@ def main(args: DictConfig) -> None:
                                                "test_unseen_keys_dataloader": test_unseen_keys_dataloader,
                                                "all_keys_dataloader": all_keys_dataloader}
 
-
-
     for key, dataloader in dataloaders_that_need_to_be_process.items():
         print(f"Processing {key}...")
         embedding_dict = get_features_and_label(dataloader, model, device)

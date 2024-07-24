@@ -660,6 +660,7 @@ def check_for_acc_about_correct_predict_seen_or_unseen(final_pred_list, species_
 
 
 def get_features_and_label(dataloader, model, device, for_key_set=False):
+    model.eval()
     _, encoded_language_feature, _ = get_feature_and_label(
         dataloader, model, device, type_of_feature="text", multi_gpu=False
     )

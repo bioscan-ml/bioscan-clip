@@ -12,7 +12,7 @@ import wandb
 from omegaconf import DictConfig, OmegaConf
 from tqdm import tqdm
 import torch.nn.functional as F
-from method_two_fine_tuning_and_eval import ViTWIthExtraLayer
+from bioscanclip.util.util import ViTWIthExtraLayer
 from bioscanclip.util.dataset_for_insect_dataset import load_insect_dataloader, load_insect_dataloader_trainval
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 

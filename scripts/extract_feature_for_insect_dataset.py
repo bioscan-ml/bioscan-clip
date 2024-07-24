@@ -1,0 +1,100 @@
+import copy
+import json
+import os
+
+import hydra
+import numpy as np
+import scipy.io as sio
+import torch
+import torch.distributed as dist
+import torch.multiprocessing as mp
+from omegaconf import DictConfig
+from tqdm import tqdm
+
+from inference_and_eval import get_features_and_label, inference_and_print_result
+from bioscanclip.model.simple_clip import load_clip_model
+from bioscanclip.util.dataset_for_insect_dataset import load_insect_dataloader
+
+
+def main_process(rank: int, world_size: int, args):
+
+    args.model_config.batch_size = 200
+
+    # current_datetime = datetime.datetime.now()
+    # formatted_datetime = current_datetime.strftime("%Y-%m-%d_%H%M%S")
+    args = copy.deepcopy(args)
+
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+    print("Construct dataloader...")
+    all_dataloader = load_insect_dataloader(
+        args, world_size=world_size, rank=rank, load_all_in_one=True)
+
+    print("Initialize model...")
+    model = load_clip_model(args)
+
+    # Using checkpoint that contrastive fine-tuned on INSECT dataset or not
+    # checkpoint = torch.load(args.model_config.insect_ckpt_path, map_location='cuda:0')
+    ckpt_trained_with_insect = os.path.join(args.model_config.ckpt_trained_with_insect_image_dna_text_path, 'best.pth')
+
+
+    checkpoint = torch.load(ckpt_trained_with_insect, map_location='cuda:0')
+
+    model.load_state_dict(checkpoint)
+    model = model.to(device)
+
+    folder = os.path.join(args.project_root_path, "extracted_embedding/INSECT")
+
+    os.makedirs(folder, exist_ok=True)
+
+
+    dna_embed_path = os.path.join(folder, "dna_embedding_from_bioscan_clip.csv")
+    image_embed_path = os.path.join(folder, "image_embedding_from_bioscan_clip.csv")
+
+    att_splits_dict = sio.loadmat(args.insect_data.path_to_res_101_mat)
+    labels = att_splits_dict["labels"].squeeze() - 1
+    all_label = np.unique(labels)
+    all_label.sort()
+    dict_for_feature = get_features_and_label(all_dataloader, model, device, for_key_set=False)
+    dna_feature = dict_for_feature["encoded_dna_feature"]
+
+
+    dict_emb = {}
+
+    pbar = tqdm(enumerate(labels), total=len(labels))
+    for i, label in pbar:
+        pbar.set_description("Extracting features: ")
+        curr_feature = dna_feature[i]
+
+
+        if str(label) not in dict_emb.keys():
+            dict_emb[str(label)] = []
+        dict_emb[str(label)].append(curr_feature)
+    class_embed = []
+    for i in all_label:
+        class_embed.append(np.sum(dict_emb[str(i)], axis=0) / len(dict_emb[str(i)]))
+    class_embed = np.array(class_embed, dtype=object)
+    class_embed = class_embed.T.squeeze()
+    print(class_embed.shape)
+    np.savetxt(dna_embed_path, class_embed,
+               delimiter=",")
+
+    # save_image_embedding to “image_embedding_from_bioscan_clip.csv”
+    image_feature = dict_for_feature["encoded_image_feature"]
+    image_feature = image_feature.astype(np.float32)
+    image_feature = image_feature.T
+    print(image_feature.shape)
+    np.savetxt(image_embed_path, image_feature, delimiter=",")
+    print(image_embed_path)
+
+
+@hydra.main(config_path="../bioscanclip/config", config_name="global_config", version_base="1.1")
+def main(args: DictConfig) -> None:
+    args.project_root_path = os.path.dirname(os.path.dirname(os.path.dirname(os.getcwd())))
+    world_size = torch.cuda.device_count()
+    print(f'world_size： {world_size}')
+    mp.spawn(main_process, args=(world_size, args), nprocs=world_size)
+
+
+if __name__ == '__main__':
+    main()
