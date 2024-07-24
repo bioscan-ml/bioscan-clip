@@ -56,9 +56,11 @@ def main(args: DictConfig) -> None:
     unique_species_for_seen = get_unique_species_for_seen(insect_trainval_dataloader)
 
     print("Load model...")
-
     original_model = load_clip_model(args)
-    checkpoint = torch.load(args.model_config.ckpt_path, map_location='cuda:0')
+    if hasattr(args.model_config, 'ckpt_trained_with_insect_image_dna_text_path'):
+        checkpoint = torch.load(args.model_config.ckpt_trained_with_insect_image_dna_text_path, map_location='cuda:0')
+    else:
+        checkpoint = torch.load(args.model_config.ckpt_path, map_location='cuda:0')
     original_model.load_state_dict(checkpoint)
     original_model = original_model.to(device)
 
