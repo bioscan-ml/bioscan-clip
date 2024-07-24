@@ -14,7 +14,7 @@ def fine_tuning_epoch(args, model, insect_train_dataloader,
     epoch_loss = []
     len_loader = len(insect_train_dataloader)
     for step, batch in pbar:
-        image_input_batch, dna_batch, input_ids, token_type_ids, attention_mask, label_batch = batch
+        processid_batch, image_input_batch, dna_input_batch, input_ids, token_type_ids, attention_mask, label_batch = batch
         target = label_batch_to_species_idx(label_batch, unique_species_for_seen)
         target = target.to(device)
         optimizer.zero_grad()
@@ -47,7 +47,7 @@ def evaluate_epoch(model, dataloader, device, unique_species_for_seen, k_values=
     pbar = tqdm(enumerate(dataloader), total=len(dataloader))
     with torch.no_grad():
         for idx, batch in pbar:
-            file_name_batch, image_input_batch, dna_batch, input_ids, token_type_ids, attention_mask, label_batch = batch
+            processid_batch, image_input_batch, dna_input_batch, input_ids, token_type_ids, attention_mask, label_batch = batch
             target = label_batch_to_species_idx(label_batch, unique_species_for_seen)
             target = target.to(device)
 
@@ -82,7 +82,7 @@ def fine_tuning_epoch_image_and_dna(args, image_classifier, dna_classifier, inse
     epoch_loss = []
     len_loader = len(insect_train_dataloader)
     for step, batch in pbar:
-        image_input_batch, dna_batch, input_ids, token_type_ids, attention_mask, label_batch = batch
+        processid_batch, image_input_batch, dna_input_batch, input_ids, token_type_ids, attention_mask, label_batch = batch
         target = label_batch_to_species_idx(label_batch, unique_species_for_seen)
         target = target.to(device)
         optimizer.zero_grad()
