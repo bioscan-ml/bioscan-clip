@@ -55,6 +55,6 @@ visualization:
 general_fine_tune_setting:
   save_ckpt: true
   epoch: 150
-  batch_size: 400
+  batch_size: 200
 
 
