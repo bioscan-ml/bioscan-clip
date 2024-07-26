@@ -20,4 +20,4 @@ model_output_name: trained_with_bioscan_5m_image_dna_text
 evaluation_period: 1
 ckpt_path: ${project_root_path}/ckpt/bioscan_clip/trained_with_bioscan_5m/image_dna_text.pth
 output_dim: 768
-port: 29501
+port: 29502
