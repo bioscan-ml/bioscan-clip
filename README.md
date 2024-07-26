@@ -247,5 +247,18 @@ cd Fine-Grained-ZSL-with-DNA/BZSL-Python
 python Demo.py --using_bioscan_clip_image_feature --datapath ../data --side_info dna_bioscan_clip --alignment --tuning
 ```
 
-# Conclusion
-BIOSCAN-CLIP combines insect images with DNA barcodes and taxonomic labels to improve taxonomic classification via contrastive learning. This method capitalizes on the practicality and low cost of image acquisition, promoting wider participation in global biodiversity tracking. Experimental results demonstrate that BIOSCAN-CLIP's shared embedding space is effective for retrieval tasks involving both known and unknown species, and adaptable for downstream applications like zero-shot learning. The model faces challenges with underrepresented and unseen species, highlighting areas for future enhancement.
+# Citing BIOSCAN-CLIP
+If you use BIOSCAN-CLIP in your research, please cite:
+```
+@article{gong2024bioscan,
+  title={BIOSCAN-CLIP: Bridging Vision and Genomics for Biodiversity Monitoring at Scale},
+  author={Gong, ZeMing and Wang, Austin T and Haurum, Joakim Bruslund and Lowe, Scott C and Taylor, Graham W and Chang, Angel X},
+  journal={arXiv preprint arXiv:2405.17537},
+  year={2024}
+}
+```
+
+# Acknowledgements
+This reseach was supported by the Government of Canada’s New Frontiers in Research Fund (NFRF) [NFRFT-2020-00073], 
+Canada CIFAR AI Chair grants, and the Pioneer Centre for AI (DNRF grant number P1).
+This research was also enabled in part by support provided by the Digital Research Alliance of Canada (alliancecan.ca).
