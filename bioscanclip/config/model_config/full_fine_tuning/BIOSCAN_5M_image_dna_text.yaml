@@ -4,7 +4,7 @@ labels_for_driven_positive_and_negative_pairs:
 wandb_project_name: BIOSCAN-CLIP-FULL-FINE-TUNING
 using_train_seen_for_pre_train: true
 dataset: bioscan_5m
-disable_lora: true
+disable_lora: false
 
 image:
   input_type: image
