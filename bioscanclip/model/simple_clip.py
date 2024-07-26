@@ -118,7 +118,7 @@ def load_clip_model(args, device=None):
     if args.model_config.image.input_type == "image":
         if args.model_config.image.model == "lora_vit":
             pre_trained_timm_vit = timm.create_model('vit_base_patch16_224', pretrained=True)
-            if hasattr(args.model_config, 'no_image') and args.model_config.no_image.model == "no_lora":
+            if hasattr(args.model_config, 'disable_lora') and args.model_config.disable_lora is True:
                 image_encoder = LoRA_ViT_timm(vit_model=pre_trained_timm_vit, r=4, num_classes=args.model_config.output_dim, lora_layer=[])
             else:
                 image_encoder = LoRA_ViT_timm(vit_model=pre_trained_timm_vit, r=4, num_classes=args.model_config.output_dim)
@@ -138,7 +138,7 @@ def load_clip_model(args, device=None):
             if args.model_config.dna.model == "lora_barcode_bert":
                 pre_trained_barcode_bert = load_pre_trained_bioscan_bert(
                     bioscan_bert_checkpoint=args.bioscan_bert_checkpoint)
-                if hasattr(args.model_config, 'no_image') and args.model_config.no_image.model == "no_lora":
+                if hasattr(args.model_config, 'disable_lora') and args.model_config.disable_lora is True:
                     dna_encoder = LoRA_barcode_bert(model=pre_trained_barcode_bert, r=4,
                                                     num_classes=args.model_config.output_dim, lora_layer=[])
                 else:
@@ -154,7 +154,7 @@ def load_clip_model(args, device=None):
         if args.model_config.language.input_type == "sequence":
             if args.model_config.language.model == "lora_bert":
                 _, pre_trained_bert = load_pre_trained_bert()
-                if hasattr(args.model_config, 'no_image') and args.model_config.no_image.model == "no_lora":
+                if hasattr(args.model_config, 'disable_lora') and args.model_config.disable_lora is True:
                     language_encoder = LoRA_bert(model=pre_trained_bert,  r=4, num_classes=args.model_config.output_dim, lora_layer=[])
                 else:
                     language_encoder = LoRA_bert(model=pre_trained_bert,  r=4, num_classes=args.model_config.output_dim)
@@ -171,7 +171,7 @@ def load_clip_model(args, device=None):
     if device is not None:
         model.to(device)
 
-    if hasattr(args.model_config, 'no_image') and args.model_config.no_image.model == "no_lora":
+    if hasattr(args.model_config, 'disable_lora') and args.model_config.disable_lora is True:
         for param in model.parameters():
             param.requires_grad = True
 
