@@ -200,7 +200,7 @@ To run evaluation for BIOSCAN-5M:
 python scripts/inference_and_eval.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_5m'
 ```
 
-## Experiment with INSECT dataset.
+## For BZSL experiment with the INSECT dataset.
 TODO add some acknowledgement about the INSECT dataset. Also, the description of the BZSL experiments should be added.
 
 To download unprocessed INSECT dataset, you can reference [BZSL](https://github.com/sbadirli/Fine-Grained-ZSL-with-DNA) or: 
@@ -211,7 +211,7 @@ cd data/INSECT
 wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/INSECT_data/unprocessed_data.zip
 unzip unprocessed_data.zip
 
-# Note that as the INSECT dataset only has the species label, we need to get the other three labels.
+# Note that we need to get the other three labels because the INSECT dataset only has the species label.
 # For that, please edit get_all_species_taxo_labels_dict_and_save_to_json.py, change Entrez.email = None to your email 
 python get_all_species_taxo_labels_dict_and_save_to_json.py
 
@@ -224,14 +224,28 @@ wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/INS
 unzip processed_data.zip
 ```
 
-### Train
-
+### Train BIOSCAN-CLIP with INSECT dataset
 ```shell
 python scripts/train_cl.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_ssl_on_insect.yaml'
 ```
 
+###  Extract image and DNA features of INSECT dataset.
+```shell
+python scripts/extract_feature_for_insect_dataset.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_ssl_on_insect.yaml'
+```
+Then, you may move the extracted features to the BZSL folder or download the pre-extracted feature.
 
+```shell
+mkdir -p Fine-Grained-ZSL-with-DNA/data/INSECT/embeddings_from_bioscan_clip
+cp extracted_embedding/INSECT/dna_embedding_from_bioscan_clip.csv Fine-Grained-ZSL-with-DNA/data/INSECT/embeddings_from_bioscan_clip/dna_embedding_from_bioscan_clip.csv
+cp extracted_embedding/INSECT/image_embedding_from_bioscan_clip.csvFine-Grained-ZSL-with-DNA/data/INSECT/embeddings_from_bioscan_clip/image_embedding_from_bioscan_clip.csv
+```
 
+###  Run BZSL for evaluation.
+```shell
+cd Fine-Grained-ZSL-with-DNA/BZSL-Python
+python Demo.py --using_bioscan_clip_image_feature --datapath ../data --side_info dna_bioscan_clip --alignment --tuning
+```
 
 # Conclusion
 BIOSCAN-CLIP combines insect images with DNA barcodes and taxonomic labels to improve taxonomic classification via contrastive learning. This method capitalizes on the practicality and low cost of image acquisition, promoting wider participation in global biodiversity tracking. Experimental results demonstrate that BIOSCAN-CLIP's shared embedding space is effective for retrieval tasks involving both known and unknown species, and adaptable for downstream applications like zero-shot learning. The model faces challenges with underrepresented and unseen species, highlighting areas for future enhancement.
