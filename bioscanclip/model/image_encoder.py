@@ -65,6 +65,7 @@ class LoRA_ViT_timm(nn.Module):
 
         # Here, we do the surgery
         for t_layer_i, blk in enumerate(vit_model.blocks):
+            print("Adding lora layers.")
             # If we only want few lora layer instead of all
             if t_layer_i not in self.lora_layer:
                 continue
