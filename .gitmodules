@@ -1,0 +1,3 @@
+[submodule "Fine-Grained-ZSL-with-DNA"]
+	path = Fine-Grained-ZSL-with-DNA
+	url = git@github.com:zmgong/Fine-Grained-ZSL-with-DNA.git

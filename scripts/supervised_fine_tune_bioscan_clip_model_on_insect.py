@@ -104,7 +104,7 @@ def main(args: DictConfig) -> None:
         args, world_size=None, rank=None, load_all_in_one=True)
 
     print("training...")
-    pbar = tqdm(range(args.model_config.epochs))
+    pbar = tqdm(range(args.general_fine_tune_setting.epoch))
 
     for epoch in pbar:
         pbar.set_description(f"Epoch: {epoch}")
@@ -138,7 +138,7 @@ def main(args: DictConfig) -> None:
                 print(f'Last image ckpt: {image_last_ckpt_path}')
                 print(f'Last dna ckpt: {dna_last_ckpt_path}')
                 # save_image_embedding to “image_embedding_from_bioscan_clip.csv”
-                folder_to_save_embed = os.path.join(args.project_root_path, "embedding_from_=bsc_fine_tuned_on_insect",
+                folder_to_save_embed = os.path.join(args.project_root_path, "embedding_from_bsc_fine_tuned_on_insect",
                                                     formatted_datetime)
                 os.makedirs(folder_to_save_embed, exist_ok=True)
                 dna_embed_path = os.path.join(folder_to_save_embed, "dna_embedding_from_bioscan_clip.csv")
