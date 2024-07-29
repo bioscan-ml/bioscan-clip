@@ -82,8 +82,8 @@ wget https://aspis.cmpt.sfu.ca/projects/bioscan/clip_project/data/version_0.2.1/
 ### Download BIOSCAN-5M data (190.4 GB)
 ```shell
 # From project folder
-mkdir -p data/BOSCAN_5M/split_data
-cd data/BOSCAN_5M
+mkdir -p data/BIOSCAN_5M/split_data
+cd data/BIOSCAN_5M
 wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/BIOSCAN_5M.hdf5
 ```
 ### Download data for generating hdf5 files
