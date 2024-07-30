@@ -16,7 +16,7 @@ language:
   model: lora_bert
 
 load_ckpt: false
-model_output_name: trained_with_bioscan_1m_image_dna_text
+model_output_name: no_align_1m
 evaluation_period: 1
 ckpt_path: ${project_root_path}/ckpt/bioscan_clip/trained_with_bioscan_1m/image_dna_text.pth
 output_dim: 768
