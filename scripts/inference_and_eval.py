@@ -818,8 +818,8 @@ def main(args: DictConfig) -> None:
         k_list=args.inference_and_eval_setting.k_list,
     )
 
-    seen_final_pred = pred_dict["encoded_image_feature"]["encoded_dna_feature"]["curr_seen_pred_list"]
-    unseen_final_pred = pred_dict["encoded_image_feature"]["encoded_dna_feature"]["curr_unseen_pred_list"]
+    # seen_final_pred = pred_dict["encoded_image_feature"]["encoded_dna_feature"]["curr_seen_pred_list"]
+    # unseen_final_pred = pred_dict["encoded_image_feature"]["encoded_dna_feature"]["curr_unseen_pred_list"]
     # all_unique_seen_species = get_all_unique_species_from_dataloader(seen_keys_dataloader)
     # all_unique_val_unseen_species = get_all_unique_species_from_dataloader(val_unseen_keys_dataloader)
     # all_unique_test_unseen_species = get_all_unique_species_from_dataloader(test_unseen_keys_dataloader)
@@ -830,15 +830,15 @@ def main(args: DictConfig) -> None:
     # check_for_acc_about_correct_predict_seen_or_unseen(
     #     unseen_final_pred, all_unique_val_unseen_species + all_unique_test_unseen_species
     # )
-
-    if args.inference_and_eval_setting.plot_embeddings:
-        generate_embedding_plot(
-            args,
-            seen_dict["encoded_image_feature"],
-            seen_dict["encoded_dna_feature"],
-            seen_dict["encoded_language_feature"],
-            seen_dict["label_list"],
-        )
+    #
+    # if args.inference_and_eval_setting.plot_embeddings:
+    #     generate_embedding_plot(
+    #         args,
+    #         seen_dict["encoded_image_feature"],
+    #         seen_dict["encoded_dna_feature"],
+    #         seen_dict["encoded_language_feature"],
+    #         seen_dict["label_list"],
+    #     )
 
     #
     # if args.inference_and_eval_setting.retrieve_images:
