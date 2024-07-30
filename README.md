@@ -165,13 +165,12 @@ python scripts/inference_and_eval.py 'model_config=lora_vit_lora_barcode_bert_lo
 ## For BZSL experiment with the INSECT dataset.
 TODO add some acknowledgement about the INSECT dataset. Also, the description of the BZSL experiments should be added.
 
-To download unprocessed INSECT dataset, you can reference [BZSL](https://github.com/sbadirli/Fine-Grained-ZSL-with-DNA) or: 
+To download unprocessed INSECT dataset, you can reference [BZSL](https://github.com/sbadirli/Fine-Grained-ZSL-with-DNA): 
 
 ```shell
 mkdir -p data/INSECT
 cd data/INSECT
-wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/INSECT_data/unprocessed_data.zip
-unzip unprocessed_data.zip
+# Download the images and metadata here.
 
 # Note that we need to get the other three labels because the INSECT dataset only has the species label.
 # For that, please edit get_all_species_taxo_labels_dict_and_save_to_json.py, change Entrez.email = None to your email 
