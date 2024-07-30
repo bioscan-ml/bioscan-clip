@@ -42,7 +42,7 @@ def train_epoch(activate_wandb, total_epochs, epoch, dataloader, model, optimize
             loss = criterion(image_output, dna_output, language_output, label_for_train_batch)
 
         loss.backward()
-        print(model.image_encoder.lora_vit.blocks[0].attn.qkv.linear_a_q.weight.grad)
+        print(model.image_encoder.lora_vit.blocks[0].attn.qkv.linear_a_q.weight.grad.sum())
         exit()
         epoch_loss = epoch_loss + loss.item()
 
