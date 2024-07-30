@@ -54,7 +54,7 @@ class LoRA_barcode_bert(nn.Module):
         super(LoRA_barcode_bert, self).__init__()
 
         assert r > 0
-        if lora_layer:
+        if lora_layer is not None:
             self.lora_layer = lora_layer
         else:
             self.lora_layer = list(range(len(model.bert.encoder.layer)))
