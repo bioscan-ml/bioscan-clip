@@ -49,7 +49,7 @@ class LoRA_ViT_timm(nn.Module):
         super(LoRA_ViT_timm, self).__init__()
 
         assert r > 0
-        if lora_layer:
+        if lora_layer is not None:
             self.lora_layer = lora_layer
         else:
             self.lora_layer = list(range(len(vit_model.blocks)))
