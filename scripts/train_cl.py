@@ -139,7 +139,7 @@ def main_process(rank: int, world_size: int, args):
     model = model.to(device)
     broadcast_model(model, rank)
 
-    optimizer = optim.Adam(model.parameters(), lr=0.001)
+    optimizer = optim.Adam(model.parameters(), lr=0.00001)
 
     open_clip_ver = False
     if hasattr(args.model_config, 'open_clip_ver') and args.model_config.open_clip_ver:
