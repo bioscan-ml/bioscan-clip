@@ -659,18 +659,18 @@ def check_for_acc_about_correct_predict_seen_or_unseen(final_pred_list, species_
         print(f"for k = {k}: {correct * 1.0 / total}")
 
 
-def get_features_and_label(dataloader, model, device, for_key_set=False):
+def get_features_and_label(dataloader, model, device, for_key_set=False, for_open_clip=False):
     model.eval()
     _, encoded_language_feature, _ = get_feature_and_label(
-        dataloader, model, device, type_of_feature="text", multi_gpu=False
+        dataloader, model, device, type_of_feature="text", multi_gpu=False, for_open_clip=for_open_clip
     )
 
     _, encoded_dna_feature, _ = get_feature_and_label(
-        dataloader, model, device, type_of_feature="dna", multi_gpu=False
+        dataloader, model, device, type_of_feature="dna", multi_gpu=False, for_open_clip=for_open_clip
     )
 
     file_name_list, encoded_image_feature, label_list = get_feature_and_label(
-        dataloader, model, device, type_of_feature="image", multi_gpu=False
+        dataloader, model, device, type_of_feature="image", multi_gpu=False, for_open_clip=for_open_clip
     )
 
     averaged_feature = None

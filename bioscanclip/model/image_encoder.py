@@ -6,9 +6,12 @@ from safetensors import safe_open
 from safetensors.torch import save_file
 from torch.nn.parameter import Parameter
 import math
+from loratorch.layers import MultiheadAttention as LoRA_MultiheadAttention
+import copy
+from bioscanclip.util.util import create_child_from_parent
+
 
 # MODIFIED FROM https://github.com/JamesQFreeman/LoRA-ViT/blob/main/lora.py
-
 class _LoRA_qkv_timm(nn.Module):
     """In timm it is implemented as
     self.qkv = nn.Linear(dim, dim * 3, bias=qkv_bias)
@@ -20,12 +23,12 @@ class _LoRA_qkv_timm(nn.Module):
     """
 
     def __init__(
-        self,
-        qkv: nn.Module,
-        linear_a_q: nn.Module,
-        linear_b_q: nn.Module,
-        linear_a_v: nn.Module,
-        linear_b_v: nn.Module,
+            self,
+            qkv: nn.Module,
+            linear_a_q: nn.Module,
+            linear_b_q: nn.Module,
+            linear_a_v: nn.Module,
+            linear_b_v: nn.Module,
     ):
         super().__init__()
         self.qkv = qkv
@@ -41,15 +44,16 @@ class _LoRA_qkv_timm(nn.Module):
         new_q = self.linear_b_q(self.linear_a_q(x))
         new_v = self.linear_b_v(self.linear_a_v(x))
         qkv[:, :, : self.dim] += new_q
-        qkv[:, :, -self.dim :] += new_v
+        qkv[:, :, -self.dim:] += new_v
         return qkv
+
 
 class LoRA_ViT_timm(nn.Module):
     def __init__(self, vit_model: VisionTransformer, r: int, num_classes: int = 0, lora_layer=None):
         super(LoRA_ViT_timm, self).__init__()
 
         assert r > 0
-        if lora_layer is not None:
+        if lora_layer:
             self.lora_layer = lora_layer
         else:
             self.lora_layer = list(range(len(vit_model.blocks)))
@@ -100,6 +104,48 @@ class LoRA_ViT_timm(nn.Module):
             nn.init.kaiming_uniform_(w_A.weight, a=math.sqrt(5))
         for w_B in self.w_Bs:
             nn.init.zeros_(w_B.weight)
+
+    def forward(self, x: Tensor) -> Tensor:
+        return self.lora_vit(x)
+
+
+
+
+
+
+
+
+
+class LoRA_ViT_OpenCLIP(nn.Module):
+    def __init__(self, vit_model, r: int, num_classes: int = 0, lora_layer=None):
+        super(LoRA_ViT_OpenCLIP, self).__init__()
+        if num_classes != 768:
+            raise ValueError(
+                "num_classes should be 768 for OpenCLIP, may need to implement a new head for other num_classes")
+        assert r > 0
+        if lora_layer is not None:
+            self.lora_layer = lora_layer
+        else:
+            self.lora_layer = list(range(len(vit_model.transformer.resblocks)))
+            block_list = enumerate(vit_model.transformer.resblocks)
+
+        # dim = vit_model.head.in_features
+        # create for storage, then we can init them or load weights
+        self.w_As = []  # These are linear layers
+        self.w_Bs = []
+
+        # lets freeze first
+        for param in vit_model.parameters():
+            param.requires_grad = False
+
+        # Here, we do the surgery
+        for t_layer_i, blk in block_list:
+            # If we only want few lora layer instead of all
+            if t_layer_i not in self.lora_layer:
+                continue
+            blk.attn = create_child_from_parent(blk.attn, LoRA_MultiheadAttention, embed_dim=blk.attn.embed_dim, num_heads=blk.attn.num_heads, enable_lora=['q', 'k', 'v'], r=r)
+
+        self.lora_vit = vit_model
 
     def forward(self, x: Tensor) -> Tensor:
         return self.lora_vit(x)

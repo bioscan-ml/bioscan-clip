@@ -4,6 +4,10 @@ import torch.nn as nn
 import math
 from torch import Tensor
 import warnings
+from bioscanclip.util.util import create_child_from_parent
+import clip
+from loratorch.layers import MultiheadAttention as LoRA_MultiheadAttention
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def load_pre_trained_bert():
     logging.set_verbosity_error()
@@ -83,3 +87,36 @@ class LoRA_bert(nn.Module):
     def forward(self, x) -> Tensor:
 
         return self.proj(self.lora_bert(**x).last_hidden_state.mean(dim=1))
+
+class LoRA_bert_OpenCLIP(nn.Module):
+    def __init__(self, bert_model, r: int, num_classes: int = 0, lora_layer=None):
+        super(LoRA_bert_OpenCLIP, self).__init__()
+        if num_classes != 768:
+            raise ValueError(
+                "num_classes should be 768 for OpenCLIP, may need to implement a new head for other num_classes")
+        assert r > 0
+        if lora_layer is not None:
+            self.lora_layer = lora_layer
+        else:
+            self.lora_layer = list(range(len(bert_model.resblocks)))
+            block_list = enumerate(bert_model.resblocks)
+
+        # lets freeze first
+        for param in bert_model.parameters():
+            param.requires_grad = False
+
+        # Here, we do the surgery
+        for t_layer_i, blk in block_list:
+            # If we only want few lora layer instead of all
+            if t_layer_i not in self.lora_layer:
+                continue
+            blk.attn = create_child_from_parent(blk.attn, LoRA_MultiheadAttention, embed_dim=blk.attn.embed_dim, num_heads=blk.attn.num_heads, enable_lora=['q', 'k', 'v'], r=r)
+
+        self.lora_bert = bert_model
+
+    def forward(self, x: Tensor) -> Tensor:
+        x = clip.tokenize(x).to(DEVICE)
+        print(x)
+        print(self.lora_bert)
+
+        return self.lora_bert(x)

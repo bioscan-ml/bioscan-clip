@@ -7,6 +7,7 @@ import torch
 import torch.multiprocessing as mp
 import torch.nn as nn
 import torch.optim as optim
+import torch.optim.lr_scheduler as lr_scheduler
 import wandb
 from omegaconf import DictConfig, OmegaConf
 import torch.distributed as dist
@@ -17,6 +18,7 @@ from bioscanclip.model.loss_func import ContrastiveLoss, ClipLoss
 from bioscanclip.model.simple_clip import load_clip_model
 from bioscanclip.util.dataset import load_dataloader, load_insect_dataloader
 import numpy as np
+from omegaconf import OmegaConf, open_dict
 
 def print_when_rank_zero(message, rank=0):
     if rank is None or rank == 0:
@@ -64,15 +66,15 @@ def construct_key_dict(list_of_dict):
     return key_dict
 
 def eval_phase(model, device, all_keys_dataloader, seen_val_dataloader, unseen_val_dataloader, k_list,
-               species_to_drop=None, rank=None):
+               species_to_drop=None, rank=None, for_open_clip=False):
     keys_dict = get_features_and_label(
-        all_keys_dataloader, model, device, for_key_set=True)
+        all_keys_dataloader, model, device, for_key_set=True, for_open_clip=for_open_clip)
 
     seen_val_dict = get_features_and_label(
-        seen_val_dataloader, model, device)
+        seen_val_dataloader, model, device, for_open_clip=for_open_clip)
 
     unseen_val_dict = get_features_and_label(
-        unseen_val_dataloader, model, device)
+        unseen_val_dataloader, model, device, for_open_clip=for_open_clip)
 
     acc_dict, _, pred_dict = inference_and_print_result(keys_dict, seen_val_dict, unseen_val_dict,
                                                      small_species_list=None, k_list=k_list)
@@ -121,6 +123,10 @@ def main_process(rank: int, world_size: int, args):
     formatted_datetime = current_datetime.strftime("%Y-%m-%d_%H%M%S")
     args = copy.deepcopy(args)
 
+    with open_dict(args.model_config):
+        if not hasattr(args.model_config, "for_open_clip"):
+            args.model_config.for_open_clip = False
+
     ddp_setup(rank, world_size, str(args.model_config.port))
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     if rank == 0:
@@ -139,14 +145,23 @@ def main_process(rank: int, world_size: int, args):
     model = model.to(device)
     broadcast_model(model, rank)
 
-    optimizer = optim.Adam(model.parameters(), lr=0.00001)
+    optimizer = optim.AdamW(model.parameters(), lr=0.001)
 
-    open_clip_ver = False
-    if hasattr(args.model_config, 'open_clip_ver') and args.model_config.open_clip_ver:
-        open_clip_ver = True
-        criterion = ClipLoss(local_loss=args.model_config.loss_setup.local_loss, gather_with_grad=args.model_config.loss_setup.gather_with_grad, rank=rank, world_size=world_size, use_horovod=args.model_config.loss_setup.use_horovod, criterion=nn.CrossEntropyLoss())
-    else:
-        criterion = ContrastiveLoss(criterion=nn.CrossEntropyLoss(), logit_scale=1 / 0.07)
+    total_steps = args.model_config.epochs * len(pre_train_dataloader)
+
+    scheduler = lr_scheduler.OneCycleLR(
+        optimizer,
+        max_lr=0.001,
+        total_steps=total_steps,
+        pct_start=0.3,
+        anneal_strategy='cos',
+        cycle_momentum=False
+    )
+
+    for_open_clip = False
+    if hasattr(args.model_config, 'for_open_clip') and args.model_config.for_open_clip:
+        for_open_clip = True
+    criterion = ContrastiveLoss(criterion=nn.CrossEntropyLoss(), logit_scale=1 / 0.07)
 
 
     if args.activate_wandb:
@@ -167,16 +182,16 @@ def main_process(rank: int, world_size: int, args):
     for epoch in range(args.model_config.epochs):
         if hasattr(args.model_config, 'dataset') and args.model_config.dataset == "INSECT":
             train_epoch(args.activate_wandb, args.model_config.epochs, epoch, insect_train_dataloader, model, optimizer,
-                        criterion, device, rank=rank)
+                        criterion, device, rank=rank, scheduler=scheduler, for_open_clip=for_open_clip)
         else:
             train_epoch(args.activate_wandb, args.model_config.epochs, epoch, pre_train_dataloader, model, optimizer,
-                        criterion, device, open_clip_ver=open_clip_ver, rank=rank)
-        if (epoch % args.model_config.evaluation_period == 0 or epoch == args.model_config.epochs - 1) and rank == 0 and epoch != 0:
+                        criterion, device, rank=rank, scheduler=scheduler, for_open_clip=for_open_clip)
+        if (epoch % args.model_config.evaluation_period == 0 or epoch == args.model_config.epochs - 1) and rank == 0:
             if hasattr(args.model_config, 'dataset') and args.model_config.dataset == "INSECT":
                 acc_dict, pred_dict = eval_phase(model, device, insect_train_dataloader_for_key, insect_val_dataloader,
-                                                 insect_test_seen_dataloader, insect_test_unseen_dataloader, k_list)
+                                                 insect_test_seen_dataloader, insect_test_unseen_dataloader, k_list, for_open_clip=for_open_clip)
             else:
-                acc_dict, pred_dict = eval_phase(model, device, all_keys_dataloader, seen_val_dataloader, unseen_val_dataloader, k_list, rank=rank)
+                acc_dict, pred_dict = eval_phase(model, device, all_keys_dataloader, seen_val_dataloader, unseen_val_dataloader, k_list, rank=rank, for_open_clip=for_open_clip)
             dict_for_wandb = convert_acc_dict_to_wandb_dict(acc_dict)
             dict_for_wandb['epoch'] = epoch
             overall_acc = (acc_dict['encoded_image_feature']['encoded_image_feature']['seen']['micro_acc'][1]['species'] + acc_dict['encoded_image_feature']['encoded_image_feature']['unseen']['micro_acc'][1]['species'])/2
