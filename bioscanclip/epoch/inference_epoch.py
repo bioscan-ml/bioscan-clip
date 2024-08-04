@@ -25,6 +25,7 @@ def get_feature_and_label(dataloader, model, device, type_of_feature="dna", for_
         for step, batch in pbar:
             pbar.set_description(f"Getting {type_of_feature} features")
             processid_batch, image_input_batch, dna_input_batch, input_ids, token_type_ids, attention_mask, label_batch = batch
+
             if for_open_clip:
                 language_input = input_ids
             else:

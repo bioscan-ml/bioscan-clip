@@ -43,6 +43,7 @@ def get_features_and_label(dataloader, model, device, for_key_set=False):
         dataloader, model, device, type_of_feature="image", multi_gpu=False
     )
 
+
     averaged_feature = None
     concatenated_feature = None
     all_key_features = None
@@ -152,6 +153,7 @@ def main(args: DictConfig) -> None:
 
             embedding_dict = get_features_and_label(dataloader, model, device)
 
+
             new_file = h5py.File(extracted_features_path, "w")
 
             order_list, family_list, genus_list, species_list = convert_labels_to_four_list(embedding_dict["label_list"])
@@ -167,6 +169,13 @@ def main(args: DictConfig) -> None:
 
             species_list = [s.encode('utf-8') for s in species_list]
             new_file.create_dataset("species_list", data=species_list)
+
+
+            id_list = [s.encode('utf-8') for s in embedding_dict["file_name_list"]]
+            if args.model_config.dataset == "bioscan_5m":
+                new_file.create_dataset("processid", data=id_list)
+            else:
+                new_file.create_dataset("file_name", data=id_list)
 
             new_file.create_dataset("encoded_image_feature", data=embedding_dict["encoded_image_feature"])
             new_file.create_dataset("encoded_dna_feature", data=embedding_dict["encoded_dna_feature"])

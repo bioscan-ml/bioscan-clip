@@ -246,7 +246,7 @@ class Dataset_for_CL(Dataset):
         if self.dataset == "bioscan_5m":
             curr_processid = self.hdf5_split_group["processid"][idx].decode("utf-8")
         else:
-            curr_processid = self.hdf5_split_group["image_file"][idx].decode("utf-8").split(".")[-1]
+            curr_processid = self.hdf5_split_group["image_file"][idx].decode("utf-8")
 
         if self.for_open_clip:
             language_input = self.list_of_label_string[idx]
@@ -301,6 +301,11 @@ def construct_dataloader(
         rank=None,
         shuffle=False,
 ):
+
+    for_open_clip = False
+    if hasattr(args.model_config, "for_open_clip"):
+        for_open_clip = args.model_config.for_open_clip
+
     barcode_bert_dna_tokens = None
     # For now, just use sequence, but not feature.
     image_type = "image"
@@ -331,7 +336,7 @@ def construct_dataloader(
         return_language=return_language,
         labels=labels,
         for_training=for_pre_train,
-        for_open_clip=args.model_config.for_open_clip,
+        for_open_clip=for_open_clip,
     )
 
     num_workers = 8
