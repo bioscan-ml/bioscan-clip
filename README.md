@@ -220,6 +220,8 @@ If you use BIOSCAN-CLIP in your research, please cite:
 ```
 
 # Acknowledgements
+We would like to express our gratitude for the use of the INSECT dataset, which played a pivotal role in the completion of our experiments. Additionally, we acknowledge the use and modification of code from the [Fine-Grained-ZSL-with-DNA](https://github.com/sbadirli/Fine-Grained-ZSL-with-DNA) repository, which facilitated part of our experimental work. The contributions of these resources have been invaluable to our project, and we appreciate the efforts of all developers and researchers involved.
+
 This reseach was supported by the Government of Canada’s New Frontiers in Research Fund (NFRF) [NFRFT-2020-00073], 
 Canada CIFAR AI Chair grants, and the Pioneer Centre for AI (DNRF grant number P1).
 This research was also enabled in part by support provided by the Digital Research Alliance of Canada (alliancecan.ca).
