@@ -179,6 +179,22 @@ python get_all_species_taxo_labels_dict_and_save_to_json.py
 # Then, generate CSV and hdf5 file for the dataset.
 python process_insect_dataset.py
 ```
+The downloaded data should be organized in this way:
+    ```shell
+    m3drefclip # project root
+    ├── INSECT
+    │   ├── att_splits.mat
+    │   ├── res101.mat
+    │   ├── images
+    │   │   │   ├── Abax parallelepipedus
+    │   │   │   │   ├── BC_ZSM_COL_02878+1311934584.jpg
+    │   │   │   │   ├── BC_ZSM_COL_05487+1338577126.JPG
+    │   │   │   │   ├── ...
+    │   │   │   ├── Abax parallelus
+    │   │   │   ├── Acordulecera dorsalis
+    │   │   │   ├── ...
+    ```
+
 You can also download the processed file with:
 ```shell
 wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/INSECT_data/processed_data.zip
