@@ -86,12 +86,11 @@ mkdir -p data/BIOSCAN_5M/split_data
 cd data/BIOSCAN_5M
 wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/BIOSCAN_5M.hdf5
 ```
+For more information about the hdf5 files, please check [Link](https://github.com/3dlg-hcvc/bioscan-clip/blob/main/DATA.md)
+
 ### Download data for generating hdf5 files
 
-TODO: provide instructions on how to generate hdf5 files and explain what input is needed to generate the hdf5 files.
-TODO: add the command for downloading the images and generating the hdf5 file.
-
-You can check [BIOSCAN-1M](https://github.com/zahrag/BIOSCAN-1M) and [BIOSCAN-5M](https://github.com/zahrag/BIOSCAN-5M) to download tsv files.
+You can check [BIOSCAN-1M](https://github.com/zahrag/BIOSCAN-1M) and [BIOSCAN-5M](https://github.com/zahrag/BIOSCAN-5M) to download tsv files. But they are actually not necessary.
 
 # Running experiments
 We recommend the use of [weights and biases](https://wandb.ai/site) to track and log experiments
