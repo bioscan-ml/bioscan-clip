@@ -54,6 +54,7 @@ def train_epoch(activate_wandb, total_epochs, epoch, dataloader, model, optimize
         optimizer.step()
         if scheduler is not None:
             scheduler.step()
+
         memory_info = torch.cuda.memory_stats(device=device)
         allocated_memory = torch.cuda.memory_allocated()
         memory_total = torch.cuda.get_device_properties(device).total_memory

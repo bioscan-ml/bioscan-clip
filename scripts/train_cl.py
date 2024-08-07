@@ -7,7 +7,7 @@ import torch
 import torch.multiprocessing as mp
 import torch.nn as nn
 import torch.optim as optim
-import torch.optim.lr_scheduler as lr_scheduler
+
 import wandb
 from omegaconf import DictConfig, OmegaConf
 import torch.distributed as dist
@@ -19,6 +19,8 @@ from bioscanclip.model.simple_clip import load_clip_model
 from bioscanclip.util.dataset import load_dataloader, load_insect_dataloader
 import numpy as np
 from omegaconf import OmegaConf, open_dict
+from torch.optim.lr_scheduler import CosineAnnealingLR
+
 
 def print_when_rank_zero(message, rank=0):
     if rank is None or rank == 0:
@@ -149,14 +151,8 @@ def main_process(rank: int, world_size: int, args):
 
     total_steps = args.model_config.epochs * len(pre_train_dataloader)
 
-    scheduler = lr_scheduler.OneCycleLR(
-        optimizer,
-        max_lr=0.001,
-        total_steps=total_steps,
-        pct_start=0.3,
-        anneal_strategy='cos',
-        cycle_momentum=False
-    )
+    scheduler = CosineAnnealingLR(optimizer, T_max=total_steps, eta_min=1e-6)
+
 
     for_open_clip = False
     if hasattr(args.model_config, 'for_open_clip') and args.model_config.for_open_clip:
