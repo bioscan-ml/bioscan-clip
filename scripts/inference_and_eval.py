@@ -2,6 +2,7 @@ import h5py
 import io
 import json
 import os
+import csv
 import random
 from collections import Counter, defaultdict
 from sklearn.preprocessing import normalize
@@ -510,7 +511,7 @@ def top_k_macro_accuracy(pred_list, gt_list, k_list=None):
     return macro_acc_dict, per_class_acc
 
 
-def print_micro_and_macro_acc(acc_dict, k_list):
+def print_micro_and_macro_acc(acc_dict, k_list, model_config):
     header = [
         " ",
         "Seen Order",
@@ -523,7 +524,38 @@ def print_micro_and_macro_acc(acc_dict, k_list):
         "Unseen Species",
     ]
 
+    # read modalities from config
+    # TODO: fit complicated strategey after updateing the config
+    if hasattr(model_config, "language"):
+        alignment = "I,D,T"
+    else:
+        alignment = "I,D"
+    suffix = f"({alignment})"
+
     rows = []
+    csv_data_dict = {'encoded_image_feature': 'Image', 
+                     'encoded_dna_feature': 'DNA',
+                     'encoded_language_feature': 'Text',
+                     'averaged_feature': 'Ave'+suffix,
+                     'concatenated_feature': 'Concat'+suffix,
+                     'all_key_features': 'All'+suffix}
+    csv_data = [["learning_strategy","Alignment", "DNA_encoder","Image_encoder","Language_encoder","Epoch",
+                 "Latent_space_dim","Query","Key","Metric","Seen_Order","Seen_Family","Seen_Genus",
+                 "Seen_Species","Unseen_Order","Unseen_Family","Unseen_Genus","Unseen_Species"]]
+
+    def read_encoder(model_config, key):
+        if hasattr(model_config, key):
+            return model_config[key].model
+        else:
+            return "None"
+    row_for_csv_data = ['LoRA', alignment]
+    row_for_csv_data.append(read_encoder(model_config, "dna"))
+    row_for_csv_data.append(read_encoder(model_config, "image"))
+    row_for_csv_data.append(read_encoder(model_config, "language"))
+    row_for_csv_data.append(model_config.epochs)
+    row_for_csv_data.append(model_config.output_dim)
+
+
     rows_for_copy_to_google_doc = []
     for query_feature_type in All_TYPE_OF_FEATURES_OF_QUERY:
         if query_feature_type not in acc_dict.keys():
@@ -539,17 +571,23 @@ def print_micro_and_macro_acc(acc_dict, k_list):
                         f"Query_feature: {query_feature_type}||Key_feature: {key_feature_type}||{type_of_acc} top-{k}"
                     ]
                     row_for_copy_to_google_doc = ""
+
+                    row_for_csv = row_for_csv_data.copy()
+                    row_for_csv += \
+                        [csv_data_dict[query_feature_type], csv_data_dict[key_feature_type], type_of_acc.replace('m', 'M').replace("_", f"_Top-{k}_")]
+                    
                     for spit in ["seen", "unseen"]:
                         for level in LEVELS:
-                            curr_row.append(
-                                f"\t{round(acc_dict[query_feature_type][key_feature_type][spit][type_of_acc][k][level], 4)}"
-                            )
+                            num = round(acc_dict[query_feature_type][key_feature_type][spit][type_of_acc][k][level], 4)
+
+                            curr_row.append(f"\t{num}")
                             row_for_copy_to_google_doc = (
-                                row_for_copy_to_google_doc
-                                + f"{round(acc_dict[query_feature_type][key_feature_type][spit][type_of_acc][k][level], 4)}\t"
+                                row_for_copy_to_google_doc + f"{num}\t"
                             )
+                            row_for_csv.append(num)
                     rows.append(curr_row)
                     rows_for_copy_to_google_doc.append(row_for_copy_to_google_doc)
+                    csv_data.append(row_for_csv)
     table = Table(header, rows)
     table.print_table()
 
@@ -557,8 +595,9 @@ def print_micro_and_macro_acc(acc_dict, k_list):
     for row in rows_for_copy_to_google_doc:
         print(row)
 
+    return csv_data
 
-def inference_and_print_result(keys_dict, seen_dict, unseen_dict, small_species_list=None, k_list=None):
+def inference_and_print_result(keys_dict, seen_dict, unseen_dict, model_config, small_species_list=None, k_list=None):
     acc_dict = {}
     per_class_acc = {}
     if k_list is None:
@@ -638,9 +677,9 @@ def inference_and_print_result(keys_dict, seen_dict, unseen_dict, small_species_
             acc_dict[query_feature_type][key_feature_type]["seen"]["macro_acc"] = seen_macro_acc
             acc_dict[query_feature_type][key_feature_type]["unseen"]["macro_acc"] = unseen_macro_acc
 
-    print_micro_and_macro_acc(acc_dict, k_list)
+    csv_data = print_micro_and_macro_acc(acc_dict, k_list, model_config)
 
-    return acc_dict, per_class_acc, pred_dict
+    return acc_dict, per_class_acc, pred_dict, csv_data
 
 
 def check_for_acc_about_correct_predict_seen_or_unseen(final_pred_list, species_list):
@@ -810,13 +849,27 @@ def main(args: DictConfig) -> None:
             with open(labels_path, "w") as json_file:
                 json.dump(total_dict, json_file, indent=4)
 
-    acc_dict, per_class_acc, pred_dict = inference_and_print_result(
+    acc_dict, per_class_acc, pred_dict, csv_data = inference_and_print_result(
         keys_dict,
         seen_dict,
         unseen_dict,
+        args.model_config,
         small_species_list=None,
         k_list=args.inference_and_eval_setting.k_list,
     )
+
+    # write acc_dict to json
+    logs_folder = os.path.join("logs")
+    os.makedirs(logs_folder, exist_ok=True)
+    with open(os.path.join(logs_folder, "accuracy.json"), 'w') as fp:
+        json.dump(acc_dict, fp)
+    print(f"Accuracy dict saved to logs folder: {logs_folder}/accuracy.json")
+
+    with open(os.path.join(logs_folder, "results.csv"), 'w', newline='') as csvfile:
+        csvwriter = csv.writer(csvfile, delimiter=',')
+        csvwriter.writerows(csv_data)
+    print(f"CSV data saved to logs folder: {logs_folder}/results.csv")
+
 
     # seen_final_pred = pred_dict["encoded_image_feature"]["encoded_dna_feature"]["curr_seen_pred_list"]
     # unseen_final_pred = pred_dict["encoded_image_feature"]["encoded_dna_feature"]["curr_unseen_pred_list"]
