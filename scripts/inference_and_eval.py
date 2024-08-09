@@ -803,7 +803,7 @@ def main(args: DictConfig) -> None:
 
         model = load_clip_model(args, device)
 
-        if hasattr(args.model_config, "load_ckpt") and args.model_config.load_ckpt:
+        if hasattr(args.model_config, "load_ckpt") and args.model_config.load_ckpt is False:
             pass
         else:
             checkpoint = torch.load(args.model_config.ckpt_path, map_location="cuda:0")

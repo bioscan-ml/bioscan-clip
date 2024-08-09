@@ -4,7 +4,6 @@ visualizations/
 outputs/
 data/
 ckpt/
-
 build
 bioscanclip.egg-info
 html_plots
