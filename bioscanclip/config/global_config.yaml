@@ -1,4 +1,4 @@
-debug_flag: false
+debug_flag: true
 
 defaults:
   - _self_

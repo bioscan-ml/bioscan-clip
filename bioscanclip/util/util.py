@@ -7,6 +7,8 @@ import faiss
 from torch import nn
 from tqdm import tqdm
 from bioscanclip.epoch.inference_epoch import get_feature_and_label
+import copy
+from loratorch.layers import MultiheadAttention as LoRA_MultiheadAttention
 
 class EncoderWithExtraLayer(nn.Module):
     def __init__(self, encoder, new_linear_layer):
@@ -295,3 +297,64 @@ def get_features_and_label(dataloader, model, device, for_key_set=False):
     dictionary_of_split["all_key_features_label"] = all_key_features_label
 
     return dictionary_of_split
+
+def create_child_from_parent(parent_instance, child_class, **child_args):
+    child_instance = child_class.__new__(child_class)
+    for attr, value in vars(parent_instance).items():
+        if hasattr(child_instance, attr):
+            setattr(child_instance, attr, copy.deepcopy(value))
+    child_class.__init__(child_instance, **child_args)
+    return child_instance
+
+def add_lora_layer_to_open_clip(open_clip_model, r: int = 4, num_classes: int = 0, lora_layer=None):
+    if num_classes != 768:
+        raise ValueError(
+            "num_classes should be 768 for OpenCLIP, may need to implement a new head for other num_classes")
+
+    vit_model = open_clip_model.visual
+
+    for param in vit_model.parameters():
+        param.requires_grad = False
+
+    assert r > 0
+    if lora_layer is not None:
+        lora_layer = lora_layer
+    else:
+        lora_layer = list(range(len(vit_model.transformer.resblocks)))
+        block_list = enumerate(vit_model.transformer.resblocks)
+
+    for param in vit_model.parameters():
+        param.requires_grad = False
+
+    for t_layer_i, blk in block_list:
+        # If we only want few lora layer instead of all
+        if t_layer_i not in lora_layer:
+            continue
+        blk.attn = create_child_from_parent(blk.attn, LoRA_MultiheadAttention, embed_dim=blk.attn.embed_dim,
+                                            num_heads=blk.attn.num_heads, enable_lora=['q', 'k', 'v'], r=r)
+    open_clip_model.visual = vit_model
+
+    # Do the same for the language model
+    language_model = open_clip_model.transformer
+    for param in language_model.parameters():
+        param.requires_grad = False
+
+    assert r > 0
+    if lora_layer is not None:
+        lora_layer = lora_layer
+    else:
+        lora_layer = list(range(len(language_model.resblocks)))
+        block_list = enumerate(language_model.resblocks)
+
+    for param in language_model.parameters():
+        param.requires_grad = False
+
+    for t_layer_i, blk in block_list:
+        # If we only want few lora layer instead of all
+        if t_layer_i not in lora_layer:
+            continue
+        blk.attn = create_child_from_parent(blk.attn, LoRA_MultiheadAttention, embed_dim=blk.attn.embed_dim,
+                                            num_heads=blk.attn.num_heads, enable_lora=['q', 'k', 'v'], r=r)
+    open_clip_model.transformer = language_model
+
+    return open_clip_model

@@ -5,7 +5,7 @@ from bioscanclip.epoch.eval_epoch import convert_label_dict_to_list_of_dict
 import torch
 
 
-def get_feature_and_label(dataloader, model, device, type_of_feature="dna", multi_gpu=False):
+def get_feature_and_label(dataloader, model, device, type_of_feature="dna", for_open_clip=False, multi_gpu=False):
     if type_of_feature not in ['dna', 'image', 'text']:
         raise TypeError(f"{type_of_feature} is not a valid input type")
 
@@ -25,8 +25,12 @@ def get_feature_and_label(dataloader, model, device, type_of_feature="dna", mult
         for step, batch in pbar:
             pbar.set_description(f"Getting {type_of_feature} features")
             processid_batch, image_input_batch, dna_input_batch, input_ids, token_type_ids, attention_mask, label_batch = batch
-            language_input = {'input_ids': input_ids.to(device), 'token_type_ids': token_type_ids.to(device),
-                              'attention_mask': attention_mask.to(device)}
+
+            if for_open_clip:
+                language_input = input_ids
+            else:
+                language_input = {'input_ids': input_ids.to(device), 'token_type_ids': token_type_ids.to(device),
+                                  'attention_mask': attention_mask.to(device)}
 
             if type_of_feature == 'dna':
                 dna_input_batch = dna_input_batch.to(device)

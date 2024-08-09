@@ -8,7 +8,8 @@ import torch.distributed as dist
 
 
 
-def train_epoch(activate_wandb, total_epochs, epoch, dataloader, model, optimizer, criterion, device, open_clip_ver=False, rank=None, check_cuda_memory=False):
+def train_epoch(activate_wandb, total_epochs, epoch, dataloader, model, optimizer, criterion, device, scheduler=None, for_open_clip=False, rank=None, check_cuda_memory=False):
+    torch.autograd.set_detect_anomaly(True)
     if rank == 0:
         pbar = tqdm(enumerate(dataloader), total=len(dataloader))
     else:
@@ -19,34 +20,41 @@ def train_epoch(activate_wandb, total_epochs, epoch, dataloader, model, optimize
     model.train()
     for step, batch in pbar:
         processid_batch, image_input_batch, dna_input_batch, input_ids, token_type_ids, attention_mask, label_for_train_batch = batch
-        language_input = {'input_ids': input_ids.to(device), 'token_type_ids': token_type_ids.to(device),
-                          'attention_mask': attention_mask.to(device)}
-
+        if for_open_clip:
+            language_input = input_ids
+        else:
+            language_input = {'input_ids': input_ids.to(device), 'token_type_ids': token_type_ids.to(device),
+                              'attention_mask': attention_mask.to(device)}
         optimizer.zero_grad()
         image_input_batch = image_input_batch.to(device)
         dna_input_batch = dna_input_batch.to(device)
         logit_scale = None
         logit_bias = None
-        if open_clip_ver:
-            image_output, dna_output, language_output, logit_scale, logit_bias = model(image_input_batch, dna_input_batch,
-                                                          language_input)
-        else:
-            image_output, dna_output, language_output = model(image_input_batch, dna_input_batch, language_input)
+        # if for_open_clip:
+            # image_output, dna_output, language_output, logit_scale, logit_bias = model(image_input_batch, dna_input_batch,
+            #                                               language_input)
+        # else:
+        #
+        image_output, dna_output, language_output = model(image_input_batch, dna_input_batch, language_input)
 
         label_for_train_batch = label_for_train_batch.to(device)
         # label_for_train_batch = construct_label_metrix(label_for_train_batch).to(device)
 
-        if open_clip_ver:
-            loss = criterion(image_output, dna_output, language_output, label_for_train_batch, logit_scale, logit_bias)
-        else:
-            loss = criterion(image_output, dna_output, language_output, label_for_train_batch)
+        # if for_open_clip:
+        #     loss = criterion(image_output, dna_output, language_output, label_for_train_batch, logit_scale, logit_bias)
+        # else:
+        #     loss = criterion(image_output, dna_output, language_output, label_for_train_batch)
+
+        loss = criterion(image_output, dna_output, language_output, label_for_train_batch)
 
         loss.backward()
-
         epoch_loss = epoch_loss + loss.item()
 
 
         optimizer.step()
+        if scheduler is not None:
+            scheduler.step()
+
         memory_info = torch.cuda.memory_stats(device=device)
         allocated_memory = torch.cuda.memory_allocated()
         memory_total = torch.cuda.get_device_properties(device).total_memory
@@ -61,3 +69,4 @@ def train_epoch(activate_wandb, total_epochs, epoch, dataloader, model, optimize
             wandb.log({"loss": loss.item(), "step": step + epoch * len(dataloader)})
 
     print(f'Epoch [{epoch}/{total_epochs}], Loss: {epoch_loss / len(dataloader)}')
+

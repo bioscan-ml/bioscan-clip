@@ -1,26 +1,14 @@
-import io
-import json
 import os
-import random
-from collections import Counter, defaultdict
-from sklearn.preprocessing import normalize
-import faiss
+
 import hydra
-import matplotlib
-import matplotlib.pyplot as plt
 import numpy as np
-import plotly
-import plotly.express as px
 import torch
 from omegaconf import DictConfig
-from sklearn.metrics import silhouette_samples
-from umap import UMAP
-from PIL import Image
+import h5py
 
 from bioscanclip.epoch.inference_epoch import get_feature_and_label
 from bioscanclip.model.simple_clip import load_clip_model
 from bioscanclip.util.dataset import load_bioscan_dataloader_all_small_splits
-from bioscanclip.util.util import Table, categorical_cmap
 
 PLOT_FOLDER = "html_plots"
 RETRIEVAL_FOLDER = "image_retrieval"
@@ -54,6 +42,7 @@ def get_features_and_label(dataloader, model, device, for_key_set=False):
     file_name_list, encoded_image_feature, label_list = get_feature_and_label(
         dataloader, model, device, type_of_feature="image", multi_gpu=False
     )
+
 
     averaged_feature = None
     concatenated_feature = None
@@ -92,6 +81,17 @@ def get_features_and_label(dataloader, model, device, for_key_set=False):
 
     return dictionary_of_split
 
+def convert_labels_to_four_list(list_of_dict):
+    order_list = []
+    family_list = []
+    genus_list = []
+    species_list = []
+    for a_dict in list_of_dict:
+        order_list.append(a_dict["order"])
+        family_list.append(a_dict["family"])
+        genus_list.append(a_dict["genus"])
+        species_list.append(a_dict["species"])
+    return order_list, family_list, genus_list, species_list
 
 @hydra.main(config_path="../bioscanclip/config", config_name="global_config", version_base="1.1")
 def main(args: DictConfig) -> None:
@@ -103,7 +103,7 @@ def main(args: DictConfig) -> None:
         args.model_config.ckpt_path = os.path.join(args.model_config.ckpt_path, "last.pth")
 
     folder_for_saving = os.path.join( args.project_root_path,
-        "extracted_embedding", args.model_config.dataset, args.model_config.model_output_name
+        "new_extracted_embedding", args.model_config.dataset, args.model_config.model_output_name
     )
     os.makedirs(folder_for_saving, exist_ok=True)
 
@@ -112,9 +112,13 @@ def main(args: DictConfig) -> None:
 
     # initialize model
     print("Initialize model...")
+
     model = load_clip_model(args, device)
-    checkpoint = torch.load(args.model_config.ckpt_path, map_location="cuda:0")
-    model.load_state_dict(checkpoint)
+    if hasattr(args.model_config, "load_ckpt") and args.model_config.load_ckpt is False:
+        pass
+    else:
+        checkpoint = torch.load(args.model_config.ckpt_path, map_location="cuda:0")
+        model.load_state_dict(checkpoint)
     # Load data
     args.model_config.batch_size = 24
     train_seen_dataloader, seen_val_dataloader, unseen_val_dataloader, seen_test_dataloader, unseen_test_dataloader, seen_keys_dataloader, val_unseen_keys_dataloader, test_unseen_keys_dataloader, all_keys_dataloader = load_bioscan_dataloader_all_small_splits(
@@ -140,16 +144,43 @@ def main(args: DictConfig) -> None:
 
     for key, dataloader in dataloaders_that_need_to_be_process.items():
         print(f"Processing {key}...")
-        embedding_dict = get_features_and_label(dataloader, model, device)
+        split = key.split('_')[:-1]
+        split_name = "_".join(split)
         extracted_features_path = os.path.join(folder_for_saving,
-                                               f"extracted_feature_{key}.npz")
-        np.savez(
-                    extracted_features_path,
-                    process_id = embedding_dict["file_name_list"],
-                    np_all_image_feature=embedding_dict["encoded_image_feature"],
-                    np_all_dna_feature=embedding_dict["encoded_dna_feature"],
-                    np_all_language_feature=embedding_dict["encoded_language_feature"],
-                )
+                                               f"extracted_features_of_{split_name}.hdf5")
+        labels_path = os.path.join(folder_for_saving, f"labels_{key}.npy")
+        if args.save_inference and not (os.path.exists(extracted_features_path) and os.path.exists(labels_path)):
+
+            embedding_dict = get_features_and_label(dataloader, model, device)
+
+
+            new_file = h5py.File(extracted_features_path, "w")
+
+            order_list, family_list, genus_list, species_list = convert_labels_to_four_list(embedding_dict["label_list"])
+
+            order_list = [s.encode('utf-8') for s in order_list]
+            new_file.create_dataset("order_list", data=order_list)
+
+            family_list = [s.encode('utf-8') for s in family_list]
+            new_file.create_dataset("family_list", data=family_list)
+
+            genus_list = [s.encode('utf-8') for s in genus_list]
+            new_file.create_dataset("genus_list", data=genus_list)
+
+            species_list = [s.encode('utf-8') for s in species_list]
+            new_file.create_dataset("species_list", data=species_list)
+
+
+            id_list = [s.encode('utf-8') for s in embedding_dict["file_name_list"]]
+            if args.model_config.dataset == "bioscan_5m":
+                new_file.create_dataset("processid", data=id_list)
+            else:
+                new_file.create_dataset("file_name", data=id_list)
+
+            new_file.create_dataset("encoded_image_feature", data=embedding_dict["encoded_image_feature"])
+            new_file.create_dataset("encoded_dna_feature", data=embedding_dict["encoded_dna_feature"])
+            if hasattr(args.model_config, "language"):
+                new_file.create_dataset("encoded_language_feature", data=embedding_dict["encoded_language_feature"])
 
 if __name__ == "__main__":
     main()

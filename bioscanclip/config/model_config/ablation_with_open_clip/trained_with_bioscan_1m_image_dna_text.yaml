@@ -1,9 +1,10 @@
-batch_size: 400
+batch_size: 10
 epochs: 15
 labels_for_driven_positive_and_negative_pairs:
-wandb_project_name: BIOSCAN-CLIP
+wandb_project_name: BIOSCAN-CLIP-ablation_with_open_clip
 using_train_seen_for_pre_train: true
 dataset: bioscan_1m
+disable_lora: false
 
 image:
   input_type: image
@@ -15,14 +16,8 @@ language:
   input_type: sequence
   model: lora_bert
 
-load_ckpt: false
-model_output_name: no_align_1m
+model_output_name: trained_with_bioscan_1m_image_dna_text
 evaluation_period: 1
 ckpt_path: ${project_root_path}/ckpt/bioscan_clip/trained_with_bioscan_1m/image_dna_text.pth
 output_dim: 768
-port: 12316
-
-fine_tuning_set:
-  batch_size: 72
-  epochs: 15
-  fine_tune_model_output_dir: ${model_output_dir}/${model_config.model_output_name}/supervise_fine_tune_ckpt
+port: 12345
