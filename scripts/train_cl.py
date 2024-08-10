@@ -19,7 +19,7 @@ from bioscanclip.model.simple_clip import load_clip_model
 from bioscanclip.util.dataset import load_dataloader, load_insect_dataloader
 import numpy as np
 from omegaconf import OmegaConf, open_dict
-from torch.optim.lr_scheduler import ExponentialLR
+import torch.optim.lr_scheduler as lr_scheduler
 
 
 def print_when_rank_zero(message, rank=0):
@@ -137,6 +137,7 @@ def main_process(rank: int, world_size: int, args):
     if hasattr(args.model_config, 'dataset') and args.model_config.dataset == "INSECT":
         insect_train_dataloader, insect_train_dataloader_for_key, insect_val_dataloader, insect_test_seen_dataloader, insect_test_unseen_dataloader = load_insect_dataloader(
             args, world_size=world_size, rank=rank)
+        pre_train_dataloader = insect_train_dataloader
     else:
         pre_train_dataloader, seen_val_dataloader, unseen_val_dataloader, all_keys_dataloader = load_dataloader(
             args, world_size=world_size, rank=rank)
@@ -147,10 +148,31 @@ def main_process(rank: int, world_size: int, args):
     model = model.to(device)
     broadcast_model(model, rank)
 
-    optimizer = optim.AdamW(model.parameters(), lr=0.001)
+    total_steps = len(pre_train_dataloader) * args.model_config.epochs
 
-    scheduler = ExponentialLR(optimizer, gamma=0.9)
+    lr = 0.001
 
+    if hasattr(args.model_config, 'lr'):
+        lr = args.model_config.lr
+
+    optimizer = optim.AdamW(model.parameters(), lr=lr, weight_decay=0.01)
+    scheduler =None
+    if hasattr(args.model_config, 'scheduler'):
+        if args.model_config.scheduler == 'one_cycle':
+            scheduler = lr_scheduler.OneCycleLR(
+                optimizer,
+                max_lr=0.001,
+                total_steps=total_steps,
+                pct_start=0.3,
+                anneal_strategy='cos',
+                cycle_momentum=False,
+            )
+        elif args.model_config.scheduler == 'exponential':
+            scheduler = lr_scheduler.ExponentialLR(optimizer, gamma=0.95)
+        elif args.model_config.scheduler == 'step':
+            scheduler = lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.5)
+        elif args.model_config.scheduler == 'cosine':
+            scheduler = lr_scheduler.CosineAnnealingLR(optimizer, T_max=total_steps, eta_min=1e-8)
 
     for_open_clip = False
     if hasattr(args.model_config, 'for_open_clip') and args.model_config.for_open_clip:
