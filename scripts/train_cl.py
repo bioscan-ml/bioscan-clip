@@ -157,7 +157,7 @@ def main_process(rank: int, world_size: int, args):
 
     optimizer = optim.AdamW(model.parameters(), lr=lr, weight_decay=0.01)
     scheduler =None
-    if hasattr(args.model_config, 'scheduler'):
+    if hasattr(args.model_config, 'lr_scheduler'):
         if args.model_config.scheduler == 'one_cycle':
             scheduler = lr_scheduler.OneCycleLR(
                 optimizer,
