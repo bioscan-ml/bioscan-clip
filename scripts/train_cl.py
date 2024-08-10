@@ -19,7 +19,7 @@ from bioscanclip.model.simple_clip import load_clip_model
 from bioscanclip.util.dataset import load_dataloader, load_insect_dataloader
 import numpy as np
 from omegaconf import OmegaConf, open_dict
-from torch.optim.lr_scheduler import CosineAnnealingLR
+from torch.optim.lr_scheduler import ExponentialLR
 
 
 def print_when_rank_zero(message, rank=0):
@@ -149,9 +149,7 @@ def main_process(rank: int, world_size: int, args):
 
     optimizer = optim.AdamW(model.parameters(), lr=0.001)
 
-    total_steps = args.model_config.epochs * len(pre_train_dataloader)
-
-    scheduler = CosineAnnealingLR(optimizer, T_max=total_steps, eta_min=1e-6)
+    scheduler = ExponentialLR(optimizer, gamma=0.9)
 
 
     for_open_clip = False
