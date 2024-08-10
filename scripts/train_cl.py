@@ -152,16 +152,19 @@ def main_process(rank: int, world_size: int, args):
 
     lr = 0.001
 
-    if hasattr(args.model_config, 'lr'):
-        lr = args.model_config.lr
+    if hasattr(args.model_config, 'lr_config') and hasattr(args.model_config.lr_config, 'lr'):
+        lr = args.model_config.lr_config.lr
 
-    optimizer = optim.AdamW(model.parameters(), lr=lr, weight_decay=0.01)
+    optimizer = optim.AdamW(model.parameters(), lr=lr)
     scheduler =None
     if hasattr(args.model_config, 'lr_scheduler'):
         if args.model_config.lr_scheduler == 'one_cycle':
+            max_lr = 0.001
+            if hasattr(args.model_config.lr_config, 'max_lr'):
+                max_lr = args.model_config.lr_config.max_lr
             scheduler = lr_scheduler.OneCycleLR(
                 optimizer,
-                max_lr=0.001,
+                max_lr=max_lr,
                 total_steps=total_steps,
                 pct_start=0.3,
                 anneal_strategy='cos',
@@ -172,7 +175,10 @@ def main_process(rank: int, world_size: int, args):
         elif args.model_config.lr_scheduler == 'step':
             scheduler = lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.5)
         elif args.model_config.lr_scheduler == 'cosine':
-            scheduler = lr_scheduler.CosineAnnealingLR(optimizer, T_max=total_steps, eta_min=1e-8)
+            min_lr = 1e-9
+            if hasattr(args.model_config.lr_config, 'min_lr'):
+                min_lr = args.model_config.lr_config.min_lr
+            scheduler = lr_scheduler.CosineAnnealingLR(optimizer, T_max=total_steps, eta_min=min_lr)
 
     for_open_clip = False
     if hasattr(args.model_config, 'for_open_clip') and args.model_config.for_open_clip:
