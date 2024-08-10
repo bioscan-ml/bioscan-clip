@@ -158,7 +158,7 @@ def main_process(rank: int, world_size: int, args):
     optimizer = optim.AdamW(model.parameters(), lr=lr, weight_decay=0.01)
     scheduler =None
     if hasattr(args.model_config, 'lr_scheduler'):
-        if args.model_config.scheduler == 'one_cycle':
+        if args.model_config.lr_scheduler == 'one_cycle':
             scheduler = lr_scheduler.OneCycleLR(
                 optimizer,
                 max_lr=0.001,
@@ -167,11 +167,11 @@ def main_process(rank: int, world_size: int, args):
                 anneal_strategy='cos',
                 cycle_momentum=False,
             )
-        elif args.model_config.scheduler == 'exponential':
+        elif args.model_config.lr_scheduler == 'exponential':
             scheduler = lr_scheduler.ExponentialLR(optimizer, gamma=0.95)
-        elif args.model_config.scheduler == 'step':
+        elif args.model_config.lr_scheduler == 'step':
             scheduler = lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.5)
-        elif args.model_config.scheduler == 'cosine':
+        elif args.model_config.lr_scheduler == 'cosine':
             scheduler = lr_scheduler.CosineAnnealingLR(optimizer, T_max=total_steps, eta_min=1e-8)
 
     for_open_clip = False
