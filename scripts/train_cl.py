@@ -67,7 +67,7 @@ def construct_key_dict(list_of_dict):
 
     return key_dict
 
-def eval_phase(model, device, all_keys_dataloader, seen_val_dataloader, unseen_val_dataloader, k_list,
+def eval_phase(model, device, all_keys_dataloader, seen_val_dataloader, unseen_val_dataloader, k_list, model_config,
                species_to_drop=None, rank=None, for_open_clip=False):
     keys_dict = get_features_and_label(
         all_keys_dataloader, model, device, for_key_set=True, for_open_clip=for_open_clip)
@@ -78,11 +78,11 @@ def eval_phase(model, device, all_keys_dataloader, seen_val_dataloader, unseen_v
     unseen_val_dict = get_features_and_label(
         unseen_val_dataloader, model, device, for_open_clip=for_open_clip)
 
-    acc_dict, _, pred_dict = inference_and_print_result(keys_dict, seen_val_dict, unseen_val_dict,
+    acc_dict, _, pred_dict, _ = inference_and_print_result(keys_dict, seen_val_dict, unseen_val_dict, model_config=model_config,
                                                      small_species_list=None, k_list=k_list)
     return acc_dict, pred_dict
 
-def eval_phase_for_insect(model, device, insect_train_dataloader_for_key, insect_val_dataloader, insect_test_seen_dataloader, insect_test_unseen_dataloader, k_list,
+def eval_phase_for_insect(model, device, insect_train_dataloader_for_key, insect_val_dataloader, insect_test_seen_dataloader, insect_test_unseen_dataloader, k_list, model_config,
                species_to_drop=None):
     insect_train_dict = get_features_and_label(
         insect_train_dataloader_for_key, model, device)
@@ -95,7 +95,7 @@ def eval_phase_for_insect(model, device, insect_train_dataloader_for_key, insect
 
     keys_dict = construct_key_dict([insect_train_dict, insect_val_dict, insect_test_seen_dict, insect_test_unseen_dict])
 
-    acc_dict, _, pred_dict = inference_and_print_result(keys_dict, insect_test_seen_dict, insect_test_unseen_dict,
+    acc_dict, _, pred_dict, _ = inference_and_print_result(keys_dict, insect_test_seen_dict, insect_test_unseen_dict,
                                                      small_species_list=None, k_list=k_list)
 
     return acc_dict, pred_dict
@@ -208,12 +208,20 @@ def main_process(rank: int, world_size: int, args):
         else:
             train_epoch(args.activate_wandb, args.model_config.epochs, epoch, pre_train_dataloader, model, optimizer,
                         criterion, device, rank=rank, scheduler=scheduler, for_open_clip=for_open_clip)
+
+
         if (epoch % args.model_config.evaluation_period == 0 or epoch == args.model_config.epochs - 1) and rank == 0:
+            if args.save_ckpt:
+                last_ckpt_path = os.path.join(folder_path, f'last.pth')
+                torch.save(model.state_dict(), last_ckpt_path)
+                print(f'Last ckpt: {last_ckpt_path}')
+
             if hasattr(args.model_config, 'dataset') and args.model_config.dataset == "INSECT":
                 acc_dict, pred_dict = eval_phase(model, device, insect_train_dataloader_for_key, insect_val_dataloader,
-                                                 insect_test_seen_dataloader, insect_test_unseen_dataloader, k_list, for_open_clip=for_open_clip)
+                                                 insect_test_seen_dataloader, insect_test_unseen_dataloader, k_list, model_config=args.model_config, for_open_clip=for_open_clip)
             else:
-                acc_dict, pred_dict = eval_phase(model, device, all_keys_dataloader, seen_val_dataloader, unseen_val_dataloader, k_list, rank=rank, for_open_clip=for_open_clip)
+                acc_dict, pred_dict = eval_phase(model, device, all_keys_dataloader, seen_val_dataloader, unseen_val_dataloader, k_list, rank=rank, model_config=args.model_config, for_open_clip=for_open_clip)
+
             dict_for_wandb = convert_acc_dict_to_wandb_dict(acc_dict)
             dict_for_wandb['epoch'] = epoch
             overall_acc = (acc_dict['encoded_image_feature']['encoded_image_feature']['seen']['micro_acc'][1]['species'] + acc_dict['encoded_image_feature']['encoded_image_feature']['unseen']['micro_acc'][1]['species'])/2
@@ -229,12 +237,6 @@ def main_process(rank: int, world_size: int, args):
             if args.activate_wandb:
                 wandb.log(dict_for_wandb,
                           commit=True)
-
-        if args.save_ckpt:
-            last_ckpt_path = os.path.join(folder_path, f'last.pth')
-            torch.save(model.state_dict(), last_ckpt_path)
-            print(f'Last ckpt: {last_ckpt_path}')
-
 
 @hydra.main(config_path="../bioscanclip/config", config_name="global_config", version_base="1.1")
 def main(args: DictConfig) -> None:
