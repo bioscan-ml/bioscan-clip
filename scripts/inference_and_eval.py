@@ -596,14 +596,20 @@ def print_micro_and_macro_acc(acc_dict, k_list, args):
     for row in rows_for_copy_to_google_doc:
         print(row)
     
-    # write acc_dict to json
     if args.save_inference:
         logs_folder = os.path.join("logs")
         os.makedirs(logs_folder, exist_ok=True)
+
+        # write config and accurate to json
         with open(os.path.join(logs_folder, "accuracy.json"), 'w') as fp:
             json.dump(acc_dict, fp)
         print(f"Accuracy dict saved to logs folder: {logs_folder}/accuracy.json")
 
+        with open(os.path.join(logs_folder, "config.json"), 'w') as fp:
+            json.dump(args, fp)
+        print(f"Config saved to logs folder: {logs_folder}/config.json")
+
+        # write results to csv
         with open(os.path.join(logs_folder, "results.csv"), 'w', newline='') as csvfile:
             csvwriter = csv.writer(csvfile, delimiter=',')
             csvwriter.writerows(csv_data)
