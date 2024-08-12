@@ -597,25 +597,26 @@ def print_micro_and_macro_acc(acc_dict, k_list, args):
         print(row)
     
     # write acc_dict to json
-    logs_folder = os.path.join("logs")
-    os.makedirs(logs_folder, exist_ok=True)
-    with open(os.path.join(logs_folder, "accuracy.json"), 'w') as fp:
-        json.dump(acc_dict, fp)
-    print(f"Accuracy dict saved to logs folder: {logs_folder}/accuracy.json")
+    if args.save_inference:
+        logs_folder = os.path.join("logs")
+        os.makedirs(logs_folder, exist_ok=True)
+        with open(os.path.join(logs_folder, "accuracy.json"), 'w') as fp:
+            json.dump(acc_dict, fp)
+        print(f"Accuracy dict saved to logs folder: {logs_folder}/accuracy.json")
 
-    with open(os.path.join(logs_folder, "results.csv"), 'w', newline='') as csvfile:
-        csvwriter = csv.writer(csvfile, delimiter=',')
-        csvwriter.writerows(csv_data)
-    print(f"CSV results saved to logs folder: {logs_folder}/results.csv")
+        with open(os.path.join(logs_folder, "results.csv"), 'w', newline='') as csvfile:
+            csvwriter = csv.writer(csvfile, delimiter=',')
+            csvwriter.writerows(csv_data)
+        print(f"CSV results saved to logs folder: {logs_folder}/results.csv")
 
-    raw_csv_data = []
-    for row in csv_data[1:]:
-        raw_csv_data.append(row[-8:])
+        raw_csv_data = []
+        for row in csv_data[1:]:
+            raw_csv_data.append(row[-8:])
 
-    with open(os.path.join(logs_folder, "raw.csv"), 'w', newline='') as csvfile:
-        csvwriter = csv.writer(csvfile, delimiter=',')
-        csvwriter.writerows(raw_csv_data)
-    print(f"raw results saved to logs folder: {logs_folder}/raw.csv")
+        with open(os.path.join(logs_folder, "raw.csv"), 'w', newline='') as csvfile:
+            csvwriter = csv.writer(csvfile, delimiter=',')
+            csvwriter.writerows(raw_csv_data)
+        print(f"raw results saved to logs folder: {logs_folder}/raw.csv")
     
 
 def inference_and_print_result(keys_dict, seen_dict, unseen_dict, args, small_species_list=None, k_list=None):
