@@ -511,7 +511,7 @@ def top_k_macro_accuracy(pred_list, gt_list, k_list=None):
     return macro_acc_dict, per_class_acc
 
 
-def print_micro_and_macro_acc(acc_dict, k_list, model_config):
+def print_micro_and_macro_acc(acc_dict, k_list, args):
     header = [
         " ",
         "Seen Order",
@@ -526,6 +526,7 @@ def print_micro_and_macro_acc(acc_dict, k_list, model_config):
 
     # read modalities from config
     # TODO: fit complicated strategey after updateing the config
+    model_config = args.model_config
     if hasattr(model_config, "language"):
         alignment = "I,D,T"
     else:
@@ -594,10 +595,30 @@ def print_micro_and_macro_acc(acc_dict, k_list, model_config):
     print("For copy to google doc")
     for row in rows_for_copy_to_google_doc:
         print(row)
+    
+    # write acc_dict to json
+    logs_folder = os.path.join("logs")
+    os.makedirs(logs_folder, exist_ok=True)
+    with open(os.path.join(logs_folder, "accuracy.json"), 'w') as fp:
+        json.dump(acc_dict, fp)
+    print(f"Accuracy dict saved to logs folder: {logs_folder}/accuracy.json")
 
-    return csv_data
+    with open(os.path.join(logs_folder, "results.csv"), 'w', newline='') as csvfile:
+        csvwriter = csv.writer(csvfile, delimiter=',')
+        csvwriter.writerows(csv_data)
+    print(f"CSV results saved to logs folder: {logs_folder}/results.csv")
 
-def inference_and_print_result(keys_dict, seen_dict, unseen_dict, model_config, small_species_list=None, k_list=None):
+    raw_csv_data = []
+    for row in csv_data[1:]:
+        raw_csv_data.append(row[-8:])
+
+    with open(os.path.join(logs_folder, "raw.csv"), 'w', newline='') as csvfile:
+        csvwriter = csv.writer(csvfile, delimiter=',')
+        csvwriter.writerows(raw_csv_data)
+    print(f"raw results saved to logs folder: {logs_folder}/raw.csv")
+    
+
+def inference_and_print_result(keys_dict, seen_dict, unseen_dict, args, small_species_list=None, k_list=None):
     acc_dict = {}
     per_class_acc = {}
     if k_list is None:
@@ -677,9 +698,9 @@ def inference_and_print_result(keys_dict, seen_dict, unseen_dict, model_config, 
             acc_dict[query_feature_type][key_feature_type]["seen"]["macro_acc"] = seen_macro_acc
             acc_dict[query_feature_type][key_feature_type]["unseen"]["macro_acc"] = unseen_macro_acc
 
-    csv_data = print_micro_and_macro_acc(acc_dict, k_list, model_config)
+    print_micro_and_macro_acc(acc_dict, k_list, args)
 
-    return acc_dict, per_class_acc, pred_dict, csv_data
+    return acc_dict, per_class_acc, pred_dict
 
 
 def check_for_acc_about_correct_predict_seen_or_unseen(final_pred_list, species_list):
@@ -849,26 +870,15 @@ def main(args: DictConfig) -> None:
             with open(labels_path, "w") as json_file:
                 json.dump(total_dict, json_file, indent=4)
 
-    acc_dict, per_class_acc, pred_dict, csv_data = inference_and_print_result(
+    acc_dict, per_class_acc, pred_dict = inference_and_print_result(
         keys_dict,
         seen_dict,
         unseen_dict,
-        args.model_config,
+        args,
         small_species_list=None,
         k_list=args.inference_and_eval_setting.k_list,
     )
 
-    # write acc_dict to json
-    logs_folder = os.path.join("logs")
-    os.makedirs(logs_folder, exist_ok=True)
-    with open(os.path.join(logs_folder, "accuracy.json"), 'w') as fp:
-        json.dump(acc_dict, fp)
-    print(f"Accuracy dict saved to logs folder: {logs_folder}/accuracy.json")
-
-    with open(os.path.join(logs_folder, "results.csv"), 'w', newline='') as csvfile:
-        csvwriter = csv.writer(csvfile, delimiter=',')
-        csvwriter.writerows(csv_data)
-    print(f"CSV data saved to logs folder: {logs_folder}/results.csv")
 
 
     # seen_final_pred = pred_dict["encoded_image_feature"]["encoded_dna_feature"]["curr_seen_pred_list"]
