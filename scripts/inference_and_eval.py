@@ -14,7 +14,7 @@ import numpy as np
 import plotly
 import plotly.express as px
 import torch
-from omegaconf import DictConfig
+from omegaconf import DictConfig, OmegaConf
 from sklearn.metrics import silhouette_samples
 from umap import UMAP
 from PIL import Image
@@ -527,10 +527,15 @@ def print_micro_and_macro_acc(acc_dict, k_list, args):
     # read modalities from config
     # TODO: fit complicated strategey after updateing the config
     model_config = args.model_config
-    if hasattr(model_config, "language"):
-        alignment = "I,D,T"
+    if hasattr(args.model_config, "load_ckpt") and args.model_config.load_ckpt is False:
+        alignment = "None"
     else:
-        alignment = "I,D"
+        alignment = "I"
+        if hasattr(model_config, "dna"):
+            alignment += ",D"
+        if hasattr(model_config, "language"):
+            alignment += ",T"
+
     suffix = f"({alignment})"
 
     rows = []
@@ -600,14 +605,10 @@ def print_micro_and_macro_acc(acc_dict, k_list, args):
         logs_folder = os.path.join("logs")
         os.makedirs(logs_folder, exist_ok=True)
 
-        # write config and accurate to json
+        # write accurate to json
         with open(os.path.join(logs_folder, "accuracy.json"), 'w') as fp:
             json.dump(acc_dict, fp)
         print(f"Accuracy dict saved to logs folder: {logs_folder}/accuracy.json")
-
-        with open(os.path.join(logs_folder, "config.json"), 'w') as fp:
-            json.dump(args, fp)
-        print(f"Config saved to logs folder: {logs_folder}/config.json")
 
         # write results to csv
         with open(os.path.join(logs_folder, "results.csv"), 'w', newline='') as csvfile:
@@ -624,6 +625,10 @@ def print_micro_and_macro_acc(acc_dict, k_list, args):
             csvwriter.writerows(raw_csv_data)
         print(f"raw results saved to logs folder: {logs_folder}/raw.csv")
     
+        # write config to json
+        with open(os.path.join(logs_folder, "config.json"), 'w') as fp:
+            json.dump(OmegaConf.to_yaml(args), fp)
+        print(f"Config saved to logs folder: {logs_folder}/config.json")
 
 def inference_and_print_result(keys_dict, seen_dict, unseen_dict, args, small_species_list=None, k_list=None):
     acc_dict = {}
@@ -865,6 +870,7 @@ def main(args: DictConfig) -> None:
                     if embedding_type in split.keys():
                         try:
                             group.create_dataset(embedding_type, data=split[embedding_type])
+                            print(f"Created dataset for {embedding_type}")
                         except:
                             print(f"Error in creating dataset for {embedding_type}")
                         # group.create_dataset(embedding_type, data=split[embedding_type])
