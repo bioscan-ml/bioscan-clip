@@ -240,7 +240,6 @@ class Dataset_for_CL(Dataset):
             else:
                 curr_dna_input = self.dna_tokens[idx]
         else:
-            # Check if DNA feature are loaded correctly
             curr_dna_input = self.hdf5_split_group["dna_features"][idx].astype(np.float32)
 
         if self.dataset == "bioscan_5m":

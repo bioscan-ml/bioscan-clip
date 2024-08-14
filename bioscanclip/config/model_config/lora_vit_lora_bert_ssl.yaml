@@ -1,4 +1,4 @@
-batch_size: 30
+batch_size: 400
 epochs: 1
 labels_for_driven_positive_and_negative_pairs:
 wandb_project_name: BIOSCAN-CLIP
