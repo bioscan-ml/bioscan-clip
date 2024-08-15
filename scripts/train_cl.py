@@ -183,7 +183,11 @@ def main_process(rank: int, world_size: int, args):
     for_open_clip = False
     if hasattr(args.model_config, 'for_open_clip') and args.model_config.for_open_clip:
         for_open_clip = True
-    criterion = ContrastiveLoss(criterion=nn.CrossEntropyLoss(), logit_scale=1 / 0.07)
+
+    if for_open_clip:
+        criterion = ClipLoss(criterion=nn.CrossEntropyLoss(), logit_scale=1 / 0.07)
+    else:
+        criterion = ContrastiveLoss(criterion=nn.CrossEntropyLoss(), logit_scale=1 / 0.07)
 
 
     if args.activate_wandb:
