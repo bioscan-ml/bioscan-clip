@@ -19,7 +19,7 @@ model_output_name: full_fine_tuning_cosin_lr_sche
 evaluation_period: 1
 ckpt_path: ${project_root_path}/ckpt/bioscan_clip/full_fine_tuning_cosin_lr_sche/image_dna_text.pth
 output_dim: 768
-port: 29501
+port: 29502
 
 disable_lora: true
 lr_scheduler: cosine
