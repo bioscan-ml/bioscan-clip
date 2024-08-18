@@ -1,0 +1,28 @@
+batch_size: 300
+epochs: 15
+labels_for_driven_positive_and_negative_pairs:
+wandb_project_name: BIOSCAN-CLIP-FULL-FINE-TUNING-DEBUG
+using_train_seen_for_pre_train: true
+dataset: bioscan_1m
+
+image:
+  input_type: image
+  model: lora_vit
+dna:
+  input_type: sequence
+  model: lora_barcode_bert
+language:
+  input_type: sequence
+  model: lora_bert
+
+model_output_name: lora_with_batch_size_300_cosin_lr_sche
+evaluation_period: 1
+ckpt_path: ${project_root_path}/ckpt/bioscan_clip/lora_with_batch_size_300_cosin_lr_sche/image_dna_text.pth
+output_dim: 768
+port: 29503
+
+lr_scheduler: cosine
+lr_config:
+  lr: 0.001
+  min_lr: 0.00001
+

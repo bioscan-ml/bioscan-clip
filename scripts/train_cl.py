@@ -19,7 +19,7 @@ from bioscanclip.model.simple_clip import load_clip_model
 from bioscanclip.util.dataset import load_dataloader, load_insect_dataloader
 import numpy as np
 from omegaconf import OmegaConf, open_dict
-from torch.optim.lr_scheduler import CosineAnnealingLR
+import torch.optim.lr_scheduler as lr_scheduler
 
 
 def print_when_rank_zero(message, rank=0):
@@ -67,7 +67,7 @@ def construct_key_dict(list_of_dict):
 
     return key_dict
 
-def eval_phase(model, device, all_keys_dataloader, seen_val_dataloader, unseen_val_dataloader, k_list,
+def eval_phase(model, device, all_keys_dataloader, seen_val_dataloader, unseen_val_dataloader, k_list, args,
                species_to_drop=None, rank=None, for_open_clip=False):
     keys_dict = get_features_and_label(
         all_keys_dataloader, model, device, for_key_set=True, for_open_clip=for_open_clip)
@@ -78,11 +78,11 @@ def eval_phase(model, device, all_keys_dataloader, seen_val_dataloader, unseen_v
     unseen_val_dict = get_features_and_label(
         unseen_val_dataloader, model, device, for_open_clip=for_open_clip)
 
-    acc_dict, _, pred_dict = inference_and_print_result(keys_dict, seen_val_dict, unseen_val_dict,
-                                                     small_species_list=None, k_list=k_list)
+    acc_dict, _, pred_dict = inference_and_print_result(keys_dict, seen_val_dict, unseen_val_dict, args=args,
+                                                        small_species_list=None, k_list=k_list)
     return acc_dict, pred_dict
 
-def eval_phase_for_insect(model, device, insect_train_dataloader_for_key, insect_val_dataloader, insect_test_seen_dataloader, insect_test_unseen_dataloader, k_list,
+def eval_phase_for_insect(model, device, insect_train_dataloader_for_key, insect_val_dataloader, insect_test_seen_dataloader, insect_test_unseen_dataloader, k_list, args,
                species_to_drop=None):
     insect_train_dict = get_features_and_label(
         insect_train_dataloader_for_key, model, device)
@@ -95,8 +95,8 @@ def eval_phase_for_insect(model, device, insect_train_dataloader_for_key, insect
 
     keys_dict = construct_key_dict([insect_train_dict, insect_val_dict, insect_test_seen_dict, insect_test_unseen_dict])
 
-    acc_dict, _, pred_dict = inference_and_print_result(keys_dict, insect_test_seen_dict, insect_test_unseen_dict,
-                                                     small_species_list=None, k_list=k_list)
+    acc_dict, _, pred_dict = inference_and_print_result(keys_dict, insect_test_seen_dict, insect_test_unseen_dict, args=args,
+                                                           small_species_list=None, k_list=k_list)
 
     return acc_dict, pred_dict
 
@@ -137,6 +137,7 @@ def main_process(rank: int, world_size: int, args):
     if hasattr(args.model_config, 'dataset') and args.model_config.dataset == "INSECT":
         insect_train_dataloader, insect_train_dataloader_for_key, insect_val_dataloader, insect_test_seen_dataloader, insect_test_unseen_dataloader = load_insect_dataloader(
             args, world_size=world_size, rank=rank)
+        pre_train_dataloader = insect_train_dataloader
     else:
         pre_train_dataloader, seen_val_dataloader, unseen_val_dataloader, all_keys_dataloader = load_dataloader(
             args, world_size=world_size, rank=rank)
@@ -147,17 +148,46 @@ def main_process(rank: int, world_size: int, args):
     model = model.to(device)
     broadcast_model(model, rank)
 
-    optimizer = optim.AdamW(model.parameters(), lr=0.001)
+    total_steps = len(pre_train_dataloader) * args.model_config.epochs
 
-    total_steps = args.model_config.epochs * len(pre_train_dataloader)
+    lr = 0.001
 
-    scheduler = CosineAnnealingLR(optimizer, T_max=total_steps, eta_min=1e-6)
+    if hasattr(args.model_config, 'lr_config') and hasattr(args.model_config.lr_config, 'lr'):
+        lr = args.model_config.lr_config.lr
 
+    optimizer = optim.AdamW(model.parameters(), lr=lr)
+    scheduler =None
+    if hasattr(args.model_config, 'lr_scheduler'):
+        if args.model_config.lr_scheduler == 'one_cycle':
+            max_lr = 0.001
+            if hasattr(args.model_config.lr_config, 'max_lr'):
+                max_lr = args.model_config.lr_config.max_lr
+            scheduler = lr_scheduler.OneCycleLR(
+                optimizer,
+                max_lr=max_lr,
+                total_steps=total_steps,
+                pct_start=0.3,
+                anneal_strategy='cos',
+                cycle_momentum=False,
+            )
+        elif args.model_config.lr_scheduler == 'exponential':
+            scheduler = lr_scheduler.ExponentialLR(optimizer, gamma=0.95)
+        elif args.model_config.lr_scheduler == 'step':
+            scheduler = lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.5)
+        elif args.model_config.lr_scheduler == 'cosine':
+            min_lr = 1e-9
+            if hasattr(args.model_config.lr_config, 'min_lr'):
+                min_lr = args.model_config.lr_config.min_lr
+            scheduler = lr_scheduler.CosineAnnealingLR(optimizer, T_max=total_steps, eta_min=min_lr)
 
     for_open_clip = False
     if hasattr(args.model_config, 'for_open_clip') and args.model_config.for_open_clip:
         for_open_clip = True
-    criterion = ContrastiveLoss(criterion=nn.CrossEntropyLoss(), logit_scale=1 / 0.07)
+
+    if for_open_clip:
+        criterion = ClipLoss(criterion=nn.CrossEntropyLoss(), logit_scale=1 / 0.07)
+    else:
+        criterion = ContrastiveLoss(criterion=nn.CrossEntropyLoss(), logit_scale=1 / 0.07)
 
 
     if args.activate_wandb:
@@ -182,12 +212,20 @@ def main_process(rank: int, world_size: int, args):
         else:
             train_epoch(args.activate_wandb, args.model_config.epochs, epoch, pre_train_dataloader, model, optimizer,
                         criterion, device, rank=rank, scheduler=scheduler, for_open_clip=for_open_clip)
+
+
         if (epoch % args.model_config.evaluation_period == 0 or epoch == args.model_config.epochs - 1) and rank == 0:
+            if args.save_ckpt:
+                last_ckpt_path = os.path.join(folder_path, f'last.pth')
+                torch.save(model.state_dict(), last_ckpt_path)
+                print(f'Last ckpt: {last_ckpt_path}')
+
             if hasattr(args.model_config, 'dataset') and args.model_config.dataset == "INSECT":
                 acc_dict, pred_dict = eval_phase(model, device, insect_train_dataloader_for_key, insect_val_dataloader,
-                                                 insect_test_seen_dataloader, insect_test_unseen_dataloader, k_list, for_open_clip=for_open_clip)
+                                                 insect_test_seen_dataloader, insect_test_unseen_dataloader, k_list, args=args, for_open_clip=for_open_clip)
             else:
-                acc_dict, pred_dict = eval_phase(model, device, all_keys_dataloader, seen_val_dataloader, unseen_val_dataloader, k_list, rank=rank, for_open_clip=for_open_clip)
+                acc_dict, pred_dict = eval_phase(model, device, all_keys_dataloader, seen_val_dataloader, unseen_val_dataloader, k_list, rank=rank, args=args, for_open_clip=for_open_clip)
+
             dict_for_wandb = convert_acc_dict_to_wandb_dict(acc_dict)
             dict_for_wandb['epoch'] = epoch
             overall_acc = (acc_dict['encoded_image_feature']['encoded_image_feature']['seen']['micro_acc'][1]['species'] + acc_dict['encoded_image_feature']['encoded_image_feature']['unseen']['micro_acc'][1]['species'])/2
@@ -203,12 +241,6 @@ def main_process(rank: int, world_size: int, args):
             if args.activate_wandb:
                 wandb.log(dict_for_wandb,
                           commit=True)
-
-        if args.save_ckpt:
-            last_ckpt_path = os.path.join(folder_path, f'last.pth')
-            torch.save(model.state_dict(), last_ckpt_path)
-            print(f'Last ckpt: {last_ckpt_path}')
-
 
 @hydra.main(config_path="../bioscanclip/config", config_name="global_config", version_base="1.1")
 def main(args: DictConfig) -> None:

@@ -135,10 +135,8 @@ def load_clip_model(args, device=None):
     open_clip_model = None
 
     disable_lora = False
-    if hasattr(args.model_config, 'disable_lora') and args.model_config.disable_lora is True:
-        disable_lora = True
-
-
+    if hasattr(args.model_config, 'disable_lora'):
+        disable_lora = args.model_config.disable_lora
 
     if args.model_config.image.model == "lora_clip_image" and args.model_config.language.model == "lora_clip_text":
         open_clip_model, _, _ = open_clip.create_model_and_transforms('ViT-L/14', pretrained='commonpool_xl_laion_s13b_b90k')
@@ -150,7 +148,7 @@ def load_clip_model(args, device=None):
         # For image part
         if args.model_config.image.input_type == "image":
             pre_trained_timm_vit = timm.create_model('vit_base_patch16_224', pretrained=True)
-            if hasattr(args.model_config, 'disable_lora') and args.model_config.disable_lora is True:
+            if disable_lora:
                 image_encoder = LoRA_ViT_timm(vit_model=pre_trained_timm_vit, r=4,
                                               num_classes=args.model_config.output_dim, lora_layer=[])
             else:
