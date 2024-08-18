@@ -1,0 +1,32 @@
+batch_size: 300
+epochs: 15
+labels_for_driven_positive_and_negative_pairs:
+wandb_project_name: BIOSCAN-CLIP-FULL-FINE-TUNING-DEBUG
+using_train_seen_for_pre_train: true
+dataset: bioscan_1m
+
+image:
+  input_type: image
+  model: lora_vit
+dna:
+  input_type: sequence
+  model: lora_barcode_bert
+
+model_output_name: full_fine_tuning_cosin_lr_sche
+evaluation_period: 1
+ckpt_path: ${project_root_path}/ckpt/bioscan_clip/full_fine_tuning_cosin_lr_sche/image_dna_text.pth
+output_dim: 768
+port: 29501
+
+disable_lora: true
+lr_scheduler: cosine
+
+lr_config:
+  lr: 0.00005
+  min_lr: 0.00001
+
+all_gather: true
+loss_setup:
+  gather_with_grad: false
+  use_horovod: false
+  local_loss: false

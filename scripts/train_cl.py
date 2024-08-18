@@ -184,8 +184,15 @@ def main_process(rank: int, world_size: int, args):
     if hasattr(args.model_config, 'for_open_clip') and args.model_config.for_open_clip:
         for_open_clip = True
 
-    if for_open_clip:
-        criterion = ClipLoss(criterion=nn.CrossEntropyLoss(), logit_scale=1 / 0.07)
+    all_gather = False
+    if hasattr(args.model_config, 'all_gather') and args.model_config.all_gather:
+        all_gather = True
+
+    if all_gather:
+        criterion = ClipLoss(local_loss=args.model_config.loss_setup.local_loss,
+                             gather_with_grad=args.model_config.loss_setup.gather_with_grad, rank=rank,
+                             world_size=world_size, use_horovod=args.model_config.loss_setup.use_horovod,
+                             criterion=nn.CrossEntropyLoss())
     else:
         criterion = ContrastiveLoss(criterion=nn.CrossEntropyLoss(), logit_scale=1 / 0.07)
 

@@ -16,13 +16,19 @@ import open_clip
 
 
 class SimpleCLIP(nn.Module):
-    def __init__(self, image_encoder, dna_encoder, language_encoder, open_clip_model=None):
+    def __init__(self, image_encoder, dna_encoder, language_encoder, open_clip_model=None, init_logit_scale: float = np.log(1 / 0.07),
+                 init_logit_bias: Optional[float] = None):
         super(SimpleCLIP, self).__init__()
         self.image_encoder = image_encoder
         self.dna_encoder = dna_encoder
         self.language_encoder = language_encoder
         self.open_clip_model = open_clip_model
         self.tokenizer_for_open_clip = open_clip.get_tokenizer('ViT-B-32') if open_clip_model is not None else None
+        self.logit_scale = nn.Parameter(torch.ones([]) * init_logit_scale)
+        if init_logit_bias is not None:
+            self.logit_bias = nn.Parameter(torch.ones([]) * init_logit_bias)
+        else:
+            self.logit_bias = None
 
     def forward(self, image_input, dna_input, language_input):
         image_output = None
@@ -47,36 +53,36 @@ class SimpleCLIP(nn.Module):
                 image_output = F.normalize(self.image_encoder(image_input), p=2, dim=-1)
             if self.language_encoder is not None:
                 language_output = F.normalize(self.language_encoder(language_input), p=2, dim=-1)
-        return image_output, dna_output, language_output
+        return image_output, dna_output, language_output, self.logit_scale.exp(), self.logit_bias
 
 
 # Modified from OpenCLIP code
-# class SimpleCLIP_With_Trainable_Temp(nn.Module):
-#     def __init__(self, image_encoder, dna_encoder, language_encoder, init_logit_scale: float = np.log(1 / 0.07),
-#                  init_logit_bias: Optional[float] = None):
-#         super(SimpleCLIP_With_Trainable_Temp, self).__init__()
-#         self.image_encoder = image_encoder
-#         self.dna_encoder = dna_encoder
-#         self.language_encoder = language_encoder
-#         self.logit_scale = nn.Parameter(torch.ones([]) * init_logit_scale)
-#         if init_logit_bias is not None:
-#             self.logit_bias = nn.Parameter(torch.ones([]) * init_logit_bias)
-#         else:
-#             self.logit_bias = None
-#
-#     def forward(self, image_input, dna_input, language_input):
-#         image_output = None
-#         dna_output = None
-#         language_output = None
-#
-#         if self.image_encoder is not None:
-#             image_output = F.normalize(self.image_encoder(image_input), p=2, dim=-1)
-#         if self.dna_encoder is not None:
-#             dna_output = F.normalize(self.dna_encoder(dna_input), p=2, dim=-1)
-#         if self.language_encoder is not None:
-#             language_output = F.normalize(self.language_encoder(language_input), p=2, dim=-1)
-#
-#         return image_output, dna_output, language_output, self.logit_scale.exp(), self.logit_bias
+class SimpleCLIP_With_Trainable_Temp(nn.Module):
+    def __init__(self, image_encoder, dna_encoder, language_encoder, init_logit_scale: float = np.log(1 / 0.07),
+                 init_logit_bias: Optional[float] = None):
+        super(SimpleCLIP_With_Trainable_Temp, self).__init__()
+        self.image_encoder = image_encoder
+        self.dna_encoder = dna_encoder
+        self.language_encoder = language_encoder
+        self.logit_scale = nn.Parameter(torch.ones([]) * init_logit_scale)
+        if init_logit_bias is not None:
+            self.logit_bias = nn.Parameter(torch.ones([]) * init_logit_bias)
+        else:
+            self.logit_bias = None
+
+    def forward(self, image_input, dna_input, language_input):
+        image_output = None
+        dna_output = None
+        language_output = None
+
+        if self.image_encoder is not None:
+            image_output = F.normalize(self.image_encoder(image_input), p=2, dim=-1)
+        if self.dna_encoder is not None:
+            dna_output = F.normalize(self.dna_encoder(dna_input), p=2, dim=-1)
+        if self.language_encoder is not None:
+            language_output = F.normalize(self.language_encoder(language_input), p=2, dim=-1)
+
+        return image_output, dna_output, language_output, self.logit_scale.exp(), self.logit_bias
 
 
 class SimpleCLIPWithClassificationHead(nn.Module):
