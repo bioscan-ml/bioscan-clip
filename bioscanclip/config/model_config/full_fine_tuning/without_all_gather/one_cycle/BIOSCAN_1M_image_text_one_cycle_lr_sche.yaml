@@ -8,18 +8,15 @@ dataset: bioscan_1m
 image:
   input_type: image
   model: lora_vit
-dna:
-  input_type: sequence
-  model: lora_barcode_bert
 language:
   input_type: sequence
   model: lora_bert
 
-model_output_name: full_fine_tuning_one_cycle_lr_sche
+model_output_name: full_fine_tuning_one_cycle_lr_sche_image_text
 evaluation_period: 1
 ckpt_path: ${project_root_path}/ckpt/bioscan_clip/full_fine_tuning_one_cycle_lr_sche/image_dna_text.pth
 output_dim: 768
-port: 29506
+port: 29516
 
 disable_lora: true
 lr_scheduler: one_cycle
