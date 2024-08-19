@@ -14,7 +14,7 @@ dna:
 
 model_output_name: full_fine_tuning_cosin_lr_sche_image_dna
 evaluation_period: 1
-ckpt_path: ${project_root_path}/ckpt/bioscan_clip/full_fine_tuning_cosin_lr_sche/image_dna_text.pth
+ckpt_path: ${project_root_path}/ckpt/bioscan_clip/full_fine_tuning_cosin_lr_sche/image_dna.pth
 output_dim: 768
 port: 29511
 
