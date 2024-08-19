@@ -35,10 +35,10 @@ class ContrastiveLoss(nn.Module):
         self.prev_num_logits = 0
         self.labels = {}
 
-    def forward(self, image_features, dna_features, text_features, label, logit_scale=1/0.07):
+    def forward(self, image_features, dna_features, text_features, labels, logit_scale):
         feature_list = [image_features, dna_features, text_features]
         feature_list = [item for item in feature_list if item is not None]
-        label = construct_label_metrix(label).to(label.device)
+        label = construct_label_metrix(labels).to(labels.device)
 
         if len(feature_list) < 2:
             raise ValueError("Too less element for calculating the contrastive loss.")
