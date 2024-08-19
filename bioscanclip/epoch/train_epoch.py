@@ -36,8 +36,7 @@ def train_epoch(activate_wandb, total_epochs, epoch, dataloader, model, optimize
                                                                                        language_input)
 
         label_for_train_batch = label_for_train_batch.to(device)
-
-        loss = criterion(image_output, dna_output, language_output, label_for_train_batch, logit_scale)
+        loss = criterion(image_features=image_output, dna_features=dna_output, text_features=language_output, labels=label_for_train_batch, logit_scale=logit_scale)
         loss.backward()
 
         optimizer.step()
