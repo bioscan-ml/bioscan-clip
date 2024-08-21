@@ -32,4 +32,4 @@ loss_setup:
   gather_with_grad: true
   use_horovod: false
   local_loss: false
-fix_temperature: 1 / 0.07
+fix_temperature: true

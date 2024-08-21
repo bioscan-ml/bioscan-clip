@@ -36,7 +36,7 @@ def train_epoch(activate_wandb, total_epochs, epoch, dataloader, model, optimize
         label_for_train_batch = label_for_train_batch.to(device)
 
         if fix_temperature is not None:
-            logit_scale = fix_temperature
+            logit_scale = 1 / 0.07
 
         loss = criterion(image_features=image_output, dna_features=dna_output, text_features=language_output,
                          labels=label_for_train_batch, logit_scale=logit_scale)
