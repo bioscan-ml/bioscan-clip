@@ -5,10 +5,8 @@ import torch.distributed.nn
 import torch.distributed as dist
 
 
-
-
-
-def train_epoch(activate_wandb, total_epochs, epoch, dataloader, model, optimizer, criterion, device, scheduler=None, for_open_clip=False, rank=None, all_gather=False, check_cuda_memory=False):
+def train_epoch(activate_wandb, total_epochs, epoch, dataloader, model, optimizer, criterion, device, scheduler=None,
+                for_open_clip=False, rank=None, all_gather=False, check_cuda_memory=False, fix_temperature=None):
     torch.autograd.set_detect_anomaly(True)
     if rank == 0:
         pbar = tqdm(enumerate(dataloader), total=len(dataloader))
@@ -32,11 +30,16 @@ def train_epoch(activate_wandb, total_epochs, epoch, dataloader, model, optimize
         logit_bias = None
 
         image_output, dna_output, language_output, logit_scale, logit_bias = model(image_input_batch,
-                                                                                       dna_input_batch,
-                                                                                       language_input)
+                                                                                   dna_input_batch,
+                                                                                   language_input)
 
         label_for_train_batch = label_for_train_batch.to(device)
-        loss = criterion(image_features=image_output, dna_features=dna_output, text_features=language_output, labels=label_for_train_batch, logit_scale=logit_scale)
+
+        if fix_temperature is not None:
+            logit_scale = fix_temperature
+
+        loss = criterion(image_features=image_output, dna_features=dna_output, text_features=language_output,
+                         labels=label_for_train_batch, logit_scale=logit_scale)
         loss.backward()
 
         optimizer.step()
@@ -61,4 +64,3 @@ def train_epoch(activate_wandb, total_epochs, epoch, dataloader, model, optimize
             wandb.log({"loss": loss.item(), "step": step + epoch * len(dataloader), "learning_rate": current_lr})
 
     print(f'Epoch [{epoch}/{total_epochs}], Loss: {epoch_loss / len(dataloader)}')
-

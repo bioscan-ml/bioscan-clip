@@ -26,9 +26,11 @@ def print_when_rank_zero(message, rank=0):
     if rank is None or rank == 0:
         print(message)
 
+
 def broadcast_model(model, rank):
     for param in model.parameters():
         dist.broadcast(param.data, src=0)
+
 
 def save_prediction(pred_list, gt_list, json_path):
     data = {
@@ -38,6 +40,7 @@ def save_prediction(pred_list, gt_list, json_path):
 
     with open(json_path, 'w') as json_file:
         json.dump(data, json_file)
+
 
 def ddp_setup(rank: int, world_size: int, port):
     os.environ['MASTER_ADDR'] = 'localhost'
@@ -67,6 +70,7 @@ def construct_key_dict(list_of_dict):
 
     return key_dict
 
+
 def eval_phase(model, device, all_keys_dataloader, seen_val_dataloader, unseen_val_dataloader, k_list, args,
                species_to_drop=None, rank=None, for_open_clip=False):
     keys_dict = get_features_and_label(
@@ -82,8 +86,10 @@ def eval_phase(model, device, all_keys_dataloader, seen_val_dataloader, unseen_v
                                                         small_species_list=None, k_list=k_list)
     return acc_dict, pred_dict
 
-def eval_phase_for_insect(model, device, insect_train_dataloader_for_key, insect_val_dataloader, insect_test_seen_dataloader, insect_test_unseen_dataloader, k_list, args,
-               species_to_drop=None):
+
+def eval_phase_for_insect(model, device, insect_train_dataloader_for_key, insect_val_dataloader,
+                          insect_test_seen_dataloader, insect_test_unseen_dataloader, k_list, args,
+                          species_to_drop=None):
     insect_train_dict = get_features_and_label(
         insect_train_dataloader_for_key, model, device)
     insect_val_dict = get_features_and_label(
@@ -95,10 +101,12 @@ def eval_phase_for_insect(model, device, insect_train_dataloader_for_key, insect
 
     keys_dict = construct_key_dict([insect_train_dict, insect_val_dict, insect_test_seen_dict, insect_test_unseen_dict])
 
-    acc_dict, _, pred_dict = inference_and_print_result(keys_dict, insect_test_seen_dict, insect_test_unseen_dict, args=args,
-                                                           small_species_list=None, k_list=k_list)
+    acc_dict, _, pred_dict = inference_and_print_result(keys_dict, insect_test_seen_dict, insect_test_unseen_dict,
+                                                        args=args,
+                                                        small_species_list=None, k_list=k_list)
 
     return acc_dict, pred_dict
+
 
 def convert_acc_dict_to_wandb_dict(acc_dict):
     dict_for_wandb = {}
@@ -113,8 +121,8 @@ def convert_acc_dict_to_wandb_dict(acc_dict):
 
     return dict_for_wandb
 
-def main_process(rank: int, world_size: int, args):
 
+def main_process(rank: int, world_size: int, args):
     if args.debug_flag or rank != 0:
         args.activate_wandb = False
         args.save_inference = False
@@ -155,7 +163,7 @@ def main_process(rank: int, world_size: int, args):
         lr = args.model_config.lr_config.lr
 
     optimizer = optim.AdamW(model.parameters(), lr=lr)
-    scheduler =None
+    scheduler = None
     if hasattr(args.model_config, 'lr_scheduler'):
         if args.model_config.lr_scheduler == 'one_cycle':
             max_lr = 0.001
@@ -187,6 +195,10 @@ def main_process(rank: int, world_size: int, args):
     if hasattr(args.model_config, 'all_gather') and args.model_config.all_gather:
         all_gather = True
 
+    fix_temperature = None
+    if hasattr(args.model_config, 'fix_temperature') and args.model_config.fix_temperature:
+        fix_temperature = args.model_config.fix_temperature
+
     if all_gather:
         criterion = ClipLoss(local_loss=args.model_config.loss_setup.local_loss,
                              gather_with_grad=args.model_config.loss_setup.gather_with_grad, rank=rank,
@@ -194,7 +206,6 @@ def main_process(rank: int, world_size: int, args):
                              criterion=nn.CrossEntropyLoss())
     else:
         criterion = ContrastiveLoss(criterion=nn.CrossEntropyLoss(), logit_scale=1 / 0.07)
-
 
     if args.activate_wandb:
         wandb.init(project=args.model_config.wandb_project_name, name=args.model_config.model_output_name)
@@ -214,11 +225,10 @@ def main_process(rank: int, world_size: int, args):
     for epoch in range(args.model_config.epochs):
         if hasattr(args.model_config, 'dataset') and args.model_config.dataset == "INSECT":
             train_epoch(args.activate_wandb, args.model_config.epochs, epoch, insect_train_dataloader, model, optimizer,
-                        criterion, device, rank=rank, scheduler=scheduler, for_open_clip=for_open_clip)
+                        criterion, device, rank=rank, scheduler=scheduler, for_open_clip=for_open_clip, fix_temperature=fix_temperature)
         else:
             train_epoch(args.activate_wandb, args.model_config.epochs, epoch, pre_train_dataloader, model, optimizer,
-                        criterion, device, rank=rank, scheduler=scheduler, for_open_clip=for_open_clip)
-
+                        criterion, device, rank=rank, scheduler=scheduler, for_open_clip=for_open_clip, fix_temperature=fix_temperature)
 
         if (epoch % args.model_config.evaluation_period == 0 or epoch == args.model_config.epochs - 1) and rank == 0:
             if args.save_ckpt:
@@ -228,13 +238,19 @@ def main_process(rank: int, world_size: int, args):
 
             if hasattr(args.model_config, 'dataset') and args.model_config.dataset == "INSECT":
                 acc_dict, pred_dict = eval_phase(model, device, insect_train_dataloader_for_key, insect_val_dataloader,
-                                                 insect_test_seen_dataloader, insect_test_unseen_dataloader, k_list, args=args, for_open_clip=for_open_clip)
+                                                 insect_test_seen_dataloader, insect_test_unseen_dataloader, k_list,
+                                                 args=args, for_open_clip=for_open_clip)
             else:
-                acc_dict, pred_dict = eval_phase(model, device, all_keys_dataloader, seen_val_dataloader, unseen_val_dataloader, k_list, rank=rank, args=args, for_open_clip=for_open_clip)
+                acc_dict, pred_dict = eval_phase(model, device, all_keys_dataloader, seen_val_dataloader,
+                                                 unseen_val_dataloader, k_list, rank=rank, args=args,
+                                                 for_open_clip=for_open_clip)
 
             dict_for_wandb = convert_acc_dict_to_wandb_dict(acc_dict)
             dict_for_wandb['epoch'] = epoch
-            overall_acc = (acc_dict['encoded_image_feature']['encoded_image_feature']['seen']['micro_acc'][1]['species'] + acc_dict['encoded_image_feature']['encoded_image_feature']['unseen']['micro_acc'][1]['species'])/2
+            overall_acc = (acc_dict['encoded_image_feature']['encoded_image_feature']['seen']['micro_acc'][1][
+                               'species'] +
+                           acc_dict['encoded_image_feature']['encoded_image_feature']['unseen']['micro_acc'][1][
+                               'species']) / 2
             if best_overall_acc is None or best_overall_acc < overall_acc:
                 best_epoch = epoch
                 best_overall_acc = overall_acc
@@ -247,6 +263,7 @@ def main_process(rank: int, world_size: int, args):
             if args.activate_wandb:
                 wandb.log(dict_for_wandb,
                           commit=True)
+
 
 @hydra.main(config_path="../bioscanclip/config", config_name="global_config", version_base="1.1")
 def main(args: DictConfig) -> None:
