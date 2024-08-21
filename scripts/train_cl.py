@@ -105,12 +105,11 @@ def convert_acc_dict_to_wandb_dict(acc_dict):
     acc_dict = acc_dict['encoded_image_feature']['encoded_image_feature']
 
     # For now, we just put query: image and key:image acc to wandb
-
     for split, split_dict in acc_dict.items():
         for type_of_acc, type_of_acc_dict in split_dict.items():
             for k, k_dict in type_of_acc_dict.items():
-                for level, curr_acc in split_dict.items():
-                    dict_for_wandb[f"{split} {type_of_acc} top-{k} {level} level"] = curr_acc
+                for level, curr_acc in type_of_acc_dict.items():
+                    dict_for_wandb[f"Image to Image_{split} {type_of_acc} top-{k} {level} level"] = curr_acc
 
     return dict_for_wandb
 
