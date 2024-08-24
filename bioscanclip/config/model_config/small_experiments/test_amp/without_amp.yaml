@@ -15,7 +15,7 @@ language:
   input_type: sequence
   model: lora_bert
 
-model_output_name: full_fine_tuning_fix_tempeature
+model_output_name: without_amp
 evaluation_period: 1
 ckpt_path: ${project_root_path}/ckpt/bioscan_clip/full_fine_tuning_one_cycle_lr_sche_with_all_gather/image_dna_text.pth
 output_dim: 768
