@@ -153,7 +153,13 @@ def load_clip_model(args, device=None):
     else:
         # For image part
         if args.model_config.image.input_type == "image":
-            pre_trained_timm_vit = timm.create_model('vit_base_patch16_224', pretrained=True)
+
+            if args.model_config.image.model == "vit_base_patch16_224":
+                pre_trained_timm_vit = timm.create_model('vit_base_patch16_224', pretrained=True)
+            else:
+                pre_trained_timm_vit = timm.create_model('vit_base_patch16_224', pretrained=True)
+
+            # pre_trained_timm_vit = timm.create_model('vit_base_patch16_224', pretrained=True)
             if disable_lora:
                 image_encoder = LoRA_ViT_timm(vit_model=pre_trained_timm_vit, r=4,
                                               num_classes=args.model_config.output_dim, lora_layer=[])

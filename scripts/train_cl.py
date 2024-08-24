@@ -20,6 +20,7 @@ from bioscanclip.util.dataset import load_dataloader, load_insect_dataloader
 import numpy as np
 from omegaconf import OmegaConf, open_dict
 import torch.optim.lr_scheduler as lr_scheduler
+from torch.cuda.amp import GradScaler
 
 
 def print_when_rank_zero(message, rank=0):
@@ -150,6 +151,23 @@ def main_process(rank: int, world_size: int, args):
         pre_train_dataloader, seen_val_dataloader, unseen_val_dataloader, all_keys_dataloader = load_dataloader(
             args, world_size=world_size, rank=rank)
 
+    # optional configs
+    for_open_clip = False
+    if hasattr(args.model_config, 'for_open_clip') and args.model_config.for_open_clip:
+        for_open_clip = True
+
+    all_gather = False
+    if hasattr(args.model_config, 'all_gather') and args.model_config.all_gather:
+        all_gather = True
+
+    fix_temperature = None
+    if hasattr(args.model_config, 'fix_temperature') and args.model_config.fix_temperature:
+        fix_temperature = args.model_config.fix_temperature
+
+    scaler = None
+    if hasattr(args.model_config, 'amp') and args.model_config.amp:
+        scaler = GradScaler()
+
     if rank == 0:
         print("Initialize model...")
     model = load_clip_model(args)
@@ -188,17 +206,7 @@ def main_process(rank: int, world_size: int, args):
                 min_lr = args.model_config.lr_config.min_lr
             scheduler = lr_scheduler.CosineAnnealingLR(optimizer, T_max=total_steps, eta_min=min_lr)
 
-    for_open_clip = False
-    if hasattr(args.model_config, 'for_open_clip') and args.model_config.for_open_clip:
-        for_open_clip = True
 
-    all_gather = False
-    if hasattr(args.model_config, 'all_gather') and args.model_config.all_gather:
-        all_gather = True
-
-    fix_temperature = None
-    if hasattr(args.model_config, 'fix_temperature') and args.model_config.fix_temperature:
-        fix_temperature = args.model_config.fix_temperature
 
     if all_gather:
         criterion = ClipLoss(local_loss=args.model_config.loss_setup.local_loss,
@@ -226,10 +234,10 @@ def main_process(rank: int, world_size: int, args):
     for epoch in range(args.model_config.epochs):
         if hasattr(args.model_config, 'dataset') and args.model_config.dataset == "INSECT":
             train_epoch(args.activate_wandb, args.model_config.epochs, epoch, insect_train_dataloader, model, optimizer,
-                        criterion, device, rank=rank, scheduler=scheduler, for_open_clip=for_open_clip, fix_temperature=fix_temperature)
+                        criterion, device, rank=rank, scheduler=scheduler, for_open_clip=for_open_clip, fix_temperature=fix_temperature, scaler=scaler)
         else:
             train_epoch(args.activate_wandb, args.model_config.epochs, epoch, pre_train_dataloader, model, optimizer,
-                        criterion, device, rank=rank, scheduler=scheduler, for_open_clip=for_open_clip, fix_temperature=fix_temperature)
+                        criterion, device, rank=rank, scheduler=scheduler, for_open_clip=for_open_clip, fix_temperature=fix_temperature, scaler=scaler)
 
         if (epoch % args.model_config.evaluation_period == 0 or epoch == args.model_config.epochs - 1) and rank == 0:
             if args.save_ckpt:

@@ -3,10 +3,11 @@ import wandb
 import psutil
 import torch.distributed.nn
 import torch.distributed as dist
+from torch.cuda.amp import autocast
 
 
 def train_epoch(activate_wandb, total_epochs, epoch, dataloader, model, optimizer, criterion, device, scheduler=None,
-                for_open_clip=False, rank=None, all_gather=False, check_cuda_memory=False, fix_temperature=None):
+                for_open_clip=False, rank=None, all_gather=False, check_cuda_memory=False, fix_temperature=None, scaler=None):
     torch.autograd.set_detect_anomaly(True)
     if rank == 0:
         pbar = tqdm(enumerate(dataloader), total=len(dataloader))
@@ -26,23 +27,40 @@ def train_epoch(activate_wandb, total_epochs, epoch, dataloader, model, optimize
         optimizer.zero_grad()
         image_input_batch = image_input_batch.to(device)
         dna_input_batch = dna_input_batch.to(device)
-        logit_scale = None
-        logit_bias = None
 
-        image_output, dna_output, language_output, logit_scale, logit_bias = model(image_input_batch,
-                                                                                   dna_input_batch,
-                                                                                   language_input)
+        if scaler is not None:
+            with autocast():
+                image_output, dna_output, language_output, logit_scale, logit_bias = model(image_input_batch,
+                                                                                           dna_input_batch,
+                                                                                           language_input)
 
-        label_for_train_batch = label_for_train_batch.to(device)
+            label_for_train_batch = label_for_train_batch.to(device)
 
-        if fix_temperature is not None:
-            logit_scale = 1 / 0.07
+            if fix_temperature is not None:
+                logit_scale = 1 / 0.07
 
-        loss = criterion(image_features=image_output, dna_features=dna_output, text_features=language_output,
-                         labels=label_for_train_batch, logit_scale=logit_scale)
-        loss.backward()
+            loss = criterion(image_features=image_output, dna_features=dna_output, text_features=language_output,
+                                labels=label_for_train_batch, logit_scale=logit_scale)
+            scaler.scale(loss).backward()
 
-        optimizer.step()
+            scaler.step(optimizer)
+            scaler.update()
+        else:
+
+            image_output, dna_output, language_output, logit_scale, logit_bias = model(image_input_batch,
+                                                                                           dna_input_batch,
+                                                                                           language_input)
+
+            label_for_train_batch = label_for_train_batch.to(device)
+
+            if fix_temperature is not None:
+                logit_scale = 1 / 0.07
+
+            loss = criterion(image_features=image_output, dna_features=dna_output, text_features=language_output,
+                                labels=label_for_train_batch, logit_scale=logit_scale)
+            loss.backward()
+            optimizer.step()
+
         if scheduler is not None:
             scheduler.step()
 
