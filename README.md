@@ -76,7 +76,7 @@ For training and reproducing our experiments, we provide HDF5 files with BIOSCAN
 ```shell
 # From project folder
 mkdir -p data/BioScan_1M/split_data
-cd data/BioScan_1M
+cd data/BioScan_1M/split_data
 wget https://aspis.cmpt.sfu.ca/projects/bioscan/clip_project/data/version_0.2.1/BioScan_data_in_splits.hdf5
 ```
 
@@ -84,7 +84,7 @@ wget https://aspis.cmpt.sfu.ca/projects/bioscan/clip_project/data/version_0.2.1/
 ```shell
 # From project folder
 mkdir -p data/BIOSCAN_5M/split_data
-cd data/BIOSCAN_5M
+cd data/BIOSCAN_5M/split_data
 wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/BIOSCAN_5M.hdf5
 ```
 For more information about the hdf5 files, please check [Link](https://github.com/3dlg-hcvc/bioscan-clip/blob/main/DATA.md)
