@@ -19,7 +19,6 @@ conda create -n bioscan-clip python=3.10
 conda activate bioscan-clip
 conda install pytorch=2.0.1 torchvision=0.15.2 torchtext=0.15.2 pytorch-cuda=11.7 -c pytorch -c nvidia
 pip install -r requirements.txt
-conda install -c conda-forge faiss
 pip install .
 pip install git+https://github.com/Baijiong-Lin/LoRA-Torch
 ```
