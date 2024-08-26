@@ -19,10 +19,11 @@ conda create -n bioscan-clip python=3.10
 conda activate bioscan-clip
 conda install pytorch=2.0.1 torchvision=0.15.2 torchtext=0.15.2 pytorch-cuda=11.7 -c pytorch -c nvidia
 pip install -r requirements.txt
-conda install -c conda-forge faiss
 pip install .
 pip install git+https://github.com/Baijiong-Lin/LoRA-Torch
 ```
+
+
 
 Depending on your GPU version, you may have to modify the torch version and other package versions in [requirements.txt](./requirements.txt).
 
@@ -75,8 +76,8 @@ For training and reproducing our experiments, we provide HDF5 files with BIOSCAN
 ### Download BIOSCAN-1M data (79.7 GB)
 ```shell
 # From project folder
-mkdir -p data/BioScan_1M/split_data
-cd data/BioScan_1M
+mkdir -p data/BIOSCAN_1M/split_data
+cd data/BIOSCAN_1M/split_data
 wget https://aspis.cmpt.sfu.ca/projects/bioscan/clip_project/data/version_0.2.1/BioScan_data_in_splits.hdf5
 ```
 
@@ -84,7 +85,7 @@ wget https://aspis.cmpt.sfu.ca/projects/bioscan/clip_project/data/version_0.2.1/
 ```shell
 # From project folder
 mkdir -p data/BIOSCAN_5M/split_data
-cd data/BIOSCAN_5M
+cd data/BIOSCAN_5M/split_data
 wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/BIOSCAN_5M.hdf5
 ```
 For more information about the hdf5 files, please check [Link](https://github.com/3dlg-hcvc/bioscan-clip/blob/main/DATA.md)
