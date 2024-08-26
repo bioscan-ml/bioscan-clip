@@ -245,7 +245,7 @@ class Dataset_for_CL(Dataset):
         if self.dataset == "bioscan_5m":
             curr_processid = self.hdf5_split_group["processid"][idx].decode("utf-8")
         else:
-            curr_processid = self.hdf5_split_group["image_file"][idx].decode("utf-8")
+            curr_processid = self.hdf5_split_group["processid"][idx].decode("utf-8")
 
         if self.for_open_clip:
             language_input = self.list_of_label_string[idx]
