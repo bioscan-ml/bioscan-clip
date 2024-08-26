@@ -23,6 +23,8 @@ pip install .
 pip install git+https://github.com/Baijiong-Lin/LoRA-Torch
 ```
 
+
+
 Depending on your GPU version, you may have to modify the torch version and other package versions in [requirements.txt](./requirements.txt).
 
 # Pretrained embeddings and models
