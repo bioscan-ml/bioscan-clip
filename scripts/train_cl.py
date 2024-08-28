@@ -282,8 +282,8 @@ def main(args: DictConfig) -> None:
     world_size = torch.cuda.device_count()
     print(f'world_size： {world_size}')
 
-    if hasattr(args.model_config, 'seed'):
-        set_seed(int(args.model_config.seed))
+    if hasattr(args.model_config, 'random_seed') and args.model_config.random_seed:
+        set_seed()
     else:
         set_seed(int(args.default_seed))
 

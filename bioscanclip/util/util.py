@@ -70,7 +70,9 @@ class KmerTokenizer(object):
         return tokens
 
 
-def set_seed(seed):
+def set_seed(seed=None):
+    if seed is None:
+        seed = random.randint(0, 1000000)
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
