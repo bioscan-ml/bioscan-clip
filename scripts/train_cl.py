@@ -285,7 +285,7 @@ def main(args: DictConfig) -> None:
     if hasattr(args.model_config, 'random_seed') and args.model_config.random_seed:
         set_seed()
     else:
-        set_seed(int(args.default_seed))
+        set_seed(seed=int(args.default_seed))
 
     mp.spawn(main_process, args=(world_size, args), nprocs=world_size)
 
