@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import json
 import faiss
+import random
 from torch import nn
 from tqdm import tqdm
 from bioscanclip.epoch.inference_epoch import get_feature_and_label
@@ -67,6 +68,14 @@ class KmerTokenizer(object):
             k_mer = dna_sequence[i : i + self.k]
             tokens.append(k_mer)
         return tokens
+
+
+def set_seed(seed):
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
 
 
 def remove_extra_pre_fix(state_dict):

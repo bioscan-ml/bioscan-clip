@@ -34,3 +34,5 @@ loss_setup:
   local_loss: false
 fix_temperature: true
 amp: true
+
+# seed: 23456

@@ -3,24 +3,25 @@ import datetime
 import json
 import os
 import hydra
+import numpy as np
+
 import torch
 import torch.multiprocessing as mp
 import torch.nn as nn
 import torch.optim as optim
+import torch.optim.lr_scheduler as lr_scheduler
+from torch.cuda.amp import GradScaler
+import torch.distributed as dist
 
 import wandb
-from omegaconf import DictConfig, OmegaConf
-import torch.distributed as dist
+from omegaconf import DictConfig, OmegaConf, open_dict
 
 from bioscanclip.epoch.train_epoch import train_epoch
 from inference_and_eval import get_features_and_label, inference_and_print_result
 from bioscanclip.model.loss_func import ContrastiveLoss, ClipLoss
 from bioscanclip.model.simple_clip import load_clip_model
+from bioscanclip.util.util import set_seed
 from bioscanclip.util.dataset import load_dataloader, load_insect_dataloader
-import numpy as np
-from omegaconf import OmegaConf, open_dict
-import torch.optim.lr_scheduler as lr_scheduler
-from torch.cuda.amp import GradScaler
 
 
 def print_when_rank_zero(message, rank=0):
@@ -280,6 +281,11 @@ def main(args: DictConfig) -> None:
     args.project_root_path = os.path.dirname(os.path.dirname(os.path.dirname(os.getcwd())))
     world_size = torch.cuda.device_count()
     print(f'world_size： {world_size}')
+
+    if hasattr(args.model_config, 'seed'):
+        set_seed(int(args.model_config.seed))
+    else:
+        set_seed(int(args.default_seed))
 
     mp.spawn(main_process, args=(world_size, args), nprocs=world_size)
 

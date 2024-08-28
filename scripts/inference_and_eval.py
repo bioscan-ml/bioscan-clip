@@ -710,6 +710,7 @@ def inference_and_print_result(keys_dict, seen_dict, unseen_dict, args, small_sp
             acc_dict[query_feature_type][key_feature_type]["seen"]["macro_acc"] = seen_macro_acc
             acc_dict[query_feature_type][key_feature_type]["unseen"]["macro_acc"] = unseen_macro_acc
 
+    import pdb; pdb.set_trace()
     print_micro_and_macro_acc(acc_dict, k_list, args)
 
     return acc_dict, per_class_acc, pred_dict
@@ -796,6 +797,7 @@ def main(args: DictConfig) -> None:
                                      )
     os.makedirs(folder_for_saving, exist_ok=True)
     labels_path = os.path.join(folder_for_saving, f"labels_{args.inference_and_eval_setting.eval_on}.json")
+    processed_id_path = os.path.join(folder_for_saving, f"processed_id_{args.inference_and_eval_setting.eval_on}.json")
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -829,6 +831,13 @@ def main(args: DictConfig) -> None:
         unseen_dict["label_list"] = total_dict["unseen_gt_dict"]
         keys_dict["label_list"] = total_dict["key_gt_dict"]
         keys_dict["all_key_features_label"] = total_dict["key_gt_dict"] + total_dict["key_gt_dict"] + total_dict["key_gt_dict"]
+
+        with open(processed_id_path, "r") as json_file:
+            id_dict = json.load(json_file)
+        seen_dict["processed_id_list"] = id_dict['seen_id_list']
+        unseen_dict["processed_id_list"] = id_dict['unseen_id_list']        
+        keys_dict["processed_id_list"] = id_dict['key_id_list']
+        keys_dict["all_processed_id_list"] = id_dict['key_id_list'] + id_dict['key_id_list'] + id_dict['key_id_list']
 
     else:
         # initialize model
@@ -882,6 +891,15 @@ def main(args: DictConfig) -> None:
             }
             with open(labels_path, "w") as json_file:
                 json.dump(total_dict, json_file, indent=4)
+
+            id_dict = {
+                "seen_id_list": seen_dict["file_name_list"],
+                "unseen_id_list": unseen_dict["file_name_list"],
+                "key_id_list": keys_dict["file_name_list"],
+            }
+            with open(processed_id_path, "w") as json_file:
+                json.dump(id_dict, json_file, indent=4)
+
 
     acc_dict, per_class_acc, pred_dict = inference_and_print_result(
         keys_dict,

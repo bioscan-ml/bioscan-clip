@@ -57,4 +57,4 @@ general_fine_tune_setting:
   epoch: 150
   batch_size: 200
 
-
+default_seed: 123456
