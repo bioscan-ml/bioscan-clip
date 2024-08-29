@@ -230,7 +230,7 @@ def main_process(rank: int, world_size: int, args):
 
     OmegaConf.save(args, os.path.join(folder_path, 'config.yaml'))
 
-    patience_step = len(pre_train_dataloader) * args.model_config.patience_ratio
+    patience_step = 60
     best_loss = float('inf')
     stop_flag = False
     count = 0
