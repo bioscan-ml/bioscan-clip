@@ -207,8 +207,6 @@ def main_process(rank: int, world_size: int, args):
                 min_lr = args.model_config.lr_config.min_lr
             scheduler = lr_scheduler.CosineAnnealingLR(optimizer, T_max=total_steps, eta_min=min_lr)
 
-
-
     if all_gather:
         criterion = ClipLoss(local_loss=args.model_config.loss_setup.local_loss,
                              gather_with_grad=args.model_config.loss_setup.gather_with_grad, rank=rank,
@@ -232,13 +230,22 @@ def main_process(rank: int, world_size: int, args):
 
     OmegaConf.save(args, os.path.join(folder_path, 'config.yaml'))
 
+    patience_step = len(pre_train_dataloader) * args.model_config.patience_ratio
+    best_loss = float('inf')
+    stop_flag = False
+    count = 0
+
+    enable_early_stopping = args.enable_early_stopping
+
     for epoch in range(args.model_config.epochs):
-        if hasattr(args.model_config, 'dataset') and args.model_config.dataset == "INSECT":
-            train_epoch(args.activate_wandb, args.model_config.epochs, epoch, insect_train_dataloader, model, optimizer,
-                        criterion, device, rank=rank, scheduler=scheduler, for_open_clip=for_open_clip, fix_temperature=fix_temperature, scaler=scaler)
-        else:
-            train_epoch(args.activate_wandb, args.model_config.epochs, epoch, pre_train_dataloader, model, optimizer,
-                        criterion, device, rank=rank, scheduler=scheduler, for_open_clip=for_open_clip, fix_temperature=fix_temperature, scaler=scaler)
+        best_loss, count, patience_step, stop_flag = train_epoch(args.activate_wandb, args.model_config.epochs, epoch,
+                                                                 pre_train_dataloader, model, optimizer,
+                                                                 criterion, device, rank=rank, scheduler=scheduler,
+                                                                 for_open_clip=for_open_clip,
+                                                                 fix_temperature=fix_temperature, scaler=scaler,
+                                                                 best_loss=best_loss, patience_step=patience_step,
+                                                                 count=count,
+                                                                 enable_early_stopping=enable_early_stopping)
 
         if (epoch % args.model_config.evaluation_period == 0 or epoch == args.model_config.epochs - 1) and rank == 0:
             if args.save_ckpt:
@@ -273,6 +280,8 @@ def main_process(rank: int, world_size: int, args):
             if args.activate_wandb:
                 wandb.log(dict_for_wandb,
                           commit=True)
+        if stop_flag:
+            break
 
 
 @hydra.main(config_path="../bioscanclip/config", config_name="global_config", version_base="1.1")

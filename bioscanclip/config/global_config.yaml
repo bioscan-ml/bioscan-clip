@@ -8,6 +8,7 @@ data_dir: ${project_root_path}/data
 activate_wandb: true
 save_inference : true
 load_inference: true
+enable_early_stopping: true
 bioscan_data:
   dir: ${data_dir}/BIOSCAN_1M
   path_to_hdf5_data: ${bioscan_data.dir}/split_data/BioScan_data_in_splits.hdf5

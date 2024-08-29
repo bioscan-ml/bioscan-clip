@@ -7,7 +7,8 @@ from torch.cuda.amp import autocast
 
 
 def train_epoch(activate_wandb, total_epochs, epoch, dataloader, model, optimizer, criterion, device, scheduler=None,
-                for_open_clip=False, rank=None, all_gather=False, check_cuda_memory=False, fix_temperature=None, scaler=None):
+                for_open_clip=False, rank=None, fix_temperature=None,
+                scaler=None, best_loss=None, patience_step=None, count=0, enable_early_stopping=False):
     torch.autograd.set_detect_anomaly(True)
     if rank == 0:
         pbar = tqdm(enumerate(dataloader), total=len(dataloader))
@@ -17,6 +18,7 @@ def train_epoch(activate_wandb, total_epochs, epoch, dataloader, model, optimize
     total_step = len(dataloader)
 
     model.train()
+    stop_flag = False
     for step, batch in pbar:
         processid_batch, image_input_batch, dna_input_batch, input_ids, token_type_ids, attention_mask, label_for_train_batch = batch
         if for_open_clip:
@@ -40,7 +42,7 @@ def train_epoch(activate_wandb, total_epochs, epoch, dataloader, model, optimize
                 logit_scale = 1 / 0.07
 
             loss = criterion(image_features=image_output, dna_features=dna_output, text_features=language_output,
-                                labels=label_for_train_batch, logit_scale=logit_scale)
+                             labels=label_for_train_batch, logit_scale=logit_scale)
             scaler.scale(loss).backward()
 
             scaler.step(optimizer)
@@ -48,8 +50,8 @@ def train_epoch(activate_wandb, total_epochs, epoch, dataloader, model, optimize
         else:
 
             image_output, dna_output, language_output, logit_scale, logit_bias = model(image_input_batch,
-                                                                                           dna_input_batch,
-                                                                                           language_input)
+                                                                                       dna_input_batch,
+                                                                                       language_input)
 
             label_for_train_batch = label_for_train_batch.to(device)
 
@@ -57,7 +59,7 @@ def train_epoch(activate_wandb, total_epochs, epoch, dataloader, model, optimize
                 logit_scale = 1 / 0.07
 
             loss = criterion(image_features=image_output, dna_features=dna_output, text_features=language_output,
-                                labels=label_for_train_batch, logit_scale=logit_scale)
+                             labels=label_for_train_batch, logit_scale=logit_scale)
             loss.backward()
             optimizer.step()
 
@@ -81,4 +83,19 @@ def train_epoch(activate_wandb, total_epochs, epoch, dataloader, model, optimize
         if activate_wandb:
             wandb.log({"loss": loss.item(), "step": step + epoch * len(dataloader), "learning_rate": current_lr})
 
+        if enable_early_stopping:
+            loss_in_value = loss.item()
+            if best_loss is None:
+                best_loss = loss_in_value
+            elif loss_in_value < best_loss:
+                best_loss = loss_in_value
+                count = 0
+            else:
+                count += 1
+            if count == patience_step:
+                stop_flag = True
+                break
+            stop_flag = False
     print(f'Epoch [{epoch}/{total_epochs}], Loss: {epoch_loss / len(dataloader)}')
+
+    return best_loss, count, patience_step, stop_flag
