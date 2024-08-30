@@ -33,3 +33,4 @@ loss_setup:
   use_horovod: false
   local_loss: false
 fix_temperature: true
+amp: true
