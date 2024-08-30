@@ -15,11 +15,11 @@ language:
   input_type: sequence
   model: lora_bert
 
-model_output_name: full_fine_tuning_fix_tempeature
+model_output_name: without_all_gather
 evaluation_period: 1
 ckpt_path: ${project_root_path}/ckpt/bioscan_clip/full_fine_tuning_one_cycle_lr_sche_with_all_gather/image_dna_text.pth
 output_dim: 768
-port: 29527
+port: 29532
 
 disable_lora: true
 lr_scheduler: one_cycle
@@ -27,9 +27,12 @@ lr_config:
   lr: 0.000001
   max_lr: 0.00005
 
-all_gather: true
+all_gather: false
 loss_setup:
   gather_with_grad: true
   use_horovod: false
   local_loss: false
 fix_temperature: true
+amp: true
+
+random_seed: false
