@@ -710,7 +710,6 @@ def inference_and_print_result(keys_dict, seen_dict, unseen_dict, args, small_sp
             acc_dict[query_feature_type][key_feature_type]["seen"]["macro_acc"] = seen_macro_acc
             acc_dict[query_feature_type][key_feature_type]["unseen"]["macro_acc"] = unseen_macro_acc
 
-    import pdb; pdb.set_trace()
     print_micro_and_macro_acc(acc_dict, k_list, args)
 
     return acc_dict, per_class_acc, pred_dict
