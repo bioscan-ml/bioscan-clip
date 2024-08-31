@@ -33,3 +33,5 @@ loss_setup:
   use_horovod: false
   local_loss: false
 amp: true
+
+random_seed: false
