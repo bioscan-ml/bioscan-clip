@@ -127,7 +127,7 @@ def convert_acc_dict_to_wandb_dict(acc_dict):
 def main_process(rank: int, world_size: int, args):
 
     if args.debug_flag or rank != 0:
-        args.activate_wandb = False
+        args.activate_wandb = True
         args.save_inference = False
         args.save_ckpt = False
 
