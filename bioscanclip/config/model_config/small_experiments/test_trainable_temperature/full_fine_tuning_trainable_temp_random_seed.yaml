@@ -19,7 +19,7 @@ model_output_name: full_fine_tuning_trainable_tempeature_random_Seed
 evaluation_period: 1
 ckpt_path: ${project_root_path}/ckpt/bioscan_clip/full_fine_tuning_one_cycle_lr_sche_with_all_gather/image_dna_text.pth
 output_dim: 768
-port: 29528
+port: 29529
 
 disable_lora: true
 lr_scheduler: one_cycle
