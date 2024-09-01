@@ -1,4 +1,4 @@
-batch_size: 200
+batch_size: 150
 epochs: 15
 labels_for_driven_positive_and_negative_pairs:
 wandb_project_name: BIOSCAN-CLIP-ablation_with_open_clip
@@ -23,10 +23,10 @@ output_dim: 768
 port: 12345
 
 for_open_clip: true
-lr_scheduler: one_cycle
+lr_scheduler: cosine
 lr_config:
-  lr: 0.000001
-  max_lr: 0.00005
+  min_lr: 0.000000001
+  max_lr: 0.001
 
 all_gather: true
 loss_setup:
