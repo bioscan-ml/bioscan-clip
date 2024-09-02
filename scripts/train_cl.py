@@ -215,7 +215,7 @@ def main_process(rank: int, world_size: int, args):
     else:
         criterion = ContrastiveLoss(criterion=nn.CrossEntropyLoss(), logit_scale=1 / 0.07)
 
-    if args.activate_wandb:
+    if args.activate_wandb and rank == 0:
         wandb.init(project=args.model_config.wandb_project_name, name=args.model_config.model_output_name)
     if rank == 0:
         print("training...")
