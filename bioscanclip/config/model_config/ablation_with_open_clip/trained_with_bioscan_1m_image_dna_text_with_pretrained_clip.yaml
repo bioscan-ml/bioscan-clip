@@ -1,4 +1,4 @@
-batch_size: 150
+batch_size: 100
 epochs: 15
 labels_for_driven_positive_and_negative_pairs:
 wandb_project_name: BIOSCAN-CLIP-ablation_with_open_clip
