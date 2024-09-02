@@ -23,10 +23,10 @@ output_dim: 768
 port: 12345
 
 for_open_clip: true
-lr_scheduler: cosine
+lr_scheduler: one_cycle
 lr_config:
-  lr: 0.001
-  min_lr: 0.00001
+  lr: 0.000001
+  max_lr: 0.00005
 
 all_gather: true
 loss_setup:
