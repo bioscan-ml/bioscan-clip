@@ -80,8 +80,8 @@ def train_epoch(activate_wandb, total_epochs, epoch, dataloader, model, optimize
             pbar.set_description(
                 f'Epoch: {epoch}||Step: {step}/{total_step}||Loss: {loss.item()} || Total Used CUDA Memory: {total_used_memory / (1024 ** 3):.2f} GB || Total CUDA Memory: {memory_total / (1024 ** 3):.2f} GB || Current LR: {current_lr}')
 
-        if activate_wandb:
-            wandb.log({"loss": loss.item(), "step": step + epoch * len(dataloader), "learning_rate": current_lr})
+            if activate_wandb:
+                wandb.log({"loss": loss.item(), "step": step + epoch * len(dataloader), "learning_rate": current_lr})
 
         if enable_early_stopping:
             loss_in_value = loss.item()
