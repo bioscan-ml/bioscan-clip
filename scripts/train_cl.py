@@ -165,9 +165,11 @@ def main_process(rank: int, world_size: int, args):
     if hasattr(args.model_config, 'fix_temperature') and args.model_config.fix_temperature:
         fix_temperature = args.model_config.fix_temperature
 
-    scaler = None
+    use_scaler = False
     if hasattr(args.model_config, 'amp') and args.model_config.amp:
-        scaler = GradScaler()
+        use_scaler = True
+
+    scaler = GradScaler(enabled=use_scaler)
 
     if rank == 0:
         print("Initialize model...")

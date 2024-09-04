@@ -24,8 +24,8 @@ port: 29532
 disable_lora: true
 lr_scheduler: one_cycle
 lr_config:
-  lr: 0.000001
-  max_lr: 0.00005
+  lr: 1e-6
+  max_lr: 5e-5
 
 all_gather: false
 loss_setup:
