@@ -30,7 +30,7 @@ def train_epoch(activate_wandb, total_epochs, epoch, dataloader, model, optimize
         image_input_batch = image_input_batch.to(device)
         dna_input_batch = dna_input_batch.to(device)
 
-        with torch.autocast(device_type=device, dtype=torch.bfloat16):
+        with torch.autocast(dtype=torch.bfloat16):
             image_output, dna_output, language_output, logit_scale, logit_bias = model(image_input_batch,
                                                                                        dna_input_batch,
                                                                                        language_input)
