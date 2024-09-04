@@ -279,7 +279,7 @@ def main_process(rank: int, world_size: int, args):
                     print(f'Best ckpt: {best_ckpt_path}')
             dict_for_wandb["overall_acc"] = overall_acc
             dict_for_wandb["best_epoch"] = best_epoch
-            if args.activate_wandb:
+            if args.activate_wandb and rank == 0:
                 wandb.log(dict_for_wandb,
                           commit=True)
         if stop_flag:
