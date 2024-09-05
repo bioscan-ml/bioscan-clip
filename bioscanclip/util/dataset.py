@@ -42,7 +42,7 @@ def prepare(dataset, rank, world_size, batch_size=32, pin_memory=False, num_work
     sampler = DistributedSampler(dataset, num_replicas=world_size, rank=rank, shuffle=shuffle, drop_last=True)
 
     dataloader = DataLoader(
-        dataset, batch_size=batch_size, pin_memory=pin_memory, num_workers=num_workers, sampler=sampler
+        dataset, batch_size=batch_size, pin_memory=pin_memory, num_workers=num_workers, sampler=sampler, drop_last=True
     )
 
     return dataloader
