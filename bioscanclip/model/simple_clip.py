@@ -12,9 +12,6 @@ import torch
 import open_clip
 
 
-
-
-
 class SimpleCLIP(nn.Module):
     def __init__(self, image_encoder, dna_encoder, language_encoder, open_clip_model=None, init_logit_scale: float = np.log(1 / 0.07),
                  init_logit_bias: Optional[float] = None):
