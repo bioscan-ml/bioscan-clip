@@ -20,11 +20,12 @@ from umap import UMAP
 from PIL import Image
 import torchvision.transforms as transforms
 import torch.nn.functional as F
-
+import cv2
 from bioscanclip.epoch.inference_epoch import get_feature_and_label
 from bioscanclip.model.simple_clip import load_clip_model
 from bioscanclip.util.dataset import load_bioscan_dataloader_all_small_splits
 from bioscanclip.util.util import Table, categorical_cmap
+from tqdm import tqdm
 
 PLOT_FOLDER = "html_plots"
 RETRIEVAL_FOLDER = "image_retrieval"
@@ -49,7 +50,7 @@ LEVELS = ["order", "family", "genus", "species"]
 def rollout(attentions, discard_ratio, head_fusion):
     result = torch.eye(attentions[0].size(-1))
     with torch.no_grad():
-        for attention in attentions:
+        for attention in attentions[1:]:
             if head_fusion == "mean":
                 attention_heads_fused = attention.mean(axis=1)
             elif head_fusion == "max":
@@ -83,7 +84,7 @@ def rollout(attentions, discard_ratio, head_fusion):
 
 
 class VITAttentionRollout:
-    def __init__(self, model, attention_layer_name='attn_drop', head_fusion="mean",
+    def __init__(self, model, attention_layer_name='attn_drop', head_fusion="min",
                  discard_ratio=0.9):
         self.model = model
         self.head_fusion = head_fusion
@@ -125,67 +126,87 @@ def get_image_encoder(model, device):
     image_encoder.to(device)
     return image_encoder
 
-def get_and_save_vit_explaination(image_list, grad_rollout, transform, device):
-    for idx, image in enumerate(image_list):
-        image.show()
-        image = transform(image).unsqueeze(0).to(device)
-        mask = grad_rollout(image)
+def show_mask_on_image(img, mask):
+    img = np.float32(img) / 255
+    heatmap = cv2.applyColorMap(np.uint8(255 * mask), cv2.COLORMAP_JET)
+    heatmap = np.float32(heatmap) / 255
+    cam = heatmap + np.float32(img)
+    cam = cam / np.max(cam)
+    return np.uint8(255 * cam)
+
+def get_and_save_vit_explaination(image_list, grad_rollout, transform, device, folder_name="representation_visualization/before_contrastive_learning"):
+    os.makedirs(folder_name, exist_ok=True)
+    for idx, image in tqdm(enumerate(image_list), total=len(image_list)):
+        image_tensor = transform(image).unsqueeze(0).to(device)
+        mask = grad_rollout(image_tensor)
         mask_255 = (mask * 255).astype(np.uint8)
+        mask_255_image = Image.fromarray(mask_255)
+        mask_255_image.save(f"{folder_name}/vit_explaination_mask_{idx}.png")
 
-        image = Image.fromarray(mask_255)
-        image.show()
+        np_img = np.array(image)[:, :, ::-1]
+        mask = cv2.resize(mask, (np_img.shape[1], np_img.shape[0]))
+        image_with_mask = show_mask_on_image(np_img, mask)
+        cv2.imwrite(f"{folder_name}/vit_explaination_image_with_mask_{idx}.png", image_with_mask)
 
-        plt.axis("off")
-        plt.savefig(f"vit_explaination_{idx}.png")
-        plt.close()
-        exit()
 
 @hydra.main(config_path="../bioscanclip/config", config_name="global_config", version_base="1.1")
 def main(args: DictConfig) -> None:
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    # Load some images from the hdf5 file
-    if args.model_config.dataset == "bioscan_5m":
-        path_to_hdf5 = args.bioscan_5m_data.path_to_hdf5_data
-    else:
-        path_to_hdf5 = args.bioscan_data.path_to_hdf5_data
+    for head_fusion in ["mean", "max", "min"]:
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        # Load some images from the hdf5 file
+        if args.model_config.dataset == "bioscan_5m":
+            path_to_hdf5 = args.bioscan_5m_data.path_to_hdf5_data
+        else:
+            path_to_hdf5 = args.bioscan_data.path_to_hdf5_data
 
-    # Init transform
-    transform = transforms.Compose(
-        [
-            transforms.ToTensor(),
-            transforms.Resize(size=256, antialias=True),
-            transforms.CenterCrop(224),
-        ]
-    )
+        # Init transform
+        transform = transforms.Compose(
+            [
+                transforms.Resize((224, 224)),
+                transforms.ToTensor(),
+            ]
+        )
 
-    # Open the hdf5 file
-    hdf5_file = h5py.File(path_to_hdf5, "r", libver="latest")
-    # For now just use train_seen data
-    hdf5_group = hdf5_file["train_seen"]
+        # Open the hdf5 file
+        hdf5_file = h5py.File(path_to_hdf5, "r", libver="latest")
+        # For now just use train_seen data
+        hdf5_group = hdf5_file["train_seen"]
 
-    # Load some images from the hdf5 file
-    image_list = get_some_images_from_hdf5(hdf5_group)
-
-    print("Initialize model...")
-    model = load_clip_model(args, device)
-    model.eval()
-    # Get the image encoder
-    image_encoder = get_image_encoder(model, device)
-    for block in image_encoder.lora_vit.blocks:
-        block.attn.fused_attn = False
-
-    # Extract feature and representation visualization for one of the image.
-    # encode_all_image(image_list, image_encoder, transform, device)
-    grad_rollout = VITAttentionRollout(image_encoder, discard_ratio=0.9)
-    get_and_save_vit_explaination(image_list, grad_rollout, transform, device)
+        # Load some images from the hdf5 file
+        image_list = get_some_images_from_hdf5(hdf5_group)
+        # Save these images into a folder call "representation_visualization/original_images"
+        os.makedirs("representation_visualization/original_images", exist_ok=True)
+        for idx, image in enumerate(image_list):
+            image.save(f"representation_visualization/original_images/image_{idx}.png")
 
 
+        print("Initialize model...")
+        model = load_clip_model(args, device)
+        model.eval()
+        # Get the image encoder
+        image_encoder = get_image_encoder(model, device)
+        for block in image_encoder.lora_vit.blocks:
+            block.attn.fused_attn = False
 
-    if hasattr(args.model_config, "load_ckpt") and args.model_config.load_ckpt is False:
-        pass
-    else:
-        checkpoint = torch.load(args.model_config.ckpt_path, map_location="cuda:0")
-        model.load_state_dict(checkpoint)
+        grad_rollout = VITAttentionRollout(image_encoder, discard_ratio=0.9, head_fusion=head_fusion)
+        get_and_save_vit_explaination(image_list, grad_rollout, transform, device, folder_name=os.path.join(args.project_root_path, f"representation_visualization/{head_fusion}/before_contrastive_learning"))
+
+
+
+        if hasattr(args.model_config, "load_ckpt") and args.model_config.load_ckpt is False:
+            pass
+        else:
+            checkpoint = torch.load(args.model_config.ckpt_path, map_location="cuda:0")
+            model.load_state_dict(checkpoint)
+
+        model.eval()
+        # Get the image encoder
+        image_encoder = get_image_encoder(model, device)
+        for block in image_encoder.lora_vit.blocks:
+            block.attn.fused_attn = False
+
+        grad_rollout = VITAttentionRollout(image_encoder, discard_ratio=0.9, head_fusion=head_fusion)
+        get_and_save_vit_explaination(image_list, grad_rollout, transform, device, folder_name=os.path.join(args.project_root_path, f"representation_visualization/{head_fusion}/after_contrastive_learning"))
 
 
 
