@@ -626,8 +626,7 @@ def print_micro_and_macro_acc(acc_dict, k_list, args):
         print(f"raw results saved to logs folder: {logs_folder}/raw.csv")
     
         # write config to json
-        with open(os.path.join(logs_folder, "config.json"), 'w') as fp:
-            json.dump(OmegaConf.to_yaml(args), fp)
+        OmegaConf.save(args, os.path.join(logs_folder, 'config.yaml'))
         print(f"Config saved to logs folder: {logs_folder}/config.json")
 
 def inference_and_print_result(keys_dict, seen_dict, unseen_dict, args, small_species_list=None, k_list=None):
