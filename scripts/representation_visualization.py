@@ -46,7 +46,7 @@ All_TYPE_OF_FEATURES_OF_KEY = [
 ]
 LEVELS = ["order", "family", "genus", "species"]
 
-# Reference and modified fromhttps://github.com/jacobgil/vit-explain/blob/main/vit_grad_rollout.py
+# Reference and modified fromhttps://github.com/jacobgil/vit-explain/blob/main/vit_attn_rollout.py
 def rollout(attentions, discard_ratio, head_fusion):
     result = torch.eye(attentions[0].size(-1))
     with torch.no_grad():
@@ -134,11 +134,11 @@ def show_mask_on_image(img, mask):
     cam = cam / np.max(cam)
     return np.uint8(255 * cam)
 
-def get_and_save_vit_explaination(image_list, grad_rollout, transform, device, folder_name="representation_visualization/before_contrastive_learning"):
+def get_and_save_vit_explaination(image_list, attn_rollout, transform, device, folder_name="representation_visualization/before_contrastive_learning"):
     os.makedirs(folder_name, exist_ok=True)
     for idx, image in tqdm(enumerate(image_list), total=len(image_list)):
         image_tensor = transform(image).unsqueeze(0).to(device)
-        mask = grad_rollout(image_tensor)
+        mask = attn_rollout(image_tensor)
         mask_255 = (mask * 255).astype(np.uint8)
         mask_255_image = Image.fromarray(mask_255)
         mask_255_image.save(f"{folder_name}/vit_explaination_mask_{idx}.png")
@@ -188,8 +188,8 @@ def main(args: DictConfig) -> None:
         for block in image_encoder.lora_vit.blocks:
             block.attn.fused_attn = False
 
-        grad_rollout = VITAttentionRollout(image_encoder, discard_ratio=0.9, head_fusion=head_fusion)
-        get_and_save_vit_explaination(image_list, grad_rollout, transform, device, folder_name=os.path.join(args.project_root_path, f"representation_visualization/{head_fusion}/before_contrastive_learning"))
+        attn_rollout = VITAttentionRollout(image_encoder, discard_ratio=0.9, head_fusion=head_fusion)
+        get_and_save_vit_explaination(image_list, attn_rollout, transform, device, folder_name=os.path.join(args.project_root_path, f"representation_visualization/{head_fusion}/before_contrastive_learning"))
 
 
 
@@ -205,8 +205,8 @@ def main(args: DictConfig) -> None:
         for block in image_encoder.lora_vit.blocks:
             block.attn.fused_attn = False
 
-        grad_rollout = VITAttentionRollout(image_encoder, discard_ratio=0.9, head_fusion=head_fusion)
-        get_and_save_vit_explaination(image_list, grad_rollout, transform, device, folder_name=os.path.join(args.project_root_path, f"representation_visualization/{head_fusion}/after_contrastive_learning"))
+        attn_rollout = VITAttentionRollout(image_encoder, discard_ratio=0.9, head_fusion=head_fusion)
+        get_and_save_vit_explaination(image_list, attn_rollout, transform, device, folder_name=os.path.join(args.project_root_path, f"representation_visualization/{head_fusion}/after_contrastive_learning"))
 
 
 
