@@ -126,9 +126,7 @@ class SimpleCLIPWithClassificationHead(nn.Module):
 
 
 def load_clip_model(args, device=None):
-
     torch.cuda.empty_cache()
-
     # Either we have the small models
     image_encoder = None
     dna_encoder = None

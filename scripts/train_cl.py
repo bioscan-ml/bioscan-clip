@@ -12,7 +12,7 @@ import torch.optim as optim
 import torch.optim.lr_scheduler as lr_scheduler
 from torch.cuda.amp import GradScaler
 import torch.distributed as dist
-
+from torch.nn.parallel import DistributedDataParallel as DDP
 import wandb
 from omegaconf import DictConfig, OmegaConf, open_dict
 
@@ -168,8 +168,8 @@ def main_process(rank: int, world_size: int, args):
     # Load MODEL
     if rank == 0:
         print("Initialize model...")
-    model = load_clip_model(args)
-    model = model.to(rank)
+    model = load_clip_model(args, device=rank)
+    model = DDP(model, device_ids=[rank])
 
     total_steps = len(pre_train_dataloader) * args.model_config.epochs
 
