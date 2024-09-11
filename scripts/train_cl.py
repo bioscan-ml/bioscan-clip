@@ -251,11 +251,11 @@ def main_process(rank: int, world_size: int, args):
                 print(f'Last ckpt: {last_ckpt_path}')
 
             if hasattr(args.model_config, 'dataset') and args.model_config.dataset == "INSECT":
-                acc_dict, pred_dict = eval_phase(model, rank, insect_train_dataloader_for_key, insect_val_dataloader,
+                acc_dict, pred_dict = eval_phase(original_model, rank, insect_train_dataloader_for_key, insect_val_dataloader,
                                                  insect_test_seen_dataloader, insect_test_unseen_dataloader, k_list,
                                                  args=args, for_open_clip=for_open_clip)
             else:
-                acc_dict, pred_dict = eval_phase(model, rank, all_keys_dataloader, seen_val_dataloader,
+                acc_dict, pred_dict = eval_phase(original_model, rank, all_keys_dataloader, seen_val_dataloader,
                                                  unseen_val_dataloader, k_list, rank=rank, args=args,
                                                  for_open_clip=for_open_clip)
 
