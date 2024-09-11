@@ -244,9 +244,10 @@ def main_process(rank: int, world_size: int, args):
                                                                  enable_early_stopping=enable_early_stopping)
 
         if (epoch % args.model_config.evaluation_period == 0 or epoch == args.model_config.epochs - 1) and rank == 0:
+            original_model = model.module if hasattr(model, 'module') else model
             if args.save_ckpt:
                 last_ckpt_path = os.path.join(folder_path, f'last.pth')
-                torch.save(model.state_dict(), last_ckpt_path)
+                torch.save(original_model.state_dict(), last_ckpt_path)
                 print(f'Last ckpt: {last_ckpt_path}')
 
             if hasattr(args.model_config, 'dataset') and args.model_config.dataset == "INSECT":
@@ -269,7 +270,8 @@ def main_process(rank: int, world_size: int, args):
                 best_overall_acc = overall_acc
                 if args.save_ckpt:
                     best_ckpt_path = os.path.join(folder_path, f'best.pth')
-                    torch.save(model.state_dict(), best_ckpt_path)
+
+                    torch.save(original_model.state_dict(), best_ckpt_path)
                     print(f'Best ckpt: {best_ckpt_path}')
             dict_for_wandb["overall_acc"] = overall_acc
             dict_for_wandb["best_epoch"] = best_epoch
