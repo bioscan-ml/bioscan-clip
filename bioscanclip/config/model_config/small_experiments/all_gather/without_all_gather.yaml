@@ -35,4 +35,4 @@ loss_setup:
 fix_temperature: true
 amp: true
 
-random_seed: true
+random_seed: false
