@@ -169,7 +169,7 @@ def main_process(rank: int, world_size: int, args):
     if rank == 0:
         print("Initialize model...")
     model = load_clip_model(args, device=rank)
-    model = DDP(model, device_ids=[rank])
+    model = DDP(model, device_ids=[rank], find_unused_parameters=True)
 
     total_steps = len(pre_train_dataloader) * args.model_config.epochs
 
