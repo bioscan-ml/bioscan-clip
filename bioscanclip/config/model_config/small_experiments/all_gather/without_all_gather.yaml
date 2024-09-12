@@ -36,3 +36,5 @@ fix_temperature: true
 amp: true
 
 random_seed: false
+
+eval_skip_epoch: 10

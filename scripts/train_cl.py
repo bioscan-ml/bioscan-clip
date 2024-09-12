@@ -163,6 +163,10 @@ def main_process(rank: int, world_size: int, args):
     if hasattr(args.model_config, 'amp') and args.model_config.amp:
         use_scaler = True
 
+    eval_skip_epoch = -1
+    if hasattr(args.model_config, 'eval_skip_epoch') and args.model_config.eval_skip_epoch:
+        eval_skip_epoch = args.model_config.eval_skip_epoch
+
     scaler = GradScaler(enabled=use_scaler)
 
     # Load MODEL
@@ -243,7 +247,7 @@ def main_process(rank: int, world_size: int, args):
                                                                  count=count,
                                                                  enable_early_stopping=enable_early_stopping)
 
-        if (epoch % args.model_config.evaluation_period == 0 or epoch == args.model_config.epochs - 1) and rank == 0:
+        if (epoch % args.model_config.evaluation_period == 0 or epoch == args.model_config.epochs - 1) and rank == 0 and epoch > eval_skip_epoch:
             original_model = model.module if hasattr(model, 'module') else model
             if args.save_ckpt:
                 last_ckpt_path = os.path.join(folder_path, f'last.pth')

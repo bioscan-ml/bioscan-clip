@@ -850,7 +850,7 @@ def main(args: DictConfig) -> None:
             model.load_state_dict(checkpoint)
 
         # Load data
-        args.model_config.batch_size = 24
+        # args.model_config.batch_size = 24
 
         if args.inference_and_eval_setting.eval_on == "val":
 
