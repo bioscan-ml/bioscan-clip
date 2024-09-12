@@ -8,7 +8,7 @@ data_dir: ${project_root_path}/data
 activate_wandb: true
 save_inference : true
 load_inference: true
-enable_early_stopping: true
+enable_early_stopping: false
 early_stopping_patience: 0.5
 bioscan_data:
   dir: ${data_dir}/BIOSCAN_1M
