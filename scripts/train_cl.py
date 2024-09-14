@@ -293,10 +293,14 @@ def main(args: DictConfig) -> None:
     world_size = torch.cuda.device_count()
     print(f'world_size： {world_size}')
 
+    default_seed = 42
+    if hasattr(args.model_config, 'default_seed') and args.model_config.default_seed is None:
+        default_seed = args.model_config.default_seed
+
     if hasattr(args.model_config, 'random_seed') and args.model_config.random_seed:
         set_seed()
     else:
-        set_seed(seed=int(args.default_seed))
+        set_seed(seed=int(default_seed))
 
     mp.spawn(main_process, args=(world_size, args), nprocs=world_size)
 
