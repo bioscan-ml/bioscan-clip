@@ -12,7 +12,7 @@ dna:
   input_type: sequence
   model: lora_barcode_bert
 
-model_output_name: image_dna
+model_output_name: image_dna_4gpu
 evaluation_period: 1
 ckpt_path: ${project_root_path}/ckpt/bioscan_clip/image_dna/best.pth
 output_dim: 768
@@ -29,7 +29,7 @@ loss_setup:
   gather_with_grad: true
   use_horovod: false
   local_loss: false
-fix_temperature: true
+fix_temperature: false
 amp: true
 
 random_seed: false
