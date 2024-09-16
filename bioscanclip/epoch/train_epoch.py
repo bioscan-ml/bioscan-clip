@@ -8,7 +8,7 @@ from torch.cuda.amp import autocast
 
 def train_epoch(activate_wandb, total_epochs, epoch, dataloader, model, optimizer, criterion, device, scaler, scheduler=None,
                 for_open_clip=False, rank=None, fix_temperature=None,
-                best_loss=None, patience_step=None, count=0, enable_early_stopping=False):
+                best_loss=None, patience_step=None, count=0, enable_early_stopping=False, enable_autocast=False):
     torch.autograd.set_detect_anomaly(True)
     if rank == 0:
         pbar = tqdm(enumerate(dataloader), total=len(dataloader))
@@ -30,10 +30,17 @@ def train_epoch(activate_wandb, total_epochs, epoch, dataloader, model, optimize
         image_input_batch = image_input_batch.to(device)
         dna_input_batch = dna_input_batch.to(device)
 
-        with torch.autocast(device_type='cuda', dtype=torch.bfloat16):
+        if enable_autocast:
+            with torch.autocast(device_type='cuda', dtype=torch.bfloat16):
+                image_output, dna_output, language_output, logit_scale, logit_bias = model(image_input_batch,
+                                                                                           dna_input_batch,
+                                                                                           language_input)
+        else:
             image_output, dna_output, language_output, logit_scale, logit_bias = model(image_input_batch,
                                                                                        dna_input_batch,
                                                                                        language_input)
+
+
         label_for_train_batch = label_for_train_batch.to(device)
         if fix_temperature is not None:
             logit_scale = 1 / 0.07

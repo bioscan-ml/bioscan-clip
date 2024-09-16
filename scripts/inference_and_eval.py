@@ -1,12 +1,10 @@
-import h5py
 import io
 import json
 import os
-import csv
 import random
 from collections import Counter, defaultdict
-from sklearn.preprocessing import normalize
-import faiss
+
+import h5py
 import hydra
 import matplotlib
 import matplotlib.pyplot as plt
@@ -14,44 +12,18 @@ import numpy as np
 import plotly
 import plotly.express as px
 import torch
-from omegaconf import DictConfig, OmegaConf
+from PIL import Image
+from omegaconf import DictConfig
 from sklearn.metrics import silhouette_samples
 from umap import UMAP
-from PIL import Image
 
-from bioscanclip.epoch.inference_epoch import get_feature_and_label
 from bioscanclip.model.simple_clip import load_clip_model
 from bioscanclip.util.dataset import load_bioscan_dataloader_all_small_splits
-from bioscanclip.util.util import Table, categorical_cmap
+from bioscanclip.util.util import categorical_cmap, inference_and_print_result, get_features_and_label, \
+    make_prediction, All_TYPE_OF_FEATURES_OF_KEY
 
 PLOT_FOLDER = "html_plots"
 RETRIEVAL_FOLDER = "image_retrieval"
-All_TYPE_OF_FEATURES_OF_QUERY = [
-    "encoded_image_feature",
-    "encoded_dna_feature",
-    "encoded_language_feature",
-    "averaged_feature",
-    "concatenated_feature",
-]
-All_TYPE_OF_FEATURES_OF_KEY = [
-    "encoded_image_feature",
-    "encoded_dna_feature",
-    "encoded_language_feature",
-    "averaged_feature",
-    "concatenated_feature",
-    "all_key_features",
-]
-LEVELS = ["order", "family", "genus", "species"]
-
-
-def get_all_unique_species_from_dataloader(dataloader):
-    all_species = []
-
-    for batch in dataloader:
-        file_name_batch, image_input_batch, dna_batch, input_ids, token_type_ids, attention_mask, label_batch = batch
-        all_species = all_species + label_batch["species"]
-    all_species = list(set(all_species))
-    return all_species
 
 
 def save_prediction(pred_dict, gt_dict, json_path):
@@ -218,18 +190,18 @@ def generate_embedding_plot(args, image_features, dna_features, language_feature
 
 
 def retrieve_images(
-    args,
-    name,
-    query_dict,
-    keys_dict,
-    queries,
-    keys,
-    query_data,
-    key_data,
-    num_queries=5,
-    max_k=5,
-    taxon="order",
-    seed=None,
+        args,
+        name,
+        query_dict,
+        keys_dict,
+        queries,
+        keys,
+        query_data,
+        key_data,
+        num_queries=5,
+        max_k=5,
+        taxon="order",
+        seed=None,
 ):
     """
     for X in {image, DNA}:
@@ -305,10 +277,10 @@ def retrieve_images(
             # save out predictions
             os.makedirs(os.path.join(folder_path, f"query_{query_feature_type}_key_{key_feature_type}"), exist_ok=True)
             with open(
-                os.path.join(
-                    folder_path, f"query_{query_feature_type}_key_{key_feature_type}", f"retrieved_images.json"
-                ),
-                "w",
+                    os.path.join(
+                        folder_path, f"query_{query_feature_type}_key_{key_feature_type}", f"retrieved_images.json"
+                    ),
+                    "w",
             ) as json_file:
                 json.dump(retrieval_results, json_file, indent=4)
 
@@ -411,309 +383,6 @@ def calculate_silhouette_score(args, image_features, labels):
         print(f"The silhouette score for {level} level is : {avg_list(silhouette_score)}")
 
 
-def make_prediction(query_feature, keys_feature, keys_label, with_similarity=False, with_indices=False, max_k=5):
-    index = faiss.IndexFlatIP(keys_feature.shape[-1])
-    keys_feature = normalize(keys_feature, norm="l2", axis=1).astype(np.float32)
-    query_feature = normalize(query_feature, norm="l2", axis=1).astype(np.float32)
-    index.add(keys_feature)
-    pred_list = []
-
-    similarities, indices = index.search(query_feature, max_k)
-    for key_indices in indices:
-        k_pred_in_diff_level = {}
-        for level in LEVELS:
-            if level not in k_pred_in_diff_level.keys():
-                k_pred_in_diff_level[level] = []
-            for i in key_indices:
-                try:
-                    k_pred_in_diff_level[level].append(keys_label[i][level])
-                except:
-                    print(keys_label)
-                    exit()
-        pred_list.append(k_pred_in_diff_level)
-
-    out = [pred_list]
-
-    if with_similarity:
-        out.append(similarities)
-
-    if with_indices:
-        out.append(indices)
-
-    if len(out) == 1:
-        return out[0]
-    return out
-
-
-def top_k_micro_accuracy(pred_list, gt_list, k_list=None):
-    total_samples = len(pred_list)
-    k_micro_acc = {}
-    for k in k_list:
-        if k not in k_micro_acc.keys():
-            k_micro_acc[k] = {}
-        for level in LEVELS:
-            correct_in_curr_level = 0
-            for pred_dict, gt_dict in zip(pred_list, gt_list):
-
-                pred_labels = pred_dict[level][:k]
-                gt_label = gt_dict[level]
-                if gt_label in pred_labels:
-                    correct_in_curr_level += 1
-            k_micro_acc[k][level] = correct_in_curr_level * 1.0 / total_samples
-
-    return k_micro_acc
-
-
-def top_k_macro_accuracy(pred_list, gt_list, k_list=None):
-    if k_list is None:
-        k_list = [1, 3, 5]
-
-    macro_acc_dict = {}
-    per_class_acc = {}
-    pred_counts = {}
-    gt_counts = {}
-
-    for k in k_list:
-        macro_acc_dict[k] = {}
-        per_class_acc[k] = {}
-        pred_counts[k] = {}
-        gt_counts[k] = {}
-        for level in LEVELS:
-            pred_counts[k][level] = {}
-            gt_counts[k][level] = {}
-            for pred, gt in zip(pred_list, gt_list):
-
-                pred_labels = pred[level][:k]
-                gt_label = gt[level]
-                if gt_label not in pred_counts[k][level].keys():
-                    pred_counts[k][level][gt_label] = 0
-                if gt_label not in gt_counts[k][level].keys():
-                    gt_counts[k][level][gt_label] = 0
-
-                if gt_label in pred_labels:
-                    pred_counts[k][level][gt_label] = pred_counts[k][level][gt_label] + 1
-                gt_counts[k][level][gt_label] = gt_counts[k][level][gt_label] + 1
-
-    for k in k_list:
-        for level in LEVELS:
-            sum_in_this_level = 0
-            list_of_labels = list(gt_counts[k][level].keys())
-            per_class_acc[k][level] = {}
-            for gt_label in list_of_labels:
-                sum_in_this_level = (
-                    sum_in_this_level + pred_counts[k][level][gt_label] * 1.0 / gt_counts[k][level][gt_label]
-                )
-                per_class_acc[k][level][gt_label] = (
-                    pred_counts[k][level][gt_label] * 1.0 / gt_counts[k][level][gt_label]
-                )
-            macro_acc_dict[k][level] = sum_in_this_level / len(list_of_labels)
-
-    return macro_acc_dict, per_class_acc
-
-
-def print_micro_and_macro_acc(acc_dict, k_list, args):
-    header = [
-        " ",
-        "Seen Order",
-        "Seen Family",
-        "Seen Genus",
-        "Seen Species",
-        "Unseen Order",
-        "Unseen Family",
-        "Unseen Genus",
-        "Unseen Species",
-    ]
-
-    # read modalities from config
-    # TODO: fit complicated strategey after updateing the config
-    model_config = args.model_config
-    if hasattr(args.model_config, "load_ckpt") and args.model_config.load_ckpt is False:
-        alignment = "None"
-    else:
-        alignment = "I"
-        if hasattr(model_config, "dna"):
-            alignment += ",D"
-        if hasattr(model_config, "language"):
-            alignment += ",T"
-
-    suffix = f"({alignment})"
-
-    rows = []
-    csv_data_dict = {'encoded_image_feature': 'Image', 
-                     'encoded_dna_feature': 'DNA',
-                     'encoded_language_feature': 'Text',
-                     'averaged_feature': 'Ave'+suffix,
-                     'concatenated_feature': 'Concat'+suffix,
-                     'all_key_features': 'All'+suffix}
-    csv_data = [["learning_strategy","Alignment", "DNA_encoder","Image_encoder","Language_encoder","Epoch",
-                 "Latent_space_dim","Query","Key","Metric","Seen_Order","Seen_Family","Seen_Genus",
-                 "Seen_Species","Unseen_Order","Unseen_Family","Unseen_Genus","Unseen_Species"]]
-
-    def read_encoder(model_config, key):
-        if hasattr(model_config, key):
-            return model_config[key].model
-        else:
-            return "None"
-    row_for_csv_data = ['LoRA', alignment]
-    row_for_csv_data.append(read_encoder(model_config, "dna"))
-    row_for_csv_data.append(read_encoder(model_config, "image"))
-    row_for_csv_data.append(read_encoder(model_config, "language"))
-    row_for_csv_data.append(model_config.epochs)
-    row_for_csv_data.append(model_config.output_dim)
-
-
-    rows_for_copy_to_google_doc = []
-    for query_feature_type in All_TYPE_OF_FEATURES_OF_QUERY:
-        if query_feature_type not in acc_dict.keys():
-            continue
-        for key_feature_type in All_TYPE_OF_FEATURES_OF_KEY:
-            if key_feature_type not in acc_dict[query_feature_type].keys():
-                continue
-            for type_of_acc in ["micro_acc", "macro_acc"]:
-                for k in k_list:
-                    if len(list(acc_dict[query_feature_type][key_feature_type].keys())) == 0:
-                        continue
-                    curr_row = [
-                        f"Query_feature: {query_feature_type}||Key_feature: {key_feature_type}||{type_of_acc} top-{k}"
-                    ]
-                    row_for_copy_to_google_doc = ""
-
-                    row_for_csv = row_for_csv_data.copy()
-                    row_for_csv += \
-                        [csv_data_dict[query_feature_type], csv_data_dict[key_feature_type], type_of_acc.replace('m', 'M').replace("_", f"_Top-{k}_")]
-                    
-                    for spit in ["seen", "unseen"]:
-                        for level in LEVELS:
-                            num = round(acc_dict[query_feature_type][key_feature_type][spit][type_of_acc][k][level], 4)
-
-                            curr_row.append(f"\t{num}")
-                            row_for_copy_to_google_doc = (
-                                row_for_copy_to_google_doc + f"{num}\t"
-                            )
-                            row_for_csv.append(num)
-                    rows.append(curr_row)
-                    rows_for_copy_to_google_doc.append(row_for_copy_to_google_doc)
-                    csv_data.append(row_for_csv)
-    table = Table(header, rows)
-    table.print_table()
-
-    print("For copy to google doc")
-    for row in rows_for_copy_to_google_doc:
-        print(row)
-    
-    if args.save_inference:
-        logs_folder = os.path.join("logs")
-        os.makedirs(logs_folder, exist_ok=True)
-
-        # write accurate to json
-        with open(os.path.join(logs_folder, "accuracy.json"), 'w') as fp:
-            json.dump(acc_dict, fp)
-        print(f"Accuracy dict saved to logs folder: {logs_folder}/accuracy.json")
-
-        # write results to csv
-        with open(os.path.join(logs_folder, "results.csv"), 'w', newline='') as csvfile:
-            csvwriter = csv.writer(csvfile, delimiter=',')
-            csvwriter.writerows(csv_data)
-        print(f"CSV results saved to logs folder: {logs_folder}/results.csv")
-
-        raw_csv_data = []
-        for row in csv_data[1:]:
-            raw_csv_data.append(row[-8:])
-
-        with open(os.path.join(logs_folder, "raw.csv"), 'w', newline='') as csvfile:
-            csvwriter = csv.writer(csvfile, delimiter=',')
-            csvwriter.writerows(raw_csv_data)
-        print(f"raw results saved to logs folder: {logs_folder}/raw.csv")
-    
-        # write config to json
-        OmegaConf.save(args, os.path.join(logs_folder, 'config.yaml'))
-        print(f"Config saved to logs folder: {logs_folder}/config.json")
-
-def inference_and_print_result(keys_dict, seen_dict, unseen_dict, args, small_species_list=None, k_list=None):
-    acc_dict = {}
-    per_class_acc = {}
-    if k_list is None:
-        k_list = [1, 3, 5]
-
-    max_k = k_list[-1]
-
-    seen_gt_label = seen_dict["label_list"]
-    unseen_gt_label = unseen_dict["label_list"]
-    keys_label = keys_dict["label_list"]
-    pred_dict = {}
-
-    for query_feature_type in All_TYPE_OF_FEATURES_OF_QUERY:
-        if query_feature_type not in seen_dict.keys():
-            continue
-        acc_dict[query_feature_type] = {}
-        per_class_acc[query_feature_type] = {}
-        pred_dict[query_feature_type] = {}
-
-        for key_feature_type in All_TYPE_OF_FEATURES_OF_KEY:
-            if key_feature_type not in keys_dict.keys():
-                continue
-            acc_dict[query_feature_type][key_feature_type] = {}
-            per_class_acc[query_feature_type][key_feature_type] = {}
-            pred_dict[query_feature_type][key_feature_type] = {}
-
-            curr_seen_feature = seen_dict[query_feature_type]
-            curr_unseen_feature = unseen_dict[query_feature_type]
-
-            curr_keys_feature = keys_dict[key_feature_type]
-            if curr_keys_feature is None:
-                continue
-            if key_feature_type == "all_key_features":
-                keys_label = keys_dict["all_key_features_label"]
-
-            if (
-                curr_keys_feature is None
-                or curr_seen_feature is None
-                or curr_unseen_feature is None
-                or curr_keys_feature.shape[-1] != curr_seen_feature.shape[-1]
-                or curr_keys_feature.shape[-1] != curr_unseen_feature.shape[-1]
-            ):
-                continue
-
-            curr_seen_pred_list = make_prediction(
-                curr_seen_feature, curr_keys_feature, keys_label, with_similarity=False, max_k=max_k
-            )
-            curr_unseen_pred_list = make_prediction(
-                curr_unseen_feature, curr_keys_feature, keys_label, max_k=max_k
-            )
-
-            pred_dict[query_feature_type][key_feature_type] = {
-                "curr_seen_pred_list": curr_seen_pred_list,
-                "curr_unseen_pred_list": curr_unseen_pred_list,
-            }
-
-            acc_dict[query_feature_type][key_feature_type]["seen"] = {}
-            acc_dict[query_feature_type][key_feature_type]["unseen"] = {}
-            acc_dict[query_feature_type][key_feature_type]["seen"]["micro_acc"] = top_k_micro_accuracy(
-                curr_seen_pred_list, seen_gt_label, k_list=k_list
-            )
-            acc_dict[query_feature_type][key_feature_type]["unseen"]["micro_acc"] = top_k_micro_accuracy(
-                curr_unseen_pred_list, unseen_gt_label, k_list=k_list
-            )
-
-            seen_macro_acc, seen_per_class_acc = top_k_macro_accuracy(
-                curr_seen_pred_list, seen_gt_label, k_list=k_list
-            )
-
-            unseen_macro_acc, unseen_per_class_acc = top_k_macro_accuracy(
-                curr_unseen_pred_list, unseen_gt_label, k_list=k_list
-            )
-
-            per_class_acc[query_feature_type][key_feature_type]["seen"] = seen_per_class_acc
-            per_class_acc[query_feature_type][key_feature_type]["unseen"] = unseen_per_class_acc
-
-            acc_dict[query_feature_type][key_feature_type]["seen"]["macro_acc"] = seen_macro_acc
-            acc_dict[query_feature_type][key_feature_type]["unseen"]["macro_acc"] = unseen_macro_acc
-
-    print_micro_and_macro_acc(acc_dict, k_list, args)
-
-    return acc_dict, per_class_acc, pred_dict
-
-
 def check_for_acc_about_correct_predict_seen_or_unseen(final_pred_list, species_list):
     for k in [1, 3, 5]:
         correct = 0
@@ -728,58 +397,6 @@ def check_for_acc_about_correct_predict_seen_or_unseen(final_pred_list, species_
             total = total + 1
 
         print(f"for k = {k}: {correct * 1.0 / total}")
-
-
-def get_features_and_label(dataloader, model, device, for_key_set=False, for_open_clip=False):
-    model.eval()
-    _, encoded_language_feature, _ = get_feature_and_label(
-        dataloader, model, device, type_of_feature="text", multi_gpu=False, for_open_clip=for_open_clip
-    )
-
-    _, encoded_dna_feature, _ = get_feature_and_label(
-        dataloader, model, device, type_of_feature="dna", multi_gpu=False, for_open_clip=for_open_clip
-    )
-
-    file_name_list, encoded_image_feature, label_list = get_feature_and_label(
-        dataloader, model, device, type_of_feature="image", multi_gpu=False, for_open_clip=for_open_clip
-    )
-
-    averaged_feature = None
-    concatenated_feature = None
-    all_key_features = None
-    all_key_features_label = None
-    if encoded_dna_feature is not None and encoded_image_feature is not None:
-        averaged_feature = np.mean([encoded_image_feature, encoded_dna_feature], axis=0)
-        concatenated_feature = np.concatenate((encoded_image_feature, encoded_dna_feature), axis=1)
-
-    dictionary_of_split = {
-        "file_name_list": file_name_list,
-        "encoded_dna_feature": encoded_dna_feature,
-        "encoded_image_feature": encoded_image_feature,
-        "encoded_language_feature": encoded_language_feature,
-        "averaged_feature": averaged_feature,
-        "concatenated_feature": concatenated_feature,
-        "label_list": label_list,
-    }
-
-    if (
-        for_key_set
-        and encoded_image_feature is not None
-        and encoded_dna_feature is not None
-        and encoded_language_feature is not None
-    ):
-        for curr_feature in [encoded_image_feature, encoded_dna_feature, encoded_language_feature]:
-            if all_key_features is None:
-                all_key_features = curr_feature
-                all_key_features_label = label_list
-            else:
-                all_key_features = np.concatenate((all_key_features, curr_feature), axis=0)
-                all_key_features_label = all_key_features_label + label_list
-
-    dictionary_of_split["all_key_features"] = all_key_features
-    dictionary_of_split["all_key_features_label"] = all_key_features_label
-
-    return dictionary_of_split
 
 
 @hydra.main(config_path="../bioscanclip/config", config_name="global_config", version_base="1.1")
@@ -799,7 +416,8 @@ def main(args: DictConfig) -> None:
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    extracted_features_path = os.path.join(folder_for_saving, f"extracted_feature_from_{args.inference_and_eval_setting.eval_on}_split.hdf5")
+    extracted_features_path = os.path.join(folder_for_saving,
+                                           f"extracted_feature_from_{args.inference_and_eval_setting.eval_on}_split.hdf5")
 
     if os.path.exists(extracted_features_path) and os.path.exists(labels_path) and args.load_inference:
         print("Loading embeddings from file...")
@@ -828,12 +446,13 @@ def main(args: DictConfig) -> None:
         seen_dict["label_list"] = total_dict["seen_gt_dict"]
         unseen_dict["label_list"] = total_dict["unseen_gt_dict"]
         keys_dict["label_list"] = total_dict["key_gt_dict"]
-        keys_dict["all_key_features_label"] = total_dict["key_gt_dict"] + total_dict["key_gt_dict"] + total_dict["key_gt_dict"]
+        keys_dict["all_key_features_label"] = total_dict["key_gt_dict"] + total_dict["key_gt_dict"] + total_dict[
+            "key_gt_dict"]
 
         with open(processed_id_path, "r") as json_file:
             id_dict = json.load(json_file)
         seen_dict["processed_id_list"] = id_dict['seen_id_list']
-        unseen_dict["processed_id_list"] = id_dict['unseen_id_list']        
+        unseen_dict["processed_id_list"] = id_dict['unseen_id_list']
         keys_dict["processed_id_list"] = id_dict['key_id_list']
         keys_dict["all_processed_id_list"] = id_dict['key_id_list'] + id_dict['key_id_list'] + id_dict['key_id_list']
 
@@ -854,12 +473,14 @@ def main(args: DictConfig) -> None:
 
         if args.inference_and_eval_setting.eval_on == "val":
 
-            _, seen_dataloader, unseen_dataloader, _, _, seen_keys_dataloader, val_unseen_keys_dataloader, test_unseen_keys_dataloader, all_keys_dataloader = load_bioscan_dataloader_all_small_splits(args)
+            _, seen_dataloader, unseen_dataloader, _, _, seen_keys_dataloader, val_unseen_keys_dataloader, test_unseen_keys_dataloader, all_keys_dataloader = load_bioscan_dataloader_all_small_splits(
+                args)
         elif args.inference_and_eval_setting.eval_on == "test":
             _, _, _, seen_dataloader, unseen_dataloader, seen_keys_dataloader, val_unseen_keys_dataloader, test_unseen_keys_dataloader, all_keys_dataloader = load_bioscan_dataloader_all_small_splits(
                 args)
         else:
-            raise ValueError("Invalid value for eval_on, specify by 'python inference_and_eval.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_ssl_ver_0_1_2.yaml' inference_and_eval_setting.eval_on=test/val'")
+            raise ValueError(
+                "Invalid value for eval_on, specify by 'python inference_and_eval.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_ssl_ver_0_1_2.yaml' inference_and_eval_setting.eval_on=test/val'")
 
         keys_dict = get_features_and_label(all_keys_dataloader, model, device, for_key_set=True)
 
@@ -898,7 +519,6 @@ def main(args: DictConfig) -> None:
             with open(processed_id_path, "w") as json_file:
                 json.dump(id_dict, json_file, indent=4)
 
-
     acc_dict, per_class_acc, pred_dict = inference_and_print_result(
         keys_dict,
         seen_dict,
@@ -907,8 +527,6 @@ def main(args: DictConfig) -> None:
         small_species_list=None,
         k_list=args.inference_and_eval_setting.k_list,
     )
-
-
 
     # seen_final_pred = pred_dict["encoded_image_feature"]["encoded_dna_feature"]["curr_seen_pred_list"]
     # unseen_final_pred = pred_dict["encoded_image_feature"]["encoded_dna_feature"]["curr_unseen_pred_list"]

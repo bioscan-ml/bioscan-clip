@@ -1,23 +1,23 @@
 import copy
 import datetime
 import os
+
+import hydra
+import numpy as np
+import scipy.io as sio
+import torch
 import torch.nn as nn
 import torch.optim as optim
-import hydra
-import torch
+import wandb
 from omegaconf import DictConfig, OmegaConf
 from tqdm import tqdm
+
+from bioscanclip.epoch.fine_tuning_epoch import fine_tuning_epoch_image_and_dna, evaluate_epoch
 from bioscanclip.model.simple_clip import load_clip_model
-from bioscanclip.util.dataset import load_bioscan_dataloader_with_train_seen_and_separate_keys, load_insect_dataloader, load_insect_dataloader_trainval
-from inference_and_eval import make_prediction, top_k_micro_accuracy, top_k_macro_accuracy
-from bioscanclip.epoch.inference_epoch import get_feature_and_label
-import numpy as np
-import torch.nn.functional as F
-import wandb
-from bioscanclip.util.util import EncoderWithExtraLayer, load_all_seen_species_name_and_create_label_map, get_unique_species_for_seen
-from bioscanclip.epoch.fine_tuning_epoch import fine_tuning_epoch, fine_tuning_epoch_image_and_dna, evaluate_epoch
-import scipy.io as sio
-from inference_and_eval import get_features_and_label
+from bioscanclip.util.dataset import load_insect_dataloader, load_insect_dataloader_trainval
+from bioscanclip.util.util import EncoderWithExtraLayer, get_unique_species_for_seen
+from bioscanclip.util.util import get_features_and_label
+
 
 @hydra.main(config_path="../bioscanclip/config", config_name="global_config", version_base="1.1")
 def main(args: DictConfig) -> None:

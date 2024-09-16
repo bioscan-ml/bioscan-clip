@@ -9,6 +9,7 @@ import h5py
 from bioscanclip.epoch.inference_epoch import get_feature_and_label
 from bioscanclip.model.simple_clip import load_clip_model
 from bioscanclip.util.dataset import load_bioscan_dataloader_all_small_splits
+from bioscanclip.util.util import get_features_and_label
 
 PLOT_FOLDER = "html_plots"
 RETRIEVAL_FOLDER = "image_retrieval"
@@ -29,57 +30,6 @@ All_TYPE_OF_FEATURES_OF_KEY = [
 ]
 LEVELS = ["order", "family", "genus", "species"]
 
-
-def get_features_and_label(dataloader, model, device, for_key_set=False):
-    _, encoded_language_feature, _ = get_feature_and_label(
-        dataloader, model, device, type_of_feature="text", multi_gpu=False
-    )
-
-    _, encoded_dna_feature, _ = get_feature_and_label(
-        dataloader, model, device, type_of_feature="dna", multi_gpu=False
-    )
-
-    file_name_list, encoded_image_feature, label_list = get_feature_and_label(
-        dataloader, model, device, type_of_feature="image", multi_gpu=False
-    )
-
-
-    averaged_feature = None
-    concatenated_feature = None
-    all_key_features = None
-    all_key_features_label = None
-    if encoded_dna_feature is not None and encoded_image_feature is not None:
-        averaged_feature = np.mean([encoded_image_feature, encoded_dna_feature], axis=0)
-        concatenated_feature = np.concatenate((encoded_image_feature, encoded_dna_feature), axis=1)
-
-    dictionary_of_split = {
-        "file_name_list": file_name_list,
-        "encoded_dna_feature": encoded_dna_feature,
-        "encoded_image_feature": encoded_image_feature,
-        "encoded_language_feature": encoded_language_feature,
-        "averaged_feature": averaged_feature,
-        "concatenated_feature": concatenated_feature,
-        "label_list": label_list,
-    }
-
-    if (
-        for_key_set
-        and encoded_image_feature is not None
-        and encoded_dna_feature is not None
-        and encoded_language_feature is not None
-    ):
-        for curr_feature in [encoded_image_feature, encoded_dna_feature, encoded_language_feature]:
-            if all_key_features is None:
-                all_key_features = curr_feature
-                all_key_features_label = label_list
-            else:
-                all_key_features = np.concatenate((all_key_features, curr_feature), axis=0)
-                all_key_features_label = all_key_features_label + label_list
-
-    dictionary_of_split["all_key_features"] = all_key_features
-    dictionary_of_split["all_key_features_label"] = all_key_features_label
-
-    return dictionary_of_split
 
 def convert_labels_to_four_list(list_of_dict):
     order_list = []
