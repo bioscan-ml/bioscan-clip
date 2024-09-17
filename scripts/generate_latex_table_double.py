@@ -1,5 +1,6 @@
 import os
 import csv
+import math
 import json
 import yaml
 import numpy as np
@@ -23,11 +24,14 @@ def get_alignment(config):
     alignment_str = ""
     flags = {"image": False, "dna": False, "language": False}
     for alignment in ["image", "dna", "language"]:
-        if alignment in config["model_config"]:
+        if "load_ckpt" in config["model_config"] and config["model_config"]["load_ckpt"] is False:
+            alignment_str += "\\myxmark & "
+        elif alignment in config["model_config"]:
             alignment_str += "\\checkmark & "
             flags[alignment] = True
         else:
             alignment_str += "\\myxmark & "
+        
     return alignment_str, (flags["image"], flags["dna"], flags["language"])
 
 
@@ -36,7 +40,11 @@ def get_result(csv, header, corr, alignment_type, macro=False):
     def compute_HM(seen, unseen):
         if type(seen) == str: seen = float(seen)
         if type(unseen) == str: unseen = float(unseen)
-        return round(2 / (1 / seen + 1 / unseen), 4)
+
+        if seen == 0 or unseen == 0:
+            return -2
+        else:
+            return 2 / (1 / seen + 1 / unseen)
 
     header_dict = {
         "Order": [10, 14],
@@ -47,16 +55,19 @@ def get_result(csv, header, corr, alignment_type, macro=False):
 
     coor_dict = {
         "dna2dna": {
+            (False, False, False):[37, 40],
             (True, True, True):[37, 40],
             (True, True, False):[25, 28],
             (True, False, True):[None, None],
         },
         "img2img": {
+            (False, False, False):[1, 4],
             (True, True, True):[1, 4],
             (True, True, False):[1, 4],
             (True, False, True):[1, 4],
         },
         "img2dna": {
+            (False, False, False):[7, 10],
             (True, True, True):[7, 10],
             (True, True, False):[7, 10],
             (True, False, True):[None, None],
@@ -69,9 +80,9 @@ def get_result(csv, header, corr, alignment_type, macro=False):
     if row is None:
         return -1, -1, -1
     
-    seen = round(float(csv[row][column_list[0]]), 2)
-    unseen = round(float(csv[row][column_list[1]]), 2)
-    harmonic = round(compute_HM(seen, unseen), 2)
+    seen = float(csv[row][column_list[0]]) * 100
+    unseen = float(csv[row][column_list[1]]) * 100
+    harmonic = compute_HM(seen, unseen)
 
     return seen, unseen, harmonic
 
@@ -97,6 +108,8 @@ def get_results(folder_list, idx, header, corr, macro=False, last=False):
         else:
             if num_list[idx] == -1:
                 return_string += "--- "
+            elif num_idx == 2 and num_list[idx] == float(-2):
+                return_string += "N/A "
             else:
                 return_string += "%.2f " % num_list[idx]
         
@@ -170,7 +183,7 @@ def write_latex_content(args, dataset=True, alignment=True):
         if alignment:
             latex_strings += "\\multicolumn{3}{c}{Aligned embeddings} & "
             column_starter += 3
-        latex_strings += "\\multicolumn{3}{c}{Image to Image} & \\multicolumn{3}{c}{DNA to DNA} & \\multicolumn{3}{c}{Image to DNA} & \\multicolumn{3}{c}{Image to Image} & \\multicolumn{3}{c}{DNA to DNA} & \\multicolumn{3}{c}{Image to DNA} \\\\ \n"
+        latex_strings += "\\multicolumn{3}{c}{DNA to DNA} & \\multicolumn{3}{c}{Image to Image} & \\multicolumn{3}{c}{Image to DNA} & \\multicolumn{3}{c}{DNA to DNA} & \\multicolumn{3}{c}{Image to Image} & \\multicolumn{3}{c}{Image to DNA} \\\\ \n"
 
         if alignment:
             latex_strings += "\\cmidrule(){%d-%d} " % (column_starter - 3, column_starter - 1)
@@ -205,7 +218,7 @@ def write_latex_content(args, dataset=True, alignment=True):
                 latex_strings += alignment_string
 
             for macro in [False, True]:
-                for corr in ["img2img", "dna2dna", "img2dna"]:
+                for corr in ["dna2dna", "img2img", "img2dna"]:
                     latex_strings += get_results(
                         args.result_folder, idx, header, corr, macro=macro, 
                         last=True if corr == "img2dna" and macro is True else False)
@@ -229,7 +242,8 @@ def main(args):
 if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument("--result_folder", type=str, nargs='+', 
-                        default=["outputs/2024-09-14/19-53-31", 
+                        default=["outputs/2024-09-16/19-20-19", 
+                                 "outputs/2024-09-14/19-53-31", 
                                  "outputs/2024-09-14/10-08-46",
                                  "outputs/2024-09-13/19-43-07",])
     # parser.add_argument("--result_folder", type=str, nargs='+')
