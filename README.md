@@ -223,7 +223,7 @@ cd Fine-Grained-ZSL-with-DNA/BZSL-Python
 python Demo.py --using_bioscan_clip_image_feature --datapath ../data --side_info dna_bioscan_clip --alignment --tuning
 ```
 
-###  Flat the `resluts.csv`.
+###  Flat the `results.csv`.
 ```shell
 python scripts/flattenCsv.pya -i PATH_TO_RESULTS_CSV -o PATH_TO_FLATTEN_CSV
 ```
