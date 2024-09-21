@@ -161,8 +161,8 @@ def main(args: DictConfig) -> None:
         for block in image_encoder.lora_vit.blocks:
             block.attn.fused_attn = False
 
-        grad_rollout = VITAttentionRollout(image_encoder, discard_ratio=0.9, head_fusion=head_fusion)
-        get_and_save_vit_explaination(image_list, grad_rollout, transform, device,
+        attn_rollout = VITAttentionRollout(image_encoder, discard_ratio=0.9, head_fusion=head_fusion)
+        get_and_save_vit_explaination(image_list, attn_rollout, transform, device,
                                       folder_name=os.path.join(args.project_root_path,
                                                                f"representation_visualization/{head_fusion}/before_contrastive_learning"))
 
@@ -178,8 +178,8 @@ def main(args: DictConfig) -> None:
         for block in image_encoder.lora_vit.blocks:
             block.attn.fused_attn = False
 
-        grad_rollout = VITAttentionRollout(image_encoder, discard_ratio=0.9, head_fusion=head_fusion)
-        get_and_save_vit_explaination(image_list, grad_rollout, transform, device,
+        attn_rollout = VITAttentionRollout(image_encoder, discard_ratio=0.9, head_fusion=head_fusion)
+        get_and_save_vit_explaination(image_list, attn_rollout, transform, device,
                                       folder_name=os.path.join(args.project_root_path,
                                                                f"representation_visualization/{head_fusion}/after_contrastive_learning"))
 
