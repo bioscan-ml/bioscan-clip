@@ -298,9 +298,10 @@ def main(args: DictConfig) -> None:
         default_seed = args.model_config.default_seed
 
     if hasattr(args.model_config, 'random_seed') and args.model_config.random_seed:
-        set_seed()
+        seed = set_seed(); string = "random seed"
     else:
-        set_seed(seed=int(default_seed))
+        seed = set_seed(seed=int(default_seed)); string = "default seed"
+    print("The module is run with %s: %d" % (string, seed))
 
     mp.spawn(main_process, args=(world_size, args), nprocs=world_size)
 

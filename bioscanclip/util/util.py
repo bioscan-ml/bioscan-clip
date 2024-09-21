@@ -100,6 +100,8 @@ def set_seed(seed=None):
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(seed)
 
+    return seed
+
 
 def remove_extra_pre_fix(state_dict):
     new_state_dict = {}
