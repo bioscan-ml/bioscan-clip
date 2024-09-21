@@ -32,5 +32,8 @@ loss_setup:
   gather_with_grad: true
   use_horovod: false
   local_loss: false
+
+eval_skip_epoch: 10
+
 fix_temperature: true
 amp: true
