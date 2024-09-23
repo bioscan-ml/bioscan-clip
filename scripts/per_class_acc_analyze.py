@@ -37,52 +37,32 @@ def get_avg_acc_by_key_count(count_list, acc_list):
 
 
 def plot_scatterplot(species_2_query_count_and_acc, image_or_dna_as_key):
-    seen_val_species_count_list = []
-    seen_val_species_acc_list = []
-    unseen_val_species_count_list = []
-    unseen_val_species_acc_list = []
+    seen_species_count_list = []
+    seen_species_acc_list = []
+    unseen_species_count_list = []
+    unseen_species_acc_list = []
 
 
 
     for species in species_2_query_count_and_acc.keys():
-        if 'seen_val' in species_2_query_count_and_acc[species].keys():
-            seen_val_species_count_list.append(species_2_query_count_and_acc[species]['key_count'])
-            seen_val_species_acc_list.append(species_2_query_count_and_acc[species]['seen_val'])
-        if 'unseen_val' in species_2_query_count_and_acc[species].keys():
-            unseen_val_species_count_list.append(species_2_query_count_and_acc[species]['key_count'])
-            unseen_val_species_acc_list.append(species_2_query_count_and_acc[species]['unseen_val'])
+        if 'seen' in species_2_query_count_and_acc[species].keys():
+            seen_species_count_list.append(species_2_query_count_and_acc[species]['key_count'])
+            seen_species_acc_list.append(species_2_query_count_and_acc[species]['seen'])
+        if 'unseen' in species_2_query_count_and_acc[species].keys():
+            unseen_species_count_list.append(species_2_query_count_and_acc[species]['key_count'])
+            unseen_species_acc_list.append(species_2_query_count_and_acc[species]['unseen'])
 
-    seen_val_species_count_list, seen_val_species_acc_list = get_avg_acc_by_key_count(seen_val_species_count_list, seen_val_species_acc_list)
-    unseen_val_species_count_list, unseen_val_species_acc_list = get_avg_acc_by_key_count(unseen_val_species_count_list,
-                                                                                unseen_val_species_acc_list)
-
-
+    seen_species_count_list, seen_species_acc_list = get_avg_acc_by_key_count(seen_species_count_list, seen_species_acc_list)
+    unseen_species_count_list, unseen_species_acc_list = get_avg_acc_by_key_count(unseen_species_count_list,
+                                                                                unseen_species_acc_list)
 
     # Plotting both seen and unseen species data
     dot_size = 300
     fonr_size = 18
     colors = sns.color_palette("pastel", n_colors=2)
     plt.figure(figsize=(16, 10))
-    plt.scatter(seen_val_species_count_list, seen_val_species_acc_list, color=colors[0], label='Seen Species', s=dot_size)
-    plt.scatter(unseen_val_species_count_list, unseen_val_species_acc_list, color=colors[1], label='Unseen Species', s=dot_size)
-
-
-    # for data, color, label in zip(
-    #         [(seen_val_species_count_list, seen_val_species_acc_list),
-    #          (unseen_val_species_count_list, unseen_val_species_acc_list)],
-    #         colors,
-    #         ['Seen Species Trend', 'Unseen Species Trend']
-    # ):
-    #     x, y = data
-    # 
-    #     sorted_indices = np.argsort(x)
-    #     x_sorted = np.array(x)[sorted_indices]
-    #     y_sorted = np.array(y)[sorted_indices]
-    # 
-    #     x_smooth = np.linspace(x_sorted.min(), x_sorted.max(), 60)
-    #     y_smooth = make_interp_spline(x_sorted, y_sorted)(x_smooth)
-    # 
-    #     plt.plot(x_smooth, y_smooth, color=color, label=label)
+    plt.scatter(seen_species_count_list, seen_species_acc_list, color=colors[0], label='Seen Species', s=dot_size)
+    plt.scatter(unseen_species_count_list, unseen_species_acc_list, color=colors[1], label='Unseen Species', s=dot_size)
 
     # plt.title(f'Record Count of Species in Key set vs. Probability for Seen and Unseen Species, using {image_or_dna_as_key} Feature as Key', fontsize=fonr_size, pad=30)
     plt.xlabel('Number of records of the species in the key set', fontsize=fonr_size+6)
@@ -108,6 +88,7 @@ def plot_multiple_scatterplot(per_class_acc_dict, all_keys_species, query_featur
     # For the combination of query and key
     for query_type in query_feature_list:
         for key_type in key_feature_list:
+            print(f'Query: {query_type}, Key: {key_type}')
             species_2_query_count_and_acc = copy.deepcopy(species_2_key_record_count)
             for seen_or_unseen in seen_and_unseen:
                 for k in k_list:
@@ -121,7 +102,6 @@ def plot_multiple_scatterplot(per_class_acc_dict, all_keys_species, query_featur
             else:
                 image_or_dna_as_key = 'DNA'
             plot_scatterplot(species_2_query_count_and_acc, image_or_dna_as_key)
-    pass
 
 def load_per_class_acc(per_class_acc_path):
     with open(per_class_acc_path) as json_file:
@@ -130,16 +110,16 @@ def load_per_class_acc(per_class_acc_path):
 
 
 if __name__ == '__main__':
-    per_class_acc_path = 'output/per_class_acc/per_class_acc.json'
+    per_class_acc_path = 'extracted_embedding/bioscan_1m/image_dna_text_4gpu/per_class_acc_val.json'
     per_class_acc_dict = load_per_class_acc(per_class_acc_path)
 
-    query_feature_list = ['encoded_image_feature']
+    query_feature_list = ['encoded_image_feature', 'encoded_dna_feature']
     key_feature_list = ['encoded_image_feature', 'encoded_dna_feature']
-    seen_and_unseen = ['seen_val', 'unseen_val']
+    seen_and_unseen = ['seen', 'unseen']
     k_list = ['1']
     levels = ['species']
 
-    data_hdf5_path = 'data/BioScan_1M/split_data/BioScan_data_in_splits.hdf5'
+    data_hdf5_path = 'data/BIOSCAN_1M/split_data/BioScan_data_in_splits.hdf5'
     # Get all species list in a dict
     data_h5file = load_hdf5_data(data_hdf5_path)
 
