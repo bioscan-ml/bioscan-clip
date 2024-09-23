@@ -12,7 +12,7 @@ import torch.optim as optim
 import torch.optim.lr_scheduler as lr_scheduler
 from torch.cuda.amp import GradScaler
 import torch.distributed as dist
-
+from torch.nn.parallel import DistributedDataParallel as DDP
 import wandb
 from omegaconf import DictConfig, OmegaConf, open_dict
 
@@ -27,11 +27,6 @@ from bioscanclip.util.dataset import load_dataloader, load_insect_dataloader
 def print_when_rank_zero(message, rank=0):
     if rank is None or rank == 0:
         print(message)
-
-
-def broadcast_model(model, rank):
-    for param in model.parameters():
-        dist.broadcast(param.data, src=0)
 
 
 def save_prediction(pred_list, gt_list, json_path):
@@ -125,7 +120,6 @@ def convert_acc_dict_to_wandb_dict(acc_dict):
 
 
 def main_process(rank: int, world_size: int, args):
-
     if args.debug_flag or rank != 0:
         args.activate_wandb = False
         args.save_inference = False
@@ -140,10 +134,10 @@ def main_process(rank: int, world_size: int, args):
             args.model_config.for_open_clip = False
 
     ddp_setup(rank, world_size, str(args.model_config.port))
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+    # Load DATALOADER
     if rank == 0:
         print("Construct dataloader...")
-
     if hasattr(args.model_config, 'dataset') and args.model_config.dataset == "INSECT":
         insect_train_dataloader, insect_train_dataloader_for_key, insect_val_dataloader, insect_test_seen_dataloader, insect_test_unseen_dataloader = load_insect_dataloader(
             args, world_size=world_size, rank=rank)
@@ -165,17 +159,21 @@ def main_process(rank: int, world_size: int, args):
     if hasattr(args.model_config, 'fix_temperature') and args.model_config.fix_temperature:
         fix_temperature = args.model_config.fix_temperature
 
-    use_scaler = False
+    enable_amp = False
     if hasattr(args.model_config, 'amp') and args.model_config.amp:
-        use_scaler = True
+        enable_amp = True
 
-    scaler = GradScaler(enabled=use_scaler)
+    eval_skip_epoch = -1
+    if hasattr(args.model_config, 'eval_skip_epoch') and args.model_config.eval_skip_epoch:
+        eval_skip_epoch = args.model_config.eval_skip_epoch
 
+    scaler = GradScaler(enabled=enable_amp)
+
+    # Load MODEL
     if rank == 0:
         print("Initialize model...")
-    model = load_clip_model(args)
-    model = model.to(device)
-    broadcast_model(model, rank)
+    model = load_clip_model(args, device=rank)
+    model = DDP(model, device_ids=[rank], find_unused_parameters=True)
 
     total_steps = len(pre_train_dataloader) * args.model_config.epochs
 
@@ -242,25 +240,26 @@ def main_process(rank: int, world_size: int, args):
     for epoch in range(args.model_config.epochs):
         best_loss, count, patience_step, stop_flag = train_epoch(args.activate_wandb, args.model_config.epochs, epoch,
                                                                  pre_train_dataloader, model, optimizer,
-                                                                 criterion, device, rank=rank, scheduler=scheduler,
+                                                                 criterion, rank, rank=rank, scheduler=scheduler,
                                                                  for_open_clip=for_open_clip,
                                                                  fix_temperature=fix_temperature, scaler=scaler,
                                                                  best_loss=best_loss, patience_step=patience_step,
                                                                  count=count,
-                                                                 enable_early_stopping=enable_early_stopping)
+                                                                 enable_early_stopping=enable_early_stopping, enable_autocast=enable_amp)
 
-        if (epoch % args.model_config.evaluation_period == 0 or epoch == args.model_config.epochs - 1) and rank == 0:
+        if (epoch % args.model_config.evaluation_period == 0 or epoch == args.model_config.epochs - 1) and rank == 0 and epoch > eval_skip_epoch:
+            original_model = model.module if hasattr(model, 'module') else model
             if args.save_ckpt:
                 last_ckpt_path = os.path.join(folder_path, f'last.pth')
-                torch.save(model.state_dict(), last_ckpt_path)
+                torch.save(original_model.state_dict(), last_ckpt_path)
                 print(f'Last ckpt: {last_ckpt_path}')
 
             if hasattr(args.model_config, 'dataset') and args.model_config.dataset == "INSECT":
-                acc_dict, pred_dict = eval_phase(model, device, insect_train_dataloader_for_key, insect_val_dataloader,
+                acc_dict, pred_dict = eval_phase(original_model, rank, insect_train_dataloader_for_key, insect_val_dataloader,
                                                  insect_test_seen_dataloader, insect_test_unseen_dataloader, k_list,
                                                  args=args, for_open_clip=for_open_clip)
             else:
-                acc_dict, pred_dict = eval_phase(model, device, all_keys_dataloader, seen_val_dataloader,
+                acc_dict, pred_dict = eval_phase(original_model, rank, all_keys_dataloader, seen_val_dataloader,
                                                  unseen_val_dataloader, k_list, rank=rank, args=args,
                                                  for_open_clip=for_open_clip)
 
@@ -275,7 +274,8 @@ def main_process(rank: int, world_size: int, args):
                 best_overall_acc = overall_acc
                 if args.save_ckpt:
                     best_ckpt_path = os.path.join(folder_path, f'best.pth')
-                    torch.save(model.state_dict(), best_ckpt_path)
+
+                    torch.save(original_model.state_dict(), best_ckpt_path)
                     print(f'Best ckpt: {best_ckpt_path}')
             dict_for_wandb["overall_acc"] = overall_acc
             dict_for_wandb["best_epoch"] = best_epoch
@@ -293,10 +293,15 @@ def main(args: DictConfig) -> None:
     world_size = torch.cuda.device_count()
     print(f'world_size： {world_size}')
 
+    default_seed = args.default_seed
+    if hasattr(args.model_config, 'default_seed'):
+        default_seed = args.model_config.default_seed
+
     if hasattr(args.model_config, 'random_seed') and args.model_config.random_seed:
-        set_seed()
+        seed = set_seed(); string = "random seed"
     else:
-        set_seed(seed=int(args.default_seed))
+        seed = set_seed(seed=int(default_seed)); string = "default seed"
+    print("The module is run with %s: %d" % (string, seed))
 
     mp.spawn(main_process, args=(world_size, args), nprocs=world_size)
 

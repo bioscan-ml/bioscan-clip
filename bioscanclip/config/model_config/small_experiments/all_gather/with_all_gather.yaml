@@ -17,7 +17,7 @@ language:
 
 model_output_name: with_all_gather
 evaluation_period: 1
-ckpt_path: ${project_root_path}/ckpt/bioscan_clip/full_fine_tuning_one_cycle_lr_sche_with_all_gather/image_dna_text.pth
+ckpt_path: ${project_root_path}/ckpt/bioscan_clip/with_all_gather/image_dna_text.pth
 output_dim: 768
 port: 29531
 
@@ -35,4 +35,6 @@ loss_setup:
 fix_temperature: true
 amp: true
 
-random_seed: true
+random_seed: false
+
+eval_skip_epoch: 10

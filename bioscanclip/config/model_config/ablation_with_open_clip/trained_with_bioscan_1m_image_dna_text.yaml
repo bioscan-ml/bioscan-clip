@@ -1,4 +1,4 @@
-batch_size: 100
+batch_size: 200
 epochs: 15
 labels_for_driven_positive_and_negative_pairs:
 wandb_project_name: BIOSCAN-CLIP-ablation_with_open_clip
@@ -32,5 +32,8 @@ loss_setup:
   gather_with_grad: true
   use_horovod: false
   local_loss: false
+
+eval_skip_epoch: 10
+
 fix_temperature: true
 amp: true

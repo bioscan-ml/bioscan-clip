@@ -1,4 +1,4 @@
-batch_size: 100
+batch_size: 200
 epochs: 15
 labels_for_driven_positive_and_negative_pairs:
 wandb_project_name: BIOSCAN-CLIP-ablation_with_open_clip
@@ -20,7 +20,7 @@ model_output_name: trained_with_bioscan_1m_image_dna_text_with_pretrained_clip
 evaluation_period: 1
 ckpt_path: ${project_root_path}/ckpt/bioscan_clip/trained_with_bioscan_1m/image_dna_text.pth
 output_dim: 768
-port: 12345
+port: 12346
 
 for_open_clip: true
 lr_scheduler: one_cycle
@@ -34,4 +34,7 @@ loss_setup:
   use_horovod: false
   local_loss: false
 fix_temperature: true
+
+eval_skip_epoch: 10
+
 amp: true
