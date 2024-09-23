@@ -528,6 +528,13 @@ def main(args: DictConfig) -> None:
         k_list=args.inference_and_eval_setting.k_list,
     )
 
+    per_claSS_acc_path = os.path.join(folder_for_saving, f"per_class_acc_{args.inference_and_eval_setting.eval_on}.json")
+
+    with open(per_claSS_acc_path, "w") as json_file:
+        json.dump(per_class_acc, json_file, indent=4)
+
+    print(f"Per class accuracy is saved in {per_claSS_acc_path}")
+
     # seen_final_pred = pred_dict["encoded_image_feature"]["encoded_dna_feature"]["curr_seen_pred_list"]
     # unseen_final_pred = pred_dict["encoded_image_feature"]["encoded_dna_feature"]["curr_unseen_pred_list"]
     # all_unique_seen_species = get_all_unique_species_from_dataloader(seen_keys_dataloader)
