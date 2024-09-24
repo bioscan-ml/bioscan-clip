@@ -33,10 +33,16 @@ def get_avg_acc_by_key_count(count_list, acc_list):
         averaged_acc.append(avg_list(record_num_to_acc[record_number_of_species_in_key_set]))
     return number_of_record_list, averaged_acc
 
+def format_title(query_type, key_type):
+    # Mapping the feature types to readable names
+    feature_name_map = {
+        'encoded_image_feature': 'Image',
+        'encoded_dna_feature': 'DNA'
+    }
+    return f'{feature_name_map[query_type]} to {feature_name_map[key_type]}'
 
 
-
-def plot_scatterplot(species_2_query_count_and_acc, image_or_dna_as_key):
+def plot_scatterplot(species_2_query_count_and_acc, title, ax, show_y_label=True):
     seen_species_count_list = []
     seen_species_acc_list = []
     unseen_species_count_list = []
@@ -60,20 +66,25 @@ def plot_scatterplot(species_2_query_count_and_acc, image_or_dna_as_key):
     dot_size = 300
     fonr_size = 18
     colors = sns.color_palette("pastel", n_colors=2)
-    plt.figure(figsize=(16, 10))
-    plt.scatter(seen_species_count_list, seen_species_acc_list, color=colors[0], label='Seen Species', s=dot_size)
-    plt.scatter(unseen_species_count_list, unseen_species_acc_list, color=colors[1], label='Unseen Species', s=dot_size)
+    ax.scatter(seen_species_count_list, seen_species_acc_list, color=colors[0], label='Seen Species', s=dot_size)
+    ax.scatter(unseen_species_count_list, unseen_species_acc_list, color=colors[1], label='Unseen Species', s=dot_size)
 
-    # plt.title(f'Record Count of Species in Key set vs. Probability for Seen and Unseen Species, using {image_or_dna_as_key} Feature as Key', fontsize=fonr_size, pad=30)
-    plt.xlabel('Number of records of the species in the key set', fontsize=fonr_size+6)
-    plt.ylabel('Probability', fontsize=fonr_size+6)
-    plt.tick_params(axis='x', labelsize=fonr_size-2)
-    plt.tick_params(axis='y', labelsize=fonr_size-2)
-    plt.legend(fontsize=fonr_size+6)
-    # plt.xlim(left=2, right=300)
-    plt.ylim(0, 1)
-    plt.xscale('log')
-    plt.show()
+    ax.set_title(title, fontsize=fonr_size, pad=30)
+
+    if show_y_label:
+        ax.tick_params(axis='y', labelsize=fonr_size - 2)
+        ax.legend(fontsize=fonr_size)
+    else:
+        ax.set_ylabel('')
+        ax.set_yticks([])
+
+        # ax.set_xlabel('Number of records of the species in the key set', fontsize=fonr_size)
+
+
+    ax.tick_params(axis='x', labelsize=fonr_size - 2)
+
+    ax.set_ylim(0, 1)
+    ax.set_xscale('log')
 
 
 def plot_multiple_scatterplot(per_class_acc_dict, all_keys_species, query_feature_list, key_feature_list, seen_and_unseen, k_list, levels):
@@ -86,9 +97,15 @@ def plot_multiple_scatterplot(per_class_acc_dict, all_keys_species, query_featur
         species_2_key_record_count[species]['key_count'] = species_2_key_record_count[species]['key_count'] + 1
 
     # For the combination of query and key
+    fig, axs = plt.subplots(1, len(query_feature_list) * len(key_feature_list),
+                            figsize=(20, 5))  # Adjust the size as needed
+    axs = axs.flatten()
+    plt.tight_layout()
+    plt.subplots_adjust(wspace=0.01)
+    ax_index = 0
     for query_type in query_feature_list:
         for key_type in key_feature_list:
-            print(f'Query: {query_type}, Key: {key_type}')
+            title = format_title(query_type, key_type)
             species_2_query_count_and_acc = copy.deepcopy(species_2_key_record_count)
             for seen_or_unseen in seen_and_unseen:
                 for k in k_list:
@@ -101,7 +118,16 @@ def plot_multiple_scatterplot(per_class_acc_dict, all_keys_species, query_featur
                 image_or_dna_as_key = 'Image'
             else:
                 image_or_dna_as_key = 'DNA'
-            plot_scatterplot(species_2_query_count_and_acc, image_or_dna_as_key)
+            show_y_label = False
+            if ax_index == 0:
+                show_y_label = True
+            plot_scatterplot(species_2_query_count_and_acc, title, axs[ax_index], show_y_label)
+            ax_index += 1
+
+
+    # set x-axis label for the whole figure
+    # plt.xlabel('Number of records of the species in the key set', fontsize=18)
+    plt.show()
 
 def load_per_class_acc(per_class_acc_path):
     with open(per_class_acc_path) as json_file:

@@ -18,7 +18,7 @@ language:
 
 model_output_name: trained_with_bioscan_1m_image_dna_text_with_pretrained_clip
 evaluation_period: 1
-ckpt_path: ${project_root_path}/ckpt/bioscan_clip/trained_with_bioscan_1m/image_dna_text.pth
+ckpt_path: ${project_root_path}/ckpt/bioscan_clip/with_open_clip/best.pth
 output_dim: 768
 port: 12346
 

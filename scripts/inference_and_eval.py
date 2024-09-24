@@ -481,12 +481,16 @@ def main(args: DictConfig) -> None:
         else:
             raise ValueError(
                 "Invalid value for eval_on, specify by 'python inference_and_eval.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_ssl_ver_0_1_2.yaml' inference_and_eval_setting.eval_on=test/val'")
+        for_open_clip = False
 
-        keys_dict = get_features_and_label(all_keys_dataloader, model, device, for_key_set=True)
+        if hasattr(args.model_config, "for_open_clip"):
+            for_open_clip=args.model_config.for_open_clip
 
-        seen_dict = get_features_and_label(seen_dataloader, model, device)
+        keys_dict = get_features_and_label(all_keys_dataloader, model, device, for_key_set=True, for_open_clip=for_open_clip)
 
-        unseen_dict = get_features_and_label(unseen_dataloader, model, device)
+        seen_dict = get_features_and_label(seen_dataloader, model, device, for_open_clip=for_open_clip)
+
+        unseen_dict = get_features_and_label(unseen_dataloader, model, device, for_open_clip=for_open_clip)
 
         if args.save_inference and not (os.path.exists(extracted_features_path) and os.path.exists(labels_path)):
             new_file = h5py.File(extracted_features_path, "w")
