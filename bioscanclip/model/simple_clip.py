@@ -148,11 +148,10 @@ def load_clip_model(args, device=None):
     else:
         # For image part
         if args.model_config.image.input_type == "image":
-
-            if args.model_config.image.model == "vit_base_patch16_224":
-                pre_trained_timm_vit = timm.create_model('vit_base_patch16_224', pretrained=True)
-            else:
-                pre_trained_timm_vit = timm.create_model('vit_base_patch16_224', pretrained=True)
+            image_model_name = 'vit_base_patch16_224'
+            if hasattr(args.model_config.image, 'pre_train_model'):
+                image_model_name = args.model_config.image.pre_train_model
+            pre_trained_timm_vit = timm.create_model(image_model_name, pretrained=True)
 
             # pre_trained_timm_vit = timm.create_model('vit_base_patch16_224', pretrained=True)
             if disable_lora:
@@ -169,7 +168,10 @@ def load_clip_model(args, device=None):
         # For language
         if hasattr(args.model_config, 'language'):
             if args.model_config.language.input_type == "sequence":
-                _, pre_trained_bert = load_pre_trained_bert()
+                language_model_name = 'prajjwal1/bert-small'
+                if hasattr(args.model_config.language, 'pre_train_model'):
+                    language_model_name = args.model_config.language.pre_train_model
+                _, pre_trained_bert = load_pre_trained_bert(language_model_name)
                 if disable_lora:
                     language_encoder = LoRA_bert(model=pre_trained_bert, r=4, num_classes=args.model_config.output_dim,
                                                  lora_layer=[])

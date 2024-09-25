@@ -9,10 +9,10 @@ import clip
 from loratorch.layers import MultiheadAttention as LoRA_MultiheadAttention
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-def load_pre_trained_bert():
+def load_pre_trained_bert(language_model_name):
     logging.set_verbosity_error()
-    tokenizer = AutoTokenizer.from_pretrained("prajjwal1/bert-small")
-    model = BertModel.from_pretrained("prajjwal1/bert-small")
+    tokenizer = AutoTokenizer.from_pretrained(language_model_name)
+    model = BertModel.from_pretrained(language_model_name)
     logging.set_verbosity_info()
     for param in model.parameters():
         param.requires_grad = False
