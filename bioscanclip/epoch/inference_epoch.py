@@ -27,10 +27,12 @@ def get_feature_and_label(dataloader, model, device, for_open_clip=False, multi_
             image_output, dna_output, language_output, logit_scale, logit_bias = model(image_input_batch.to(device),
                                                                                        dna_input_batch.to(device),
                                                                                        language_input)
-
-            encoded_image_feature_list = encoded_image_feature_list + F.normalize(image_output, dim=-1).cpu().tolist()
-            encoded_dna_feature_list = encoded_dna_feature_list + F.normalize(dna_output, dim=-1).cpu().tolist()
-            encoded_text_feature_list = encoded_text_feature_list + F.normalize(language_output, dim=-1).cpu().tolist()
+            if image_output is not None:
+                encoded_image_feature_list = encoded_image_feature_list + F.normalize(image_output, dim=-1).cpu().tolist()
+            if dna_output is not None:
+                encoded_dna_feature_list = encoded_dna_feature_list + F.normalize(dna_output, dim=-1).cpu().tolist()
+            if language_output is not None:
+                encoded_text_feature_list = encoded_text_feature_list + F.normalize(language_output, dim=-1).cpu().tolist()
 
 
 
