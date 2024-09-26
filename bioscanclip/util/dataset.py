@@ -127,7 +127,7 @@ class Dataset_for_CL(Dataset):
             # self.tokenizer = open_clip.get_tokenizer('ViT-B-32')
             self.tokenizer = None
         else:
-            language_model_name="prajjwal1/bert-small",
+            language_model_name="prajjwal1/bert-small"
             if hasattr(args.model_config.language, "pre_train_model"):
                 language_model_name = args.model_config.language.pre_train_model
             self.tokenizer, _ = load_pre_trained_bert(language_model_name)
