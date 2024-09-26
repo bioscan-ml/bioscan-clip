@@ -7,8 +7,8 @@ import torch
 from omegaconf import DictConfig
 from tqdm import tqdm
 from bioscanclip.model.simple_clip import load_clip_model
-from bioscanclip.util.dataset import load_bioscan_dataloader_with_train_seen_and_separate_keys, load_bioscan_dataloader_for_test
-from inference_and_eval import make_prediction, top_k_micro_accuracy, top_k_macro_accuracy
+from bioscanclip.util.dataset import load_bioscan_dataloader_with_train_seen_and_separate_keys, load_bioscan_dataloader_all_small_splits
+from bioscanclip.util.util import top_k_micro_accuracy, top_k_macro_accuracy, make_prediction
 from bioscanclip.epoch.inference_epoch import get_feature_and_label
 import numpy as np
 import torch.nn.functional as F
@@ -538,14 +538,19 @@ def main(args: DictConfig) -> None:
 
     # For test splits
     best_threshold = seen_val_output_dict['best_threshold']
-    _, seen_test_dataloader, unseen_test_dataloader, all_keys_dataloader = load_bioscan_dataloader_for_test(
-        args)
+    if args.inference_and_eval_setting.eval_on == "val":
+
+        _, seen_dataloader, unseen_dataloader, _, _, seen_keys_dataloader, val_unseen_keys_dataloader, test_unseen_keys_dataloader, all_keys_dataloader = load_bioscan_dataloader_all_small_splits(
+            args)
+    elif args.inference_and_eval_setting.eval_on == "test":
+        _, _, _, seen_dataloader, unseen_dataloader, seen_keys_dataloader, val_unseen_keys_dataloader, test_unseen_keys_dataloader, all_keys_dataloader = load_bioscan_dataloader_all_small_splits(
+            args)
 
     seen_test_output_dict, unseen_test_output_dict = method_2_inference_and_eval_for_seen_and_unseen(args,
                                                                                                    image_classifier,
                                                                                                    original_model,
-                                                                                                   seen_test_dataloader,
-                                                                                                   unseen_test_dataloader,
+                                                                                                   seen_dataloader,
+                                                                                                   unseen_dataloader,
                                                                                                    val_unseen_keys_dataloader,
                                                                                                    test_unseen_keys_dataloader,
                                                                                                    species_level_label_to_index_dict,
@@ -561,7 +566,7 @@ def main(args: DictConfig) -> None:
     check_for_acc_about_correct_predict_seen_or_unseen(seen_test_final_pred, all_unique_seen_species)
     print("For unseen")
     check_for_acc_about_correct_predict_seen_or_unseen(unseen_test_final_pred,
-                                                       all_unique_test_seen_species + all_unique_test_seen_species)
+                                                       all_unique_val_seen_species + all_unique_test_seen_species)
 
 
 

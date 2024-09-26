@@ -130,17 +130,12 @@ class Dataset_for_CL(Dataset):
             language_model_name="prajjwal1/bert-small",
             if hasattr(args.model_config.language, "pre_train_model"):
                 language_model_name = args.model_config.language.pre_train_model
-
             self.tokenizer, _ = load_pre_trained_bert(language_model_name)
-
-
 
         list_of_label_dict = get_array_of_label_dicts(self.hdf5_inputs_path, split)
         self.list_of_label_string = []
         for i in list_of_label_dict:
             self.list_of_label_string.append(i['order'] + ' ' + i['family'] + ' ' + i['genus'] + ' ' + i['species'])
-
-
 
         if self.for_training:
             if hasattr(args.model_config,
@@ -304,7 +299,6 @@ def construct_dataloader(
         rank=None,
         shuffle=False,
 ):
-
     for_open_clip = False
     if hasattr(args.model_config, "for_open_clip"):
         for_open_clip = args.model_config.for_open_clip

@@ -5,8 +5,8 @@ import torch
 from omegaconf import DictConfig
 from tqdm import tqdm
 from bioscanclip.model.simple_clip import load_clip_model
-from bioscanclip.util.dataset import load_bioscan_dataloader_with_train_seen_and_separate_keys, load_bioscan_dataloader_for_test
-from inference_and_eval import make_prediction, top_k_micro_accuracy, top_k_macro_accuracy
+from bioscanclip.util.dataset import load_bioscan_dataloader_with_train_seen_and_separate_keys, load_bioscan_dataloader_all_small_splits
+from bioscanclip.util.util import top_k_micro_accuracy, top_k_macro_accuracy, make_prediction
 from bioscanclip.epoch.inference_epoch import get_feature_and_label
 import numpy as np
 
@@ -20,22 +20,26 @@ def inference_with_original_image_encoder_and_dna_encoder(original_model, seen_q
                                                           unseen_query_dataloader,
                                                           key_dataloaders, device, key_type='dna'):
     # Get query feature
-    _, seen_query_image_feature, gt_label_for_seen_query = get_feature_and_label(seen_query_dataloader,
+    _, seen_query_image_feature, _, _, gt_label_for_seen_query = get_feature_and_label(seen_query_dataloader,
                                                                                  original_model, device,
-                                                                                 type_of_feature="image",
                                                                                  multi_gpu=False)
-    _, unseen_query_image_feature, gt_label_for_unseen_query = get_feature_and_label(
-        unseen_query_dataloader, original_model, device,
-        type_of_feature="image", multi_gpu=False)
+    _, unseen_query_image_feature, _, _, gt_label_for_unseen_query = get_feature_and_label(
+        unseen_query_dataloader, original_model, device, multi_gpu=False)
 
     # Get key feature
     all_key_feature = []
     all_key_labels = []
     for curr_key_data_loader in key_dataloaders:
-        _, curr_key_feature, curr_key_labels = get_feature_and_label(curr_key_data_loader,
+
+        file_name_list, encoded_image_feature, encoded_dna_feature, encoded_language_feature, curr_key_labels = get_feature_and_label(curr_key_data_loader,
                                                                      original_model, device,
-                                                                     type_of_feature=key_type,
                                                                      multi_gpu=False)
+        if key_type == 'image':
+            curr_key_feature = encoded_image_feature
+        elif key_type == 'dna':
+            curr_key_feature = encoded_dna_feature
+        else:
+            raise ValueError("key_type must be either 'image' or 'dna'.")
 
         all_key_feature.append(curr_key_feature)
         all_key_labels = all_key_labels + curr_key_labels
@@ -334,29 +338,34 @@ def main(args: DictConfig) -> None:
 
     # For test splits
     best_threshold = seen_val_output_dict['best_threshold']
-    _, seen_test_dataloader, unseen_test_dataloader, all_keys_dataloader = load_bioscan_dataloader_for_test(
-        args)
+    if args.inference_and_eval_setting.eval_on == "val":
 
-    seen_test_output_dict, unseen_test_output_dict = method_1_inference_and_eval_for_seen_and_unseen(args,
+        _, seen_dataloader, unseen_dataloader, _, _, seen_keys_dataloader, val_unseen_keys_dataloader, test_unseen_keys_dataloader, all_keys_dataloader = load_bioscan_dataloader_all_small_splits(
+            args)
+    elif args.inference_and_eval_setting.eval_on == "test":
+        _, _, _, seen_dataloader, unseen_dataloader, seen_keys_dataloader, val_unseen_keys_dataloader, test_unseen_keys_dataloader, all_keys_dataloader = load_bioscan_dataloader_all_small_splits(
+            args)
+
+    seen_output_dict, unseen_output_dict = method_1_inference_and_eval_for_seen_and_unseen(args,
                                                                                                      original_model,
-                                                                                                     seen_test_dataloader,
-                                                                                                     unseen_test_dataloader,
+                                                                                                     seen_dataloader,
+                                                                                                     unseen_dataloader,
                                                                                                      seen_keys_dataloader,
                                                                                                      val_unseen_keys_dataloader,
                                                                                                      test_unseen_keys_dataloader,
                                                                                                      device,
                                                                                                      searched_threshold=best_threshold)
 
-    print_acc_for_google_doc(seen_test_output_dict, unseen_test_output_dict)
+    print_acc_for_google_doc(seen_output_dict, unseen_output_dict)
 
-    seen_test_final_pred = seen_test_output_dict['final_pred_labels']
-    unseen_test_final_pred = unseen_test_output_dict['final_pred_labels']
+    seen_final_pred = seen_output_dict['final_pred_labels']
+    unseen_final_pred = unseen_output_dict['final_pred_labels']
 
     print("For seen")
-    check_for_acc_about_correct_predict_seen_or_unseen(seen_test_final_pred, all_unique_seen_species)
+    check_for_acc_about_correct_predict_seen_or_unseen(seen_final_pred, all_unique_seen_species)
     print("For unseen")
-    check_for_acc_about_correct_predict_seen_or_unseen(unseen_test_final_pred,
-                                                       all_unique_test_seen_species + all_unique_test_seen_species)
+    check_for_acc_about_correct_predict_seen_or_unseen(unseen_final_pred,
+                                                       all_unique_val_seen_species + all_unique_test_seen_species)
 
 
 if __name__ == '__main__':
