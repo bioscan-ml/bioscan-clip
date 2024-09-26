@@ -7,7 +7,8 @@ import torch
 from omegaconf import DictConfig
 from tqdm import tqdm
 from bioscanclip.model.simple_clip import load_clip_model
-from bioscanclip.util.dataset import load_bioscan_dataloader_with_train_seen_and_separate_keys, load_bioscan_dataloader_all_small_splits
+from bioscanclip.util.dataset import load_bioscan_dataloader_with_train_seen_and_separate_keys, \
+    load_bioscan_dataloader_all_small_splits
 from bioscanclip.util.util import top_k_micro_accuracy, top_k_macro_accuracy, make_prediction
 from bioscanclip.epoch.inference_epoch import get_feature_and_label
 import numpy as np
@@ -19,7 +20,6 @@ K_LIST = None
 """
 Add classification head at the end of the image encoder for classify the seen split
 """
-
 
 
 class ViTWIthExtraLayer(nn.Module):
@@ -84,8 +84,6 @@ def inference_with_fine_tuned_image_encoder(image_encoder, dataloader, species_l
     return all_confidence_score, pred_labels, gt_labels
 
 
-
-
 def decide_prediction_with_threshold(args, pred_labels_from_a,
                                      pred_confidence_from_a,
                                      pred_labels_from_b, threshold):
@@ -117,7 +115,6 @@ def decide_prediction_with_threshold(args, pred_labels_from_a,
 
 def make_final_pred(args, pred_labels_from_a, pred_confidence_from_a,
                     pred_labels_from_b, gt_labels, threshold):
-
     if len(pred_labels_from_a) != len(pred_confidence_from_a) != len(
             pred_labels_from_b):
         print(f"pred_labels_from_a: {len(pred_labels_from_a)}")
@@ -136,20 +133,20 @@ def inference_with_original_image_encoder_and_dna_encoder(original_model, seen_d
                                                           val_unseen_keys_dataloader, test_unseen_keys_dataloader,
                                                           device):
     # Get query feature
-    _, seen_query_image_feature, _ = get_feature_and_label(seen_dataloader, original_model, device,
-                                                               type_of_feature="image", multi_gpu=False)
-    _, unseen_query_image_feature, _ = get_feature_and_label(unseen_dataloader, original_model, device,
-                                                                 type_of_feature="image", multi_gpu=False)
+    _, seen_query_image_feature, _, _, gt_label_for_seen_query = get_feature_and_label(seen_dataloader,
+                                                                                       original_model, device,
+                                                                                       multi_gpu=False)
 
-    _, unseen_val_keys_dna_feature, unseen_val_keys_labels = get_feature_and_label(val_unseen_keys_dataloader,
-                                                                                   original_model, device,
-                                                                                   type_of_feature="dna",
-                                                                                   multi_gpu=False)
+    _, unseen_query_image_feature, _, _, gt_label_for_unseen_query = get_feature_and_label(
+        unseen_dataloader, original_model, device, multi_gpu=False)
 
-    _, unseen_test_keys_dna_feature, unseen_test_keys_labels = get_feature_and_label(test_unseen_keys_dataloader,
-                                                                                     original_model, device,
-                                                                                     type_of_feature="dna",
-                                                                                     multi_gpu=False)
+    _, _, unseen_val_keys_dna_feature, _, unseen_val_keys_labels = get_feature_and_label(val_unseen_keys_dataloader,
+                                                                                         original_model, device,
+                                                                                         multi_gpu=False)
+
+    _, _, unseen_test_keys_dna_feature, _, unseen_test_keys_labels = get_feature_and_label(test_unseen_keys_dataloader,
+                                                                                           original_model, device,
+                                                                                           multi_gpu=False)
 
     # Maybe in the future we can just use val unseen
     dna_feature_of_all_unseen_species = np.concatenate((unseen_val_keys_dna_feature, unseen_test_keys_dna_feature),
@@ -157,13 +154,14 @@ def inference_with_original_image_encoder_and_dna_encoder(original_model, seen_d
     key_labels_of_all_unseen_species = unseen_val_keys_labels + unseen_test_keys_labels
 
     seen_pred_labels = make_prediction(seen_query_image_feature, dna_feature_of_all_unseen_species,
-                                           key_labels_of_all_unseen_species,
-                                           max_k=5)
+                                       key_labels_of_all_unseen_species,
+                                       max_k=5)
     unseen_pred_labels = make_prediction(unseen_query_image_feature, dna_feature_of_all_unseen_species,
-                                             key_labels_of_all_unseen_species,
-                                             max_k=5)
+                                         key_labels_of_all_unseen_species,
+                                         max_k=5)
 
     return seen_pred_labels, unseen_pred_labels
+
 
 def harmonic_mean(l):
     s = 0
@@ -175,8 +173,8 @@ def harmonic_mean(l):
 
     return len(l) / s
 
-def search_threshold_with_harmonic_mean(args, all_split_data, num_intervals=1000):
 
+def search_threshold_with_harmonic_mean(args, all_split_data, num_intervals=1000):
     thresholds = np.linspace(0, 1, num_intervals + 1)
     best_threshold = None
     max_score = float('-inf')
@@ -203,7 +201,6 @@ def search_threshold_with_harmonic_mean(args, all_split_data, num_intervals=1000
                 f"Curr best harmonic_mean_over_acc: {harmonic_mean_over_acc} || Curr best threshold: {threshold}")
 
     return best_threshold
-
 
 
 def get_final_pred_and_acc(args, pred_labels_from_a,
@@ -245,13 +242,13 @@ def method_2_inference_and_eval_for_seen_and_unseen(args, image_classifier, orig
     print("For val seen, search best threshold.")
 
     seen_query_data = {'pred_labels_from_a': seen_pred_labels_from_image_classifier,
-                           'pred_confidence_from_a': seen_all_confidence_score_from_image_classifier,
-                           'pred_labels_from_b': seen_pred_labels_from_search_with_unseen_keys
+                       'pred_confidence_from_a': seen_all_confidence_score_from_image_classifier,
+                       'pred_labels_from_b': seen_pred_labels_from_search_with_unseen_keys
         , "gt_labels": seen_gt_labels}
 
     unseen_query_data = {'pred_labels_from_a': unseen_pred_labels_from_image_classifier,
-                           'pred_confidence_from_a': unseen_all_confidence_score_from_image_classifier,
-                           'pred_labels_from_b': unseen_pred_labels_from_search_with_unseen_keys
+                         'pred_confidence_from_a': unseen_all_confidence_score_from_image_classifier,
+                         'pred_labels_from_b': unseen_pred_labels_from_search_with_unseen_keys
         , "gt_labels": unseen_gt_labels}
 
     if searched_threshold is None:
@@ -260,20 +257,19 @@ def method_2_inference_and_eval_for_seen_and_unseen(args, image_classifier, orig
     else:
         best_threshold = searched_threshold
 
-
     seen_output_dict = get_final_pred_and_acc(args, seen_pred_labels_from_image_classifier,
-                                                                       seen_all_confidence_score_from_image_classifier,
-                                                                       seen_pred_labels_from_search_with_unseen_keys,
-                                                                       seen_gt_labels,
-                                                                       best_threshold=best_threshold)
+                                              seen_all_confidence_score_from_image_classifier,
+                                              seen_pred_labels_from_search_with_unseen_keys,
+                                              seen_gt_labels,
+                                              best_threshold=best_threshold)
 
     print("For val unseen, search best threshold.")
     unseen_output_dict = get_final_pred_and_acc(args,
-                                                                         unseen_pred_labels_from_image_classifier,
-                                                                         unseen_all_confidence_score_from_image_classifier,
-                                                                         unseen_pred_labels_from_search_with_unseen_keys,
-                                                                         unseen_gt_labels,
-                                                                         best_threshold=best_threshold)
+                                                unseen_pred_labels_from_image_classifier,
+                                                unseen_all_confidence_score_from_image_classifier,
+                                                unseen_pred_labels_from_search_with_unseen_keys,
+                                                unseen_gt_labels,
+                                                best_threshold=best_threshold)
 
     return seen_output_dict, unseen_output_dict
 
@@ -281,12 +277,12 @@ def method_2_inference_and_eval_for_seen_and_unseen(args, image_classifier, orig
 def get_all_unique_species_from_dataloader(dataloader):
     all_species = []
 
-
     for batch in dataloader:
         file_name_batch, image_input_batch, dna_batch, input_ids, token_type_ids, attention_mask, label_batch = batch
         all_species = all_species + label_batch['species']
     all_species = list(set(all_species))
     return all_species
+
 
 def load_all_seen_species_name_and_create_label_map(train_seen_dataloader):
     all_seen_species = []
@@ -326,7 +322,8 @@ def label_batch_to_species_idx(label_batch, species_level_label_to_index_dict):
     return target
 
 
-def fine_tuning_epoch(args, model, train_dataloader, val_seen_dataloader, val_unseen_dataloader, optimizer, criterion, scheduler,
+def fine_tuning_epoch(args, model, train_dataloader, val_seen_dataloader, val_unseen_dataloader, optimizer, criterion,
+                      scheduler,
                       device, species_level_label_to_index_dict):
     pbar = tqdm(enumerate(train_dataloader), total=len(train_dataloader))
     epoch_loss = []
@@ -412,7 +409,6 @@ def print_acc_for_google_doc(seen_output_dict, unseen_output_dict, K_LIST=None):
 
 
 def check_for_acc_about_correct_predict_seen_or_unseen(final_pred_list, species_list):
-
     for k in [1, 3, 5]:
         correct = 0
         total = 0
@@ -424,8 +420,7 @@ def check_for_acc_about_correct_predict_seen_or_unseen(final_pred_list, species_
                     correct = correct + 1
                     break
             total = total + 1
-        print(f"for k = {k}: {(correct*1.0)/total}")
-
+        print(f"for k = {k}: {(correct * 1.0) / total}")
 
 
 @hydra.main(config_path="../bioscanclip/config", config_name="global_config", version_base="1.1")
@@ -469,15 +464,15 @@ def main(args: DictConfig) -> None:
         for param in image_classifier.parameters():
             param.requires_grad = True
 
-
     last_ckpt_path = os.path.join(args.model_config.fine_tuning_set.fine_tune_model_output_dir, 'last.pth')
     os.makedirs(args.model_config.fine_tuning_set.fine_tune_model_output_dir, exist_ok=True)
+    print(last_ckpt_path)
 
     if os.path.exists(last_ckpt_path):
         print(f"Found pre-trained model in {last_ckpt_path}")
         saved_image_classifier_param = torch.load(last_ckpt_path)  # Load the saved state dictionary
         image_classifier.load_state_dict(saved_image_classifier_param)
-        args.save_ckpt=False
+        args.save_ckpt = False
         for param in image_classifier.parameters():
             param.requires_grad = False
     else:
@@ -525,23 +520,20 @@ def main(args: DictConfig) -> None:
 
     print_acc_for_google_doc(seen_val_output_dict, unseen_val_output_dict, K_LIST=K_LIST)
 
-
     seen_val_final_pred = seen_val_output_dict['final_pred_labels']
     unseen_val_final_pred = unseen_val_output_dict['final_pred_labels']
-
-
 
     all_unique_seen_species = get_all_unique_species_from_dataloader(seen_keys_dataloader)
     all_unique_val_seen_species = get_all_unique_species_from_dataloader(val_unseen_keys_dataloader)
     all_unique_test_seen_species = get_all_unique_species_from_dataloader(test_unseen_keys_dataloader)
-
 
     print_acc_for_google_doc(seen_val_output_dict, unseen_val_output_dict)
 
     print("For seen")
     check_for_acc_about_correct_predict_seen_or_unseen(seen_val_final_pred, all_unique_seen_species)
     print("For unseen")
-    check_for_acc_about_correct_predict_seen_or_unseen(unseen_val_final_pred, all_unique_val_seen_species + all_unique_test_seen_species)
+    check_for_acc_about_correct_predict_seen_or_unseen(unseen_val_final_pred,
+                                                       all_unique_val_seen_species + all_unique_test_seen_species)
 
     # For test splits
     best_threshold = seen_val_output_dict['best_threshold']
@@ -554,15 +546,16 @@ def main(args: DictConfig) -> None:
             args)
 
     seen_test_output_dict, unseen_test_output_dict = method_2_inference_and_eval_for_seen_and_unseen(args,
-                                                                                                   image_classifier,
-                                                                                                   original_model,
-                                                                                                   seen_dataloader,
-                                                                                                   unseen_dataloader,
-                                                                                                   val_unseen_keys_dataloader,
-                                                                                                   test_unseen_keys_dataloader,
-                                                                                                   species_level_label_to_index_dict,
-                                                                                                   idx_to_all_labels,
-                                                                                                   device, searched_threshold=best_threshold)
+                                                                                                     image_classifier,
+                                                                                                     original_model,
+                                                                                                     seen_dataloader,
+                                                                                                     unseen_dataloader,
+                                                                                                     val_unseen_keys_dataloader,
+                                                                                                     test_unseen_keys_dataloader,
+                                                                                                     species_level_label_to_index_dict,
+                                                                                                     idx_to_all_labels,
+                                                                                                     device,
+                                                                                                     searched_threshold=best_threshold)
 
     print_acc_for_google_doc(seen_test_output_dict, unseen_test_output_dict)
 
@@ -574,7 +567,6 @@ def main(args: DictConfig) -> None:
     print("For unseen")
     check_for_acc_about_correct_predict_seen_or_unseen(unseen_test_final_pred,
                                                        all_unique_val_seen_species + all_unique_test_seen_species)
-
 
 
 if __name__ == '__main__':
