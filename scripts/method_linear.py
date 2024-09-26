@@ -13,6 +13,7 @@ from bioscanclip.epoch.inference_epoch import get_feature_and_label
 import numpy as np
 import torch.nn.functional as F
 import wandb
+from torch.optim.lr_scheduler import OneCycleLR
 
 K_LIST = None
 """
@@ -325,7 +326,7 @@ def label_batch_to_species_idx(label_batch, species_level_label_to_index_dict):
     return target
 
 
-def fine_tuning_epoch(args, model, train_dataloader, val_seen_dataloader, val_unseen_dataloader, optimizer, criterion,
+def fine_tuning_epoch(args, model, train_dataloader, val_seen_dataloader, val_unseen_dataloader, optimizer, criterion, scheduler,
                       device, species_level_label_to_index_dict):
     pbar = tqdm(enumerate(train_dataloader), total=len(train_dataloader))
     epoch_loss = []
@@ -340,6 +341,7 @@ def fine_tuning_epoch(args, model, train_dataloader, val_seen_dataloader, val_un
         loss = criterion(output, target)
         loss.backward()
         optimizer.step()
+        scheduler.step()
         pbar.set_description(f"loss: {loss.item()}")
         epoch_loss.append(loss.item())
 
@@ -438,7 +440,7 @@ def main(args: DictConfig) -> None:
     K_LIST = args.inference_and_eval_setting.k_list
 
     # Custom batch size
-    args.model_config.batch_size = args.general_fine_tune_setting.batch_size
+    args.model_config.batch_size = args.model_config.fine_tuning_set.batch_size
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -466,8 +468,6 @@ def main(args: DictConfig) -> None:
         for param in image_classifier.parameters():
             param.requires_grad = True
 
-    criterion = nn.CrossEntropyLoss()
-    optimizer = optim.AdamW(image_classifier.parameters(), lr=0.001)
 
     last_ckpt_path = os.path.join(args.model_config.fine_tuning_set.fine_tune_model_output_dir, 'last.pth')
     os.makedirs(args.model_config.fine_tuning_set.fine_tune_model_output_dir, exist_ok=True)
@@ -484,11 +484,17 @@ def main(args: DictConfig) -> None:
             wandb.init(project=args.model_config.wandb_project_name + "fine_tune_image_classifier",
                        name=args.model_config.model_output_name)
         pbar = tqdm(list(range(args.general_fine_tune_setting.epoch)))
+        criterion = nn.CrossEntropyLoss()
+        optimizer = optim.AdamW(image_classifier.parameters(), lr=0.0001)
+
+        total_steps = len(train_seen_dataloader) * args.epochs
+
+        scheduler = OneCycleLR(optimizer, max_lr=0.01, total_steps=total_steps)
         for epoch in pbar:
             pbar.set_description(f"Epoch: {epoch}")
             epoch_loss, seen_evaluation_result = fine_tuning_epoch(args, image_classifier, train_seen_dataloader,
                                                                    seen_val_dataloader, unseen_val_dataloader,
-                                                                   optimizer, criterion, device,
+                                                                   optimizer, criterion, scheduler, device,
                                                                    species_level_label_to_index_dict)
             dict_for_wandb = {'epoch_loss': epoch_loss}
             for key in seen_evaluation_result.keys():

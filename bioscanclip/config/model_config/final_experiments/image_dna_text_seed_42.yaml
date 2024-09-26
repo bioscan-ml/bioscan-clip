@@ -42,6 +42,6 @@ eval_skip_epoch: 23
 default_seed: 42
 
 fine_tuning_set:
-  batch_size: 72
+  batch_size: 400
   epochs: 15
   fine_tune_model_output_dir: ${model_output_dir}/${model_config.model_output_name}/supervise_fine_tune_ckpt
