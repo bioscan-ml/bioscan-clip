@@ -487,7 +487,7 @@ def main(args: DictConfig) -> None:
         criterion = nn.CrossEntropyLoss()
         optimizer = optim.AdamW(image_classifier.parameters(), lr=0.0001)
 
-        total_steps = len(train_seen_dataloader) * args.epochs
+        total_steps = len(train_seen_dataloader) * args.general_fine_tune_setting.epoch
 
         scheduler = OneCycleLR(optimizer, max_lr=0.01, total_steps=total_steps)
         for epoch in pbar:
