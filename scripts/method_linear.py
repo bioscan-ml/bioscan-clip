@@ -340,11 +340,12 @@ def fine_tuning_epoch(args, model, train_dataloader, val_seen_dataloader, val_un
         output = model(image_input_batch)
         loss = criterion(output, target)
         loss.backward()
+        current_lr = optimizer.param_groups[0]['lr']
+        wandb.log({"loss": loss.item(), "learning_rate": current_lr})
         optimizer.step()
         scheduler.step()
         pbar.set_description(f"loss: {loss.item()}")
         epoch_loss.append(loss.item())
-
     epoch_loss = sum(epoch_loss) * 1.0 / len(epoch_loss)
 
     print("Eval on seen val.")
@@ -489,7 +490,7 @@ def main(args: DictConfig) -> None:
 
         total_steps = len(train_seen_dataloader) * args.general_fine_tune_setting.epoch
 
-        scheduler = OneCycleLR(optimizer, max_lr=0.01, total_steps=total_steps)
+        scheduler = OneCycleLR(optimizer, max_lr=0.001, total_steps=total_steps)
         for epoch in pbar:
             pbar.set_description(f"Epoch: {epoch}")
             epoch_loss, seen_evaluation_result = fine_tuning_epoch(args, image_classifier, train_seen_dataloader,
