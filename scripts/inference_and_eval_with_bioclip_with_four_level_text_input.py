@@ -10,7 +10,7 @@ from omegaconf import DictConfig
 from tqdm import tqdm
 
 from inference_and_eval_with_bioclip_with_image_to_image import compute_accuracy
-from util.dataset import load_bioscan_dataloader, load_bioscan_dataloader_with_train_seen_and_separate_keys
+from bioscanclip.util.dataset import load_dataloader, load_bioscan_dataloader_with_train_seen_and_separate_keys
 import open_clip
 import torch.nn.functional as F
 
@@ -177,7 +177,7 @@ def encode_image_feature_and_calculate_accuracy(model, txt_features, query_datal
     compute_accuracy(all_pred, all_gt)
 
 
-@hydra.main(config_path="config", config_name="global_config", version_base="1.1")
+@hydra.main(config_path="../bioscanclip/config", config_name="global_config", version_base="1.1")
 def main(args: DictConfig) -> None:
     args.save_inference = True
     if os.path.exists(os.path.join(args.model_config.ckpt_path, "best.pth")):
@@ -201,7 +201,7 @@ def main(args: DictConfig) -> None:
     args.model_config.batch_size = 24
     _, _, _, seen_keys_dataloader, val_unseen_keys_dataloader, test_unseen_keys_dataloader = load_bioscan_dataloader_with_train_seen_and_separate_keys(
         args, for_pretrain=False)
-    _, seen_val_dataloader, unseen_val_dataloader, all_keys_dataloader = load_bioscan_dataloader(args)
+    _, seen_val_dataloader, unseen_val_dataloader, all_keys_dataloader = load_dataloader(args)
 
     all_species, species_to_other = get_all_unique_species_from_dataloader(all_keys_dataloader)
     # classnames = [name.replace("_", " ") for name in all_species]
