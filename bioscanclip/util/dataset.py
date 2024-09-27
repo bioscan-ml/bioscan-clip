@@ -793,54 +793,53 @@ class INSECTDataset(Dataset):
         self.images = image_hdf5_path
         self.for_open_clip = for_open_clip
 
-        if self.image_input_type == "image":
-            if self.for_training:
-                if self.for_open_clip:
-                    self.transform = transforms.Compose(
-                        [
-                            transforms.ToTensor(),
 
-                            transforms.Resize(size=256, antialias=True),
-                            transforms.RandomResizedCrop(224, antialias=True),
-                            transforms.Normalize((0.48145466, 0.4578275, 0.40821073),
-                                                 (0.26862954, 0.26130258, 0.27577711)),
-                            transforms.RandomHorizontalFlip(),
-                            transforms.RandomVerticalFlip(),
-                            transforms.RandomRotation(degrees=(-45, 45)),
-                            # transforms.ColorJitter(brightness=0.5, contrast=0.5, saturation=0.5, hue=0.5),
-                        ]
-                    )
-                else:
-                    self.transform = transforms.Compose(
-                        [
-                            transforms.ToTensor(),
-                            transforms.Resize(size=256, antialias=True),
-                            transforms.RandomResizedCrop(224, antialias=True),
-                            transforms.RandomHorizontalFlip(),
-                            transforms.RandomVerticalFlip(),
-                            transforms.RandomRotation(degrees=(-45, 45)),
-                            # transforms.ColorJitter(brightness=0.5, contrast=0.5, saturation=0.5, hue=0.5),
-                        ]
-                    )
+        if self.for_training:
+            if self.for_open_clip:
+                self.transform = transforms.Compose(
+                    [
+                        transforms.ToTensor(),
+                        transforms.Resize(size=256, antialias=True),
+                        transforms.RandomResizedCrop(224, antialias=True),
+                        transforms.Normalize((0.48145466, 0.4578275, 0.40821073),
+                                             (0.26862954, 0.26130258, 0.27577711)),
+                        transforms.RandomHorizontalFlip(),
+                        transforms.RandomVerticalFlip(),
+                        transforms.RandomRotation(degrees=(-45, 45)),
+                        # transforms.ColorJitter(brightness=0.5, contrast=0.5, saturation=0.5, hue=0.5),
+                    ]
+                )
             else:
-                if self.for_open_clip:
-                    self.transform = transforms.Compose(
-                        [
-                            transforms.ToTensor(),
-                            transforms.Resize(size=256, antialias=True),
-                            transforms.CenterCrop(224),
-                            transforms.Normalize((0.48145466, 0.4578275, 0.40821073),
-                                                 (0.26862954, 0.26130258, 0.27577711)),
-                        ]
-                    )
-                else:
-                    self.transform = transforms.Compose(
-                        [
-                            transforms.ToTensor(),
-                            transforms.Resize(size=256, antialias=True),
-                            transforms.CenterCrop(224),
-                        ]
-                    )
+                self.transform = transforms.Compose(
+                    [
+                        transforms.ToTensor(),
+                        transforms.Resize(size=256, antialias=True),
+                        transforms.RandomResizedCrop(224, antialias=True),
+                        transforms.RandomHorizontalFlip(),
+                        transforms.RandomVerticalFlip(),
+                        transforms.RandomRotation(degrees=(-45, 45)),
+                        # transforms.ColorJitter(brightness=0.5, contrast=0.5, saturation=0.5, hue=0.5),
+                    ]
+                )
+        else:
+            if self.for_open_clip:
+                self.transform = transforms.Compose(
+                    [
+                        transforms.ToTensor(),
+                        transforms.Resize(size=256, antialias=True),
+                        transforms.CenterCrop(224),
+                        transforms.Normalize((0.48145466, 0.4578275, 0.40821073),
+                                             (0.26862954, 0.26130258, 0.27577711)),
+                    ]
+                )
+            else:
+                self.transform = transforms.Compose(
+                    [
+                        transforms.ToTensor(),
+                        transforms.Resize(size=256, antialias=True),
+                        transforms.CenterCrop(224),
+                    ]
+                )
 
     @property
     def image_ids(self):
@@ -852,8 +851,8 @@ class INSECTDataset(Dataset):
     def load_image(self, id):
         selected_dataset = self.hdf5_images['images'][id]
         curr_image = Image.open(io.BytesIO(selected_dataset[:]))
-        if self.image_transforms is not None:
-            curr_image = self.image_transforms(curr_image)
+        if self.transform is not None:
+            curr_image = self.transform(curr_image)
         return curr_image
 
     def __len__(self):
