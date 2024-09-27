@@ -338,7 +338,8 @@ def fine_tuning_epoch(args, model, train_dataloader, val_seen_dataloader, val_un
         loss = criterion(output, target)
         loss.backward()
         current_lr = optimizer.param_groups[0]['lr']
-        wandb.log({"loss": loss.item(), "learning_rate": current_lr})
+        if args.activate_wandb:
+            wandb.log({"loss": loss.item(), "learning_rate": current_lr})
         optimizer.step()
         scheduler.step()
         pbar.set_description(f"loss: {loss.item()}")
