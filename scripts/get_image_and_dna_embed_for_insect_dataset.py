@@ -12,8 +12,8 @@ from omegaconf import DictConfig
 from tqdm import tqdm
 
 from inference_and_eval import get_features_and_label, inference_and_print_result
-from model.simple_clip import load_clip_model
-from util.dataset_for_insect_dataset import load_insect_dataloader
+from bioscanclip.model.simple_clip import load_clip_model
+from bioscanclip.util.dataset import load_insect_dataloader
 
 
 def save_prediction(pred_list, gt_list, json_path):

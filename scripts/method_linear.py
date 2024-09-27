@@ -485,7 +485,7 @@ def main(args: DictConfig) -> None:
 
         total_steps = len(train_seen_dataloader) * args.general_fine_tune_setting.epoch
 
-        scheduler = OneCycleLR(optimizer, max_lr=0.001, total_steps=total_steps)
+        scheduler = OneCycleLR(optimizer, max_lr=0.0001, total_steps=total_steps)
         for epoch in pbar:
             pbar.set_description(f"Epoch: {epoch}")
             epoch_loss, seen_evaluation_result = fine_tuning_epoch(args, image_classifier, train_seen_dataloader,

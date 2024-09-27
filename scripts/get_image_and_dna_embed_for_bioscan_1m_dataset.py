@@ -12,8 +12,8 @@ from omegaconf import DictConfig
 from tqdm import tqdm
 
 from inference_and_eval import get_features_and_label, inference_and_print_result
-from model.simple_clip import load_clip_model
-from util.dataset import load_bioscan_dataloader_all_small_splits
+from bioscanclip.model.simple_clip import load_clip_model
+from bioscanclip.util.dataset import load_bioscan_dataloader_all_small_splits
 
 
 def main_process(rank: int, world_size: int, args):
@@ -25,7 +25,7 @@ def main_process(rank: int, world_size: int, args):
     args.debug_flag = False
     # # Set up for debug, delete when you see it!
 
-    # special set up for train on INSECT dataset
+    # special set up for train on BIOSCAN-1M dataset
     args.model_config.batch_size = 200
     args.model_config.epochs = 80
 
@@ -41,7 +41,7 @@ def main_process(rank: int, world_size: int, args):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     print("Construct dataloader...")
-    train_seen_dataloader, seen_val_dataloader, unseen_val_dataloader, seen_test_dataloader, unseen_test_dataloader, seen_keys_dataloader, val_unseen_keys_dataloader, test_unseen_keys_dataloader = load_bioscan_dataloader_all_small_splits(args, world_size=None, rank=None)
+    train_seen_dataloader, seen_val_dataloader, unseen_val_dataloader, seen_test_dataloader, unseen_test_dataloader, _, _, _, _ = load_bioscan_dataloader_all_small_splits(args, world_size=None, rank=None)
 
     print("Initialize model...")
     model = load_clip_model(args)
@@ -109,20 +109,43 @@ def main_process(rank: int, world_size: int, args):
     dict_to_json['species'] = all_species_list
     
     # save metadata
-    folder_to_save_dict = os.path.join(args.project_root_path, 'bioscan_data_in_insect_format')
+    folder_to_save_dict = os.path.join(args.project_root_path, 'bioscan_data_in_insect_format', args.model_config.model_output_name)
     os.makedirs(folder_to_save_dict, exist_ok=True)
     file_path = os.path.join(folder_to_save_dict, 'bioscan_1m_data_in_insect_format.json')
     with open(file_path, 'w') as json_file:
         json.dump(dict_to_json, json_file, indent=4)
-        
+
+    dict_emb = {}
+    pbar = tqdm(enumerate(all_label_list), total=len(all_label_list))
+    for i, label in pbar:
+        pbar.set_description("Averaging features: ")
+        curr_feature = all_dna_feature[i]
+        if str(label) not in dict_emb.keys():
+            dict_emb[str(label)] = []
+        dict_emb[str(label)].append(curr_feature)
+    class_embed = []
+
+    unique_class_id = np.unique(all_label_list)
+    unique_class_id.sort()
+    for i in unique_class_id:
+        class_embed.append(np.sum(dict_emb[str(i)], axis=0) / len(dict_emb[str(i)]))
+    class_embed = np.array(class_embed, dtype=object)
+    class_embed = class_embed.T.squeeze()
+    print(class_embed.shape)
+
+    class_averaged_dna_embedd_path = os.path.join(folder_to_save_dict, 'dna_embed.csv')
+
     # save image feature feature
     image_embedd_path = os.path.join(folder_to_save_dict, 'image_embed.csv')
-    dna_embedd_path = os.path.join(folder_to_save_dict, 'dna_embed.csv')
+
+    dna_embedd_path = os.path.join(folder_to_save_dict, 'dna_embed_by_individual.csv')
     np.savetxt(image_embedd_path, all_image_feature, delimiter=',')
     np.savetxt(dna_embedd_path, all_dna_feature, delimiter=',')
+    np.savetxt(class_averaged_dna_embedd_path, class_embed, delimiter=',')
+    print(f"Embeddings saved to {folder_to_save_dict}")
 
 
-@hydra.main(config_path="config", config_name="global_config", version_base="1.1")
+@hydra.main(config_path="../bioscanclip/config", config_name="global_config", version_base="1.1")
 def main(args: DictConfig) -> None:
     args.project_root_path = os.path.dirname(os.path.dirname(os.path.dirname(os.getcwd())))
     world_size = torch.cuda.device_count()

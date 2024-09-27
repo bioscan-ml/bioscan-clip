@@ -56,7 +56,7 @@ visualization:
 
 general_fine_tune_setting:
   save_ckpt: true
-  epoch: 150
+  epoch: 15
   batch_size: 200
 
 default_seed: 42
