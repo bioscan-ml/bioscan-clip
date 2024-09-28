@@ -22,6 +22,7 @@ from bioscanclip.model.loss_func import ContrastiveLoss, ClipLoss
 from bioscanclip.model.simple_clip import load_clip_model
 from bioscanclip.util.util import set_seed
 from bioscanclip.util.dataset import load_dataloader, load_insect_dataloader
+from bioscanclip.util.util import scale_learning_rate
 
 
 def print_when_rank_zero(message, rank=0):
@@ -184,6 +185,14 @@ def main_process(rank: int, world_size: int, args):
 
     if hasattr(args.model_config, 'lr_config') and hasattr(args.model_config.lr_config, 'lr'):
         lr = args.model_config.lr_config.lr
+    """
+    We do not scale the learning rate then write in the config. 
+    Instead, we get the general learning rate from the config 
+    and scale it by the number of GPUs and batch size.
+    """
+
+    lr = scale_learning_rate(lr=lr, batch_size=args.model_config.batch_size, world_size=world_size)
+
 
     optimizer = optim.AdamW(model.parameters(), lr=lr)
     scheduler = None
@@ -192,6 +201,7 @@ def main_process(rank: int, world_size: int, args):
             max_lr = 0.001
             if hasattr(args.model_config.lr_config, 'max_lr'):
                 max_lr = args.model_config.lr_config.max_lr
+            max_lr = scale_learning_rate(lr=max_lr, batch_size=args.model_config.batch_size, world_size=world_size)
             scheduler = lr_scheduler.OneCycleLR(
                 optimizer,
                 max_lr=max_lr,
@@ -208,6 +218,7 @@ def main_process(rank: int, world_size: int, args):
             min_lr = 1e-9
             if hasattr(args.model_config.lr_config, 'min_lr'):
                 min_lr = args.model_config.lr_config.min_lr
+            min_lr = scale_learning_rate(lr=min_lr, batch_size=args.model_config.batch_size, world_size=world_size)
             scheduler = lr_scheduler.CosineAnnealingLR(optimizer, T_max=total_steps, eta_min=min_lr)
 
     if all_gather:
