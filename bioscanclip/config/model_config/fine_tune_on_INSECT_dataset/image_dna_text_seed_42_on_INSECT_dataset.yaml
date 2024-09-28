@@ -19,6 +19,8 @@ model_output_name: image_dna_text_4gpu_fine_tune_on_INSECT_dataset
 evaluation_period: 1
 ckpt_path: ${project_root_path}/ckpt/bioscan_clip/final_experiments/image_dna_text_4gpu_epoch50/best.pth
 pretrained_ckpt_path: ${project_root_path}/ckpt/bioscan_clip/final_experiments/image_dna_text_4gpu_epoch50/best.pth
+trained_with_insect_image_dna_text_ckpt_path: ${project_root_path}/ckpt/bioscan_clip/trained_with_INSECT/image_dna_text_4gpu_epoch50/best.pth
+
 output_dim: 768
 port: 29531
 
