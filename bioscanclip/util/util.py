@@ -697,6 +697,6 @@ def get_all_unique_species_from_dataloader(dataloader):
     return all_species
 
 def scale_learning_rate(lr, batch_size, base_batch_size=500, world_size=1):
-    total_batch_size = args.model_config.batch_size * world_size
+    total_batch_size = batch_size * world_size
     lr = lr * base_batch_size / total_batch_size
     return lr

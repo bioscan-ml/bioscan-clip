@@ -2,27 +2,22 @@ import copy
 import datetime
 import json
 import os
-from transformers import AutoTokenizer
+
 import hydra
+import numpy as np
 import torch
 import torch.distributed as dist
 import torch.multiprocessing as mp
 import torch.nn as nn
 import torch.optim as optim
 import wandb
-from omegaconf import DictConfig, OmegaConf
+from omegaconf import DictConfig, OmegaConf, open_dict
 
-from epoch.train_epoch import train_epoch
+from bioscanclip.epoch.train_epoch import train_epoch
+from bioscanclip.model.loss_func import ContrastiveLoss
+from bioscanclip.model.simple_clip import load_clip_model
+from bioscanclip.util.dataset_for_insect_dataset import load_insect_dataloader
 from inference_and_eval import get_features_and_label, inference_and_print_result
-from model.loss_func import ContrastiveLoss
-from model.simple_clip import load_clip_model
-from util.dataset import load_bioscan_dataloader
-from util.dataset_for_insect_dataset import load_insect_dataloader
-from Bio import Entrez
-import time
-import numpy as np
-
-
 
 
 def save_prediction(pred_list, gt_list, json_path):
@@ -96,27 +91,22 @@ def convert_acc_dict_to_wandb_dict(acc_dict):
 
 
 def main_process(rank: int, world_size: int, args):
-
-    # # Set up for debug, delete when you see it!
-
-    args.debug_flag = False
-    # # Set up for debug, delete when you see it!
-
-    # special set up for train on INSECT dataset
-    args.model_config.batch_size = 350
-    args.model_config.epochs = 80
-    args.model_config.evaluation_period = 75
-
-
-    if args.debug_flag:
+    if args.debug_flag or rank != 0:
         args.activate_wandb = False
         args.save_inference = False
         args.save_ckpt = False
 
+    args.model_config.batch_size = 500
+    args.model_config.epochs = 80
+    args.model_config.evaluation_period = 75
 
     current_datetime = datetime.datetime.now()
     formatted_datetime = current_datetime.strftime("%Y-%m-%d_%H%M%S")
     args = copy.deepcopy(args)
+
+    with open_dict(args.model_config):
+        if not hasattr(args.model_config, "for_open_clip"):
+            args.model_config.for_open_clip = False
 
     ddp_setup(rank, world_size, str(args.model_config.port))
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
