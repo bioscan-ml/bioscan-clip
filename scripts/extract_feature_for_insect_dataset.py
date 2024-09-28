@@ -35,21 +35,29 @@ def main_process(rank: int, world_size: int, args):
 
     # Using checkpoint that contrastive fine-tuned on INSECT dataset or not
     # checkpoint = torch.load(args.model_config.insect_ckpt_path, map_location='cuda:0')
-    ckpt_trained_with_insect = os.path.join(args.model_config.ckpt_trained_with_insect_image_dna_text_path, 'best.pth')
+    use_ckpt_fine_tuned_on_INSECT_dataset = False
+    if hasattr(args.model_config, 'use_ckpt_fine_tuned_on_INSECT_dataset'):
+        use_ckpt_fine_tuned_on_INSECT_dataset = args.model_config.use_ckpt_fine_tuned_on_INSECT_dataset
+    if use_ckpt_fine_tuned_on_INSECT_dataset:
+        checkpoint = torch.load(args.model_config.ckpt_path, map_location='cuda:0')
+    else:
+        checkpoint = torch.load(args.model_config.pretrained_ckpt_path, map_location='cuda:0')
 
 
-    checkpoint = torch.load(ckpt_trained_with_insect, map_location='cuda:0')
 
     model.load_state_dict(checkpoint)
     model = model.to(device)
 
-    folder = os.path.join(args.project_root_path, "extracted_embedding/INSECT")
-
-    os.makedirs(folder, exist_ok=True)
-
-
-    dna_embed_path = os.path.join(folder, "dna_embedding_from_bioscan_clip.csv")
-    image_embed_path = os.path.join(folder, "image_embedding_from_bioscan_clip.csv")
+    if use_ckpt_fine_tuned_on_INSECT_dataset:
+        folder = os.path.join(args.project_root_path, f"extracted_embedding/INSECT/finetuned_on_INSECT")
+        os.makedirs(folder, exist_ok=True)
+        dna_embed_path = os.path.join(folder, "dna_embedding_from_bioscan_clip.csv")
+        image_embed_path = os.path.join(folder, "image_embedding_from_bioscan_clip.csv")
+    else:
+        folder = os.path.join(args.project_root_path, f"extracted_embedding/INSECT/trained_on_BIOSCAN_1M")
+        os.makedirs(folder, exist_ok=True)
+        dna_embed_path = os.path.join(folder, "dna_embedding_from_bioscan_clip_no_fine_tuned_on_INSECT.csv")
+        image_embed_path = os.path.join(folder, "image_embedding_from_bioscan_clip_no_fine_tuned_on_INSECT.csv")
 
     att_splits_dict = sio.loadmat(args.insect_data.path_to_res_101_mat)
     labels = att_splits_dict["labels"].squeeze() - 1

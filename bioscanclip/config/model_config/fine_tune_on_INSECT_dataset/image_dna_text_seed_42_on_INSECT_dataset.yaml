@@ -17,9 +17,12 @@ language:
 
 model_output_name: image_dna_text_4gpu_fine_tune_on_INSECT_dataset
 evaluation_period: 1
-ckpt_path: ${project_root_path}/ckpt/bioscan_clip/final_experiments/image_dna_text_4gpu_epoch50/best.pth
+
+
 pretrained_ckpt_path: ${project_root_path}/ckpt/bioscan_clip/final_experiments/image_dna_text_4gpu_epoch50/best.pth
-trained_with_insect_image_dna_text_ckpt_path: ${project_root_path}/ckpt/bioscan_clip/trained_with_INSECT/image_dna_text_4gpu_epoch50/best.pth
+ckpt_path: ${project_root_path}/ckpt/bioscan_clip/trained_with_INSECT/image_dna_text_4gpu_epoch50/best.pth
+
+use_ckpt_fine_tuned_on_INSECT_dataset: true
 
 output_dim: 768
 port: 29531
@@ -28,7 +31,7 @@ disable_lora: true
 lr_scheduler: one_cycle
 lr_config:
   lr: 1e-6
-  max_lr: 5e-5
+  max_lr: 3e-6
 
 all_gather: true
 loss_setup:
