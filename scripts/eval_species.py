@@ -419,105 +419,107 @@ def main(args: DictConfig) -> None:
     extracted_features_path = os.path.join(folder_for_saving,
                                            f"extracted_feature_from_{args.inference_and_eval_setting.eval_on}_split.hdf5")
 
-    if os.path.exists(extracted_features_path) and os.path.exists(labels_path) and args.load_inference:
-        print("Loading embeddings from file...")
+    # if os.path.exists(extracted_features_path) and os.path.exists(labels_path) and args.load_inference:
+    #     print("Loading embeddings from file...")
 
-        with h5py.File(extracted_features_path, 'r') as hdf5_file:
-            seen_dict = {
+    #     with h5py.File(extracted_features_path, 'r') as hdf5_file:
+    #         seen_dict = {
 
-            }
-            for type_of_feature in All_TYPE_OF_FEATURES_OF_KEY:
-                if type_of_feature in hdf5_file["seen"].keys():
-                    seen_dict[type_of_feature] = hdf5_file["seen"][type_of_feature][:]
+    #         }
+    #         for type_of_feature in All_TYPE_OF_FEATURES_OF_KEY:
+    #             if type_of_feature in hdf5_file["seen"].keys():
+    #                 seen_dict[type_of_feature] = hdf5_file["seen"][type_of_feature][:]
 
-            unseen_dict = {
-            }
-            for type_of_feature in All_TYPE_OF_FEATURES_OF_KEY:
-                if type_of_feature in hdf5_file["unseen"].keys():
-                    unseen_dict[type_of_feature] = hdf5_file["unseen"][type_of_feature][:]
-            keys_dict = {
-            }
-            for type_of_feature in All_TYPE_OF_FEATURES_OF_KEY:
-                if type_of_feature in hdf5_file["key"].keys():
-                    keys_dict[type_of_feature] = hdf5_file["key"][type_of_feature][:]
+    #         unseen_dict = {
+    #         }
+    #         for type_of_feature in All_TYPE_OF_FEATURES_OF_KEY:
+    #             if type_of_feature in hdf5_file["unseen"].keys():
+    #                 unseen_dict[type_of_feature] = hdf5_file["unseen"][type_of_feature][:]
+    #         keys_dict = {
+    #         }
+    #         for type_of_feature in All_TYPE_OF_FEATURES_OF_KEY:
+    #             if type_of_feature in hdf5_file["key"].keys():
+    #                 keys_dict[type_of_feature] = hdf5_file["key"][type_of_feature][:]
 
-        with open(labels_path, "r") as json_file:
-            total_dict = json.load(json_file)
-        seen_dict["label_list"] = total_dict["seen_gt_dict"]
-        unseen_dict["label_list"] = total_dict["unseen_gt_dict"]
-        keys_dict["label_list"] = total_dict["key_gt_dict"]
-        keys_dict["all_key_features_label"] = total_dict["key_gt_dict"] + total_dict["key_gt_dict"] + total_dict[
-            "key_gt_dict"]
+    #     with open(labels_path, "r") as json_file:
+    #         total_dict = json.load(json_file)
+    #     seen_dict["label_list"] = total_dict["seen_gt_dict"]
+    #     unseen_dict["label_list"] = total_dict["unseen_gt_dict"]
+    #     keys_dict["label_list"] = total_dict["key_gt_dict"]
+    #     keys_dict["all_key_features_label"] = total_dict["key_gt_dict"] + total_dict["key_gt_dict"] + total_dict[
+    #         "key_gt_dict"]
 
-        with open(processed_id_path, "r") as json_file:
-            id_dict = json.load(json_file)
-        seen_dict["processed_id_list"] = id_dict['seen_id_list']
-        unseen_dict["processed_id_list"] = id_dict['unseen_id_list']
-        keys_dict["processed_id_list"] = id_dict['key_id_list']
-        keys_dict["all_processed_id_list"] = id_dict['key_id_list'] + id_dict['key_id_list'] + id_dict['key_id_list']
 
+    # else:
+
+    # initialize model
+    print("Initialize model...")
+
+    model = load_clip_model(args, device)
+
+    if hasattr(args.model_config, "load_ckpt") and args.model_config.load_ckpt is False:
+        pass
     else:
-        # initialize model
-        print("Initialize model...")
+        checkpoint = torch.load(args.model_config.ckpt_path, map_location="cuda:0")
+        model.load_state_dict(checkpoint)
 
-        model = load_clip_model(args, device)
+    # Load data
+    # args.model_config.batch_size = 24
 
-        if hasattr(args.model_config, "load_ckpt") and args.model_config.load_ckpt is False:
-            pass
-        else:
-            checkpoint = torch.load(args.model_config.ckpt_path, map_location="cuda:0")
-            model.load_state_dict(checkpoint)
+    if args.inference_and_eval_setting.eval_on == "val":
 
-        # Load data
-        # args.model_config.batch_size = 24
+        _, seen_dataloader, unseen_dataloader, _, _, seen_keys_dataloader, val_unseen_keys_dataloader, test_unseen_keys_dataloader, all_keys_dataloader = load_bioscan_dataloader_all_small_splits(
+            args)
+    elif args.inference_and_eval_setting.eval_on == "test":
+        _, _, _, seen_dataloader, unseen_dataloader, seen_keys_dataloader, val_unseen_keys_dataloader, test_unseen_keys_dataloader, all_keys_dataloader = load_bioscan_dataloader_all_small_splits(
+            args)
+    else:
+        raise ValueError(
+            "Invalid value for eval_on, specify by 'python inference_and_eval.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_ssl_ver_0_1_2.yaml' inference_and_eval_setting.eval_on=test/val'")
 
-        if args.inference_and_eval_setting.eval_on == "val":
+    keys_dict = get_features_and_label(all_keys_dataloader, model, device, for_key_set=True)
 
-            _, seen_dataloader, unseen_dataloader, _, _, seen_keys_dataloader, val_unseen_keys_dataloader, test_unseen_keys_dataloader, all_keys_dataloader = load_bioscan_dataloader_all_small_splits(
-                args)
-        elif args.inference_and_eval_setting.eval_on == "test":
-            _, _, _, seen_dataloader, unseen_dataloader, seen_keys_dataloader, val_unseen_keys_dataloader, test_unseen_keys_dataloader, all_keys_dataloader = load_bioscan_dataloader_all_small_splits(
-                args)
-        else:
-            raise ValueError(
-                "Invalid value for eval_on, specify by 'python inference_and_eval.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_ssl_ver_0_1_2.yaml' inference_and_eval_setting.eval_on=test/val'")
+    seen_dict = get_features_and_label(seen_dataloader, model, device)
 
-        keys_dict = get_features_and_label(all_keys_dataloader, model, device, for_key_set=True)
+    unseen_dict = get_features_and_label(unseen_dataloader, model, device)
 
-        seen_dict = get_features_and_label(seen_dataloader, model, device)
+    if args.save_inference and not (os.path.exists(extracted_features_path) and os.path.exists(labels_path)):
+        new_file = h5py.File(extracted_features_path, "w")
+        name_of_splits = ["seen", "unseen", "key"]
+        split_dicts = [seen_dict, unseen_dict, keys_dict]
+        for split_name, split in zip(name_of_splits, split_dicts):
+            group = new_file.create_group(split_name)
+            for embedding_type in All_TYPE_OF_FEATURES_OF_KEY:
+                if embedding_type in split.keys():
+                    try:
+                        group.create_dataset(embedding_type, data=split[embedding_type])
+                        print(f"Created dataset for {embedding_type}")
+                    except:
+                        print(f"Error in creating dataset for {embedding_type}")
+                    # group.create_dataset(embedding_type, data=split[embedding_type])
+        new_file.close()
+        total_dict = {
+            "seen_gt_dict": seen_dict["label_list"],
+            "unseen_gt_dict": unseen_dict["label_list"],
+            "key_gt_dict": keys_dict["label_list"],
+        }
+        with open(labels_path, "w") as json_file:
+            json.dump(total_dict, json_file, indent=4)
 
-        unseen_dict = get_features_and_label(unseen_dataloader, model, device)
+        id_dict = {
+            "seen_id_list": seen_dict["file_name_list"],
+            "unseen_id_list": unseen_dict["file_name_list"],
+            "key_id_list": keys_dict["file_name_list"],
+        }
+        with open(processed_id_path, "w") as json_file:
+            json.dump(id_dict, json_file, indent=4)
 
-        if args.save_inference and not (os.path.exists(extracted_features_path) and os.path.exists(labels_path)):
-            new_file = h5py.File(extracted_features_path, "w")
-            name_of_splits = ["seen", "unseen", "key"]
-            split_dicts = [seen_dict, unseen_dict, keys_dict]
-            for split_name, split in zip(name_of_splits, split_dicts):
-                group = new_file.create_group(split_name)
-                for embedding_type in All_TYPE_OF_FEATURES_OF_KEY:
-                    if embedding_type in split.keys():
-                        try:
-                            group.create_dataset(embedding_type, data=split[embedding_type])
-                            print(f"Created dataset for {embedding_type}")
-                        except:
-                            print(f"Error in creating dataset for {embedding_type}")
-                        # group.create_dataset(embedding_type, data=split[embedding_type])
-            new_file.close()
-            total_dict = {
-                "seen_gt_dict": seen_dict["label_list"],
-                "unseen_gt_dict": unseen_dict["label_list"],
-                "key_gt_dict": keys_dict["label_list"],
-            }
-            with open(labels_path, "w") as json_file:
-                json.dump(total_dict, json_file, indent=4)
-
-            id_dict = {
-                "seen_id_list": seen_dict["file_name_list"],
-                "unseen_id_list": unseen_dict["file_name_list"],
-                "key_id_list": keys_dict["file_name_list"],
-            }
-            with open(processed_id_path, "w") as json_file:
-                json.dump(id_dict, json_file, indent=4)
+    with open(processed_id_path, "r") as json_file:
+        id_dict = json.load(json_file)
+    seen_dict["processed_id_list"] = id_dict['seen_id_list']
+    unseen_dict["processed_id_list"] = id_dict['unseen_id_list']
+    keys_dict["processed_id_list"] = id_dict['key_id_list']
+    keys_dict["all_processed_id_list"] = id_dict['key_id_list'] + id_dict['key_id_list'] + id_dict['key_id_list']
 
     acc_dict, per_class_acc, pred_dict = inference_and_print_result(
         keys_dict,

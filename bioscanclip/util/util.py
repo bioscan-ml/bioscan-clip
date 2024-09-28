@@ -348,12 +348,14 @@ def create_child_from_parent(parent_instance, child_class, **child_args):
 def top_k_micro_accuracy(pred_list, gt_list, k_list=None, print_flag=False, seen_flag=True, gt_id_list=None):
     total_samples = len(pred_list)
     k_micro_acc = {}
-    csv_data = [["GT_id", "GT_label", "Pred_label"]]
+    result_dict_for_csv = {}
+
+    seen_string = "seen" if seen_flag else "unseen"
 
     for k in k_list:
         if k not in k_micro_acc.keys():
             k_micro_acc[k] = {}
-        for level in LEVELS:
+        for lid, level in enumerate(LEVELS):
             correct_in_curr_level = 0
             for pred_dict, gt_dict, gt_id in zip(pred_list, gt_list, gt_id_list):
 
@@ -361,20 +363,32 @@ def top_k_micro_accuracy(pred_list, gt_list, k_list=None, print_flag=False, seen
                 gt_label = gt_dict[level]
                 if gt_label in pred_labels:
                     correct_in_curr_level += 1
-                else:
-                    if k == 1 and level == "species" and print_flag:
-                        seen_string = "seen" if seen_flag else "unseen"
 
-                        csv_data.append([gt_id.split('.')[0], gt_label, pred_labels[0]])
-                        # print(f"Mirco top_1 ({seen_string})-- false predicted species. GT label: {gt_label}, pred_label: {pred_labels}")
+                if k==1 and print_flag:
+                    id = gt_id.split('.')[0]                
+                    if id not in result_dict_for_csv:
+                        result_dict_for_csv[id] = {}
+                    result_dict_for_csv[id][level] = {
+                        "GT": gt_label,
+                        "Pred": pred_labels[0]
+                    }
             k_micro_acc[k][level] = correct_in_curr_level * 1.0 / total_samples
 
     
     if print_flag:
-        with open(f"misclassified_micro_top1_{seen_string}_species.csv", 'w', newline='') as csvfile:
+        csv_data = [["GT_id", "GT_Order", "Pred_Order", "GT_Family", "Pred_Family", 
+                    "GT_Genus", "Pred_Genus", "GT_Species", "Pred_Species"]]
+        for id in result_dict_for_csv:
+            curr_row = [id]
+            for level in LEVELS:
+                curr_row.append(result_dict_for_csv[id][level]["GT"])
+                curr_row.append(result_dict_for_csv[id][level]["Pred"])
+            csv_data.append(curr_row)
+
+        with open(f"val_top1_{seen_string}_results.csv", 'w', newline='') as csvfile:
             csvwriter = csv.writer(csvfile, delimiter=',')
             csvwriter.writerows(csv_data)
-        print(f"Misclassified micro top-1 species saved to logs folder: logs/misclassified_macro_top1_{seen_string}_species.csv")
+        print(f"val top-1 results saved to logs folder: logs/val_top1_{seen_string}_results.csv")
 
     return k_micro_acc
 
@@ -600,6 +614,7 @@ def inference_and_print_result(keys_dict, seen_dict, unseen_dict, args, small_sp
     max_k = k_list[-1]
 
     seen_gt_label = seen_dict["label_list"]
+    print(seen_dict.keys())
     seen_gt_id = seen_dict["processed_id_list"]
     unseen_gt_label = unseen_dict["label_list"]
     unseen_gt_id = unseen_dict["processed_id_list"]
@@ -667,11 +682,11 @@ def inference_and_print_result(keys_dict, seen_dict, unseen_dict, args, small_sp
             )
 
             seen_macro_acc, seen_per_class_acc = top_k_macro_accuracy(
-                curr_seen_pred_list, seen_gt_label, k_list=k_list, print_flag=print_flag, seen_flag=True, gt_id_list=seen_gt_id
+                curr_seen_pred_list, seen_gt_label, k_list=k_list, print_flag=False, seen_flag=True, gt_id_list=seen_gt_id
             )
 
             unseen_macro_acc, unseen_per_class_acc = top_k_macro_accuracy(
-                curr_unseen_pred_list, unseen_gt_label, k_list=k_list, print_flag=print_flag, seen_flag=False, gt_id_list=unseen_gt_id
+                curr_unseen_pred_list, unseen_gt_label, k_list=k_list, print_flag=False, seen_flag=False, gt_id_list=unseen_gt_id
             )
 
             per_class_acc[query_feature_type][key_feature_type]["seen"] = seen_per_class_acc

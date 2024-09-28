@@ -241,11 +241,16 @@ def main(args):
 
 if __name__ == "__main__":
     parser = ArgumentParser()
+    # parser.add_argument("--result_folder", type=str, nargs='+', 
+    #                     default=["outputs/2024-09-16/19-20-19", 
+    #                              "outputs/2024-09-14/19-53-31", 
+    #                              "outputs/2024-09-14/10-08-46",
+    #                              "outputs/2024-09-13/19-43-07",])
     parser.add_argument("--result_folder", type=str, nargs='+', 
                         default=["outputs/2024-09-16/19-20-19", 
-                                 "outputs/2024-09-14/19-53-31", 
-                                 "outputs/2024-09-14/10-08-46",
-                                 "outputs/2024-09-13/19-43-07",])
+                                 "outputs/2024-09-17/06-08-54", 
+                                 "outputs/2024-09-16/13-24-08",
+                                 "outputs/2024-09-15/17-23-29",])
     # parser.add_argument("--result_folder", type=str, nargs='+')
     parser.add_argument("--full_table", action="store_true",
                         help="Write the full table, including the header and footer")

@@ -11,15 +11,12 @@ image:
 dna:
   input_type: sequence
   model: lora_barcode_bert
-language:
-  input_type: sequence
-  model: lora_bert
 
-model_output_name: image_dna_text_4gpu
+model_output_name: image_dna_4gpu
 evaluation_period: 1
-ckpt_path: ${project_root_path}/ckpt/bioscan_clip/image_dna_text_4gpu_epoch50/2024-09-15_172335/best.pth
+ckpt_path: ${project_root_path}/ckpt/bioscan_clip/image_dna_4gpu_50epoch/2024-09-16_132415/best.pth
 output_dim: 768
-port: 29531
+port: 29532
 
 disable_lora: true
 lr_scheduler: one_cycle
@@ -40,7 +37,3 @@ random_seed: false
 eval_skip_epoch: 23
 
 default_seed: 42
-
-# load_ckpt: false
-it_config_path: ${project_root_path}/bioscanclip/config/model_config/final_experiments/image_text_seed_42_eval.yaml
-id_config_path: ${project_root_path}/bioscanclip/config/model_config/final_experiments/image_dna_seed_42_eval.yaml
