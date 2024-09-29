@@ -178,7 +178,7 @@ def main(args: DictConfig) -> None:
                    name="Fine-tune BIOSCAN-CLIP image encoder on INSECT dataset")
 
     folder_path = os.path.join(args.project_root_path, args.model_output_dir,
-                               "Fine_tune_BIOSCAN-CLIP-image-encoder_on_INSECT_dataset", formatted_datetime)
+                               "Fine_tune_BIOSCAN-CLIP-image-encoder_on_INSECT_dataset_10_epoch", formatted_datetime)
     os.makedirs(folder_path, exist_ok=True)
     last_ckpt_path = os.path.join(folder_path, 'last.ckpt')
     OmegaConf.save(args, os.path.join(folder_path, 'config.yaml'))
