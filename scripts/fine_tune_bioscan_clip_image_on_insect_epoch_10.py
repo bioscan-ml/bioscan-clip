@@ -175,7 +175,7 @@ def main(args: DictConfig) -> None:
 
     if args.activate_wandb:
         wandb.init(project="Fine-tune BIOSCAN-CLIP image encoder on INSECT dataset",
-                   name="Fine-tune BIOSCAN-CLIP image encoder on INSECT dataset")
+                   name="Fine-tune BIOSCAN-CLIP image encoder on INSECT dataset_10_epoch")
 
     folder_path = os.path.join(args.project_root_path, args.model_output_dir,
                                "Fine_tune_BIOSCAN-CLIP-image-encoder_on_INSECT_dataset_10_epoch", formatted_datetime)
@@ -188,6 +188,9 @@ def main(args: DictConfig) -> None:
 
     print("training...")
     pbar = tqdm(range(args.model_config.epochs))
+    folder_to_save_embed = os.path.join(args.project_root_path,
+                                        "embedding_from_BIOSCAN-CLIP-image-encoder_fine_tuned_on_insect_10_epoch",
+                                        formatted_datetime)
     for epoch in pbar:
         pbar.set_description(f"Epoch: {epoch}")
         epoch_loss = fine_tuning_epoch(args, image_classifier, insect_trainval_dataloader,
@@ -210,8 +213,7 @@ def main(args: DictConfig) -> None:
                 torch.save(image_classifier.state_dict(), last_ckpt_path)
                 print(f'Last ckpt: {last_ckpt_path}')
                 # save_image_embedding to “image_embedding_from_bioscan_clip.csv”
-                folder_to_save_embed = os.path.join(args.project_root_path, "embedding_from_BIOSCAN-CLIP-image-encoder_fine_tuned_on_insect",
-                                                    formatted_datetime)
+
                 os.makedirs(folder_to_save_embed, exist_ok=True)
                 image_embed_path = os.path.join(folder_to_save_embed,
                                                 "image_embedding_from_BIOSCAN-CLIP-image-encoder_fine_tuned_on_insect.csv")
@@ -224,8 +226,6 @@ def main(args: DictConfig) -> None:
         torch.save(image_classifier.state_dict(), last_ckpt_path)
         print(f'Last ckpt: {last_ckpt_path}')
         # save_image_embedding to “image_embedding_from_bioscan_clip.csv”
-        folder_to_save_embed = os.path.join(args.project_root_path, "embedding_from_BIOSCAN-CLIP-image-encoder_fine_tuned_on_insect",
-                                            formatted_datetime)
         os.makedirs(folder_to_save_embed, exist_ok=True)
         image_embed_path = os.path.join(folder_to_save_embed, "image_embedding_from_BIOSCAN-CLIP-image-encoder_fine_tuned_on_insect.csv")
         image_feature = get_features(all_dataloader, image_classifier, device)
