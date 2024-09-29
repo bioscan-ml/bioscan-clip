@@ -127,10 +127,11 @@ class Dataset_for_CL(Dataset):
             # self.tokenizer = open_clip.get_tokenizer('ViT-B-32')
             self.tokenizer = None
         else:
-            language_model_name="prajjwal1/bert-small"
-            if hasattr(args.model_config.language, "pre_train_model"):
-                language_model_name = args.model_config.language.pre_train_model
-            self.tokenizer, _ = load_pre_trained_bert(language_model_name)
+            if hasattr(args.model_config, "language"):
+                language_model_name="prajjwal1/bert-small"
+                if hasattr(args.model_config.language, "pre_train_model"):
+                    language_model_name = args.model_config.language.pre_train_model
+                self.tokenizer, _ = load_pre_trained_bert(language_model_name)
 
         list_of_label_dict = get_array_of_label_dicts(self.hdf5_inputs_path, split)
         self.list_of_label_string = []
