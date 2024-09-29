@@ -76,7 +76,7 @@ def fine_tuning_epoch(args, model, insect_train_dataloader,
         loss.backward()
         optimizer.step()
         scheduler.step()
-        pbar.set_description(f"loss: {loss.item()}")
+        pbar.set_description(f"loss: {loss.item()}, lr: {scheduler.get_last_lr()[0]}")
         epoch_loss.append(loss.item())
         if args.activate_wandb:
             wandb.log({"loss": loss.item(), "lr": scheduler.get_last_lr()[0]
