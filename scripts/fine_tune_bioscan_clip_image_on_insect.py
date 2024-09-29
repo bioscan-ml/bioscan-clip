@@ -79,7 +79,8 @@ def fine_tuning_epoch(args, model, insect_train_dataloader,
         pbar.set_description(f"loss: {loss.item()}")
         epoch_loss.append(loss.item())
         if args.activate_wandb:
-            wandb.log({"loss": loss.item(), "step": step + epoch * len_loader})
+            wandb.log({"loss": loss.item(), "lr": scheduler.get_last_lr()[0]
+                      , "step": step + epoch * len_loader})
 
     epoch_loss = sum(epoch_loss) * 1.0 / len(epoch_loss)
 
@@ -163,7 +164,7 @@ def main(args: DictConfig) -> None:
         param.requires_grad = True
 
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.AdamW(image_classifier.parameters(), lr=0.005)
+    optimizer = optim.AdamW(image_classifier.parameters(), lr=0.002)
 
     # Calculate total number of steps (iterations)
     total_steps = args.model_config.epochs * len(insect_trainval_dataloader)
