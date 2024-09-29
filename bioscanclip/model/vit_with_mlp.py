@@ -18,3 +18,17 @@ class ViT_And_MLP(nn.Module):
             feature = self.vit.forward_features(x).mean(dim=1)
 
         return self.mlp(feature)
+
+class ViTWIthExtraLayer(nn.Module):
+    def __init__(self, vit_model, new_linear_layer):
+        super(ViTWIthExtraLayer, self).__init__()
+        self.vit = vit_model
+        self.new_linear_layer = new_linear_layer
+
+    def get_feature(self, x):
+        return self.vit(x)
+
+    def forward(self, x):
+        outputs = self.vit(x)
+        outputs = self.new_linear_layer(outputs)
+        return outputs

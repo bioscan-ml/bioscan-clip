@@ -218,7 +218,7 @@ def retrieve_images(
         return image.resize((256, 256))
 
     folder_path = os.path.join(
-        "/",
+        args.project_root_path,
         RETRIEVAL_FOLDER,
         args.model_config.model_output_name,
         name,
@@ -248,6 +248,7 @@ def retrieve_images(
             # select random queries
             queries_feature = queries_feature[query_indices, :]
             for query_index in query_indices:
+                # import pdb; pdb.set_trace()
                 retrieval_results.append(
                     {
                         "query": {
