@@ -108,7 +108,7 @@ def get_some_images_from_hdf5(hdf5_group, id_list, n=None):
         image_enc_padded = hdf5_group["image"][idx].astype(np.uint8)
         enc_length = hdf5_group["image_mask"][idx]
         image_enc = image_enc_padded[:enc_length]
-        curr_image = Image.open(io.BytesIO(image_enc))
+        curr_image = Image.open(io.BytesIO(image_enc)).resize((256, 256))
 
         id = hdf5_group["image_file"][idx]
         if id in id_list:
@@ -174,7 +174,7 @@ def main(args: DictConfig) -> None:
     seen_flag = False; seen_string = "seen" if seen_flag else "unseen"
     val_flag = True; val_string = "val" if val_flag else "test"
     # save_path = os.path.join(args.project_root_path, "representation_visualization_test/macro/seen")
-    save_path = os.path.join(args.project_root_path, f"representation_visualization/{seen_string}")
+    save_path = os.path.join(args.project_root_path, f"representation_visualization_resize/{seen_string}")
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # Load some images from the hdf5 file
@@ -327,6 +327,7 @@ def main(args: DictConfig) -> None:
 
 
                 print(f"Merge {before_label}_{after_label} images at {level} level")
+                os.makedirs(os.path.join(save_path, f"{level}/{before_label}_{after_label}/origin"), exist_ok=True)
                 os.makedirs(os.path.join(save_path, f"{level}/{before_label}_{after_label}/merge"), exist_ok=True)
                 os.makedirs(os.path.join(save_path, f"{level}/{before_label}_{after_label}/merge_alignments"), exist_ok=True)
 
@@ -337,9 +338,11 @@ def main(args: DictConfig) -> None:
                     tqdm(zip(image_list, image_id_list, before_masked_image_list, \
                              after_masked_image_list_it, after_masked_image_list_id, after_masked_image_list_idt), total=len(image_list)):
 
-                    image = np.array(image)
+                    image = np.array(image)[:, :, ::-1]
+                    cv2.imwrite(os.path.join(save_path, f"{level}/{before_label}_{after_label}/origin", f"{image_id}.png"), image)
+
                     height = image.shape[0]
-                    separator = np.zeros((height, 10, 3), dtype=np.uint8)
+                    separator = np.ones((height, 10, 3), dtype=np.uint8) * 255
 
                     combined_image = np.hstack((image, separator, before_image, separator, after_image_idt))
                     cv2.imwrite(os.path.join(save_path, f"{level}/{before_label}_{after_label}/merge", f"{image_id}.png"), combined_image)

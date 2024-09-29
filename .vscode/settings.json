@@ -1,0 +1,18 @@
+{
+    "python.analysis.exclude": [
+        "bioscanclip.egg-info",
+        "build",
+        "ckpt",
+        "outputs",
+        "extracted_embedding",
+        "html_plots",
+        "representation_visualization",
+        "representation_visualization_resize",
+    ],
+    // "python.analysis.autoImportCompletions": true,
+    // "python.analysis.typeCheckingMode": "off",
+    // "python.analysis.typeCheckingMode": "basic",
+}
+
+
+
