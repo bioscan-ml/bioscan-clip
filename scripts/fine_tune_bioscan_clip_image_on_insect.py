@@ -15,6 +15,7 @@ import torch.nn.functional as F
 from bioscanclip.util.dataset_for_insect_dataset import load_insect_dataloader, load_insect_dataloader_trainval
 from bioscanclip.model.vit_with_mlp import ViTWIthExtraLayer
 from bioscanclip.model.simple_clip import load_clip_model
+from torch.optim.lr_scheduler import LambdaLR
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 
@@ -60,7 +61,7 @@ def label_batch_to_species_idx(label_batch, unique_species_for_seen):
 
 
 def fine_tuning_epoch(args, model, insect_train_dataloader,
-                      optimizer, criterion, unique_species_for_seen, epoch, device):
+                      optimizer, criterion, scheduler, unique_species_for_seen, epoch, device):
     pbar = tqdm(enumerate(insect_train_dataloader), total=len(insect_train_dataloader))
     epoch_loss = []
     len_loader = len(insect_train_dataloader)
@@ -74,6 +75,7 @@ def fine_tuning_epoch(args, model, insect_train_dataloader,
         loss = criterion(output, target)
         loss.backward()
         optimizer.step()
+        scheduler.step()
         pbar.set_description(f"loss: {loss.item()}")
         epoch_loss.append(loss.item())
         if args.activate_wandb:
@@ -118,8 +120,8 @@ def main(args: DictConfig) -> None:
     # # Set up for debug, delete when you see it!
 
     # special set up for train on INSECT dataset
-    args.model_config.batch_size = 200
-    args.model_config.epochs = 500
+    args.model_config.batch_size = 300
+    args.model_config.epochs = 80
     args.model_config.evaluation_period = 15
 
     if args.debug_flag:
@@ -161,7 +163,14 @@ def main(args: DictConfig) -> None:
         param.requires_grad = True
 
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.AdamW(image_classifier.parameters(), lr=0.001)
+    optimizer = optim.AdamW(image_classifier.parameters(), lr=0.005)
+
+    # Calculate total number of steps (iterations)
+    total_steps = args.model_config.epochs * len(insect_trainval_dataloader)
+
+    # Define a linear learning rate scheduler based on the step
+    lambda_lr = lambda step: 1 - step / total_steps
+    scheduler = LambdaLR(optimizer, lr_lambda=lambda_lr)
 
     if args.activate_wandb:
         wandb.init(project="Fine-tune BIOSCAN-CLIP image encoder on INSECT dataset",
@@ -181,7 +190,7 @@ def main(args: DictConfig) -> None:
     for epoch in pbar:
         pbar.set_description(f"Epoch: {epoch}")
         epoch_loss = fine_tuning_epoch(args, image_classifier, insect_trainval_dataloader,
-                                       optimizer, criterion, unique_species_for_seen, epoch, device)
+                                       optimizer, criterion, scheduler, unique_species_for_seen, epoch, device)
 
         if epoch % args.model_config.evaluation_period == 0 or epoch - 1 == args.model_config.epochs:
             print("Eval:")
@@ -223,6 +232,7 @@ def main(args: DictConfig) -> None:
         image_feature = image_feature.T
         print(image_feature.shape)
         np.savetxt(image_embed_path, image_feature, delimiter=",")
+        print(f"Saved image embedding to: {image_embed_path}")
 
 
 if __name__ == '__main__':
