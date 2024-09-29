@@ -122,7 +122,7 @@ def main(args: DictConfig) -> None:
 
     # special set up for train on INSECT dataset
     args.model_config.batch_size = 300
-    args.model_config.epochs = 500
+    args.model_config.epochs = 100
     args.model_config.evaluation_period = 15
 
     if args.debug_flag:
@@ -164,7 +164,7 @@ def main(args: DictConfig) -> None:
         param.requires_grad = True
 
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.AdamW(image_classifier.parameters(), lr=0.001)
+    optimizer = optim.AdamW(image_classifier.parameters(), lr=0.00015)
 
     # Calculate total number of steps (iterations)
     total_steps = args.model_config.epochs * len(insect_trainval_dataloader)
