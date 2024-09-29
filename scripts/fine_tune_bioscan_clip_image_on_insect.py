@@ -122,7 +122,7 @@ def main(args: DictConfig) -> None:
 
     # special set up for train on INSECT dataset
     args.model_config.batch_size = 300
-    args.model_config.epochs = 80
+    args.model_config.epochs = 500
     args.model_config.evaluation_period = 15
 
     if args.debug_flag:
