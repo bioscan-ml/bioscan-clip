@@ -110,6 +110,8 @@ def get_similarity_for_different_combination_of_modalities(
                     curr_instance_with_distance_information['smallest_distance'][f"{query}_{key}"] = smallest_distance
             similarity_dict[seen_or_unseen][file_name] = curr_instance_with_distance_information
 
+    import pdb;pdb.set_trace()
+
 
 
 @hydra.main(config_path="../bioscanclip/config", config_name="global_config", version_base="1.1")

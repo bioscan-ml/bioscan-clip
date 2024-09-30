@@ -10,7 +10,8 @@ from omegaconf import DictConfig
 from tqdm import tqdm
 
 from inference_and_eval_with_bioclip_with_image_to_image import compute_accuracy
-from bioscanclip.util.dataset import load_dataloader, load_bioscan_dataloader_with_train_seen_and_separate_keys
+from bioscanclip.util.dataset import load_dataloader, load_bioscan_dataloader_with_train_seen_and_separate_keys, \
+    load_bioscan_dataloader_all_small_splits
 import open_clip
 import torch.nn.functional as F
 
@@ -130,7 +131,8 @@ def get_all_unique_species_from_dataloader(dataloader):
 
         for idx, species in enumerate(label_batch['species']):
             if species not in species_to_other.keys():
-                species_to_other[species] = {"order": label_batch['order'][idx], "family": label_batch['family'][idx], "genus": label_batch['genus'][idx], 'species': species}
+                species_to_other[species] = {"order": label_batch['order'][idx], "family": label_batch['family'][idx],
+                                             "genus": label_batch['genus'][idx], 'species': species}
 
     all_species = list(set(all_species))
     all_species.sort()
@@ -148,7 +150,6 @@ def get_autocast(precision):
 
 
 def encode_image_feature_and_calculate_accuracy(model, txt_features, query_dataloader, all_species):
-
     # for image feature
     autocast = get_autocast("amp")
     pbar = tqdm(query_dataloader)
@@ -174,7 +175,6 @@ def encode_image_feature_and_calculate_accuracy(model, txt_features, query_datal
     compute_accuracy(all_pred, all_gt)
 
 
-
 @hydra.main(config_path="../bioscanclip/config", config_name="global_config", version_base="1.1")
 def main(args: DictConfig) -> None:
     args.save_inference = True
@@ -197,20 +197,20 @@ def main(args: DictConfig) -> None:
 
     # Load data
     args.model_config.batch_size = 24
-    _, _, _, seen_keys_dataloader, val_unseen_keys_dataloader, test_unseen_keys_dataloader = load_bioscan_dataloader_with_train_seen_and_separate_keys(
-        args, for_pretrain=False)
+    _, _, _, seen_test_dataloader, unseen_test_dataloader, seen_keys_dataloader, val_unseen_keys_dataloader, test_unseen_keys_dataloader, all_keys_dataloader = load_bioscan_dataloader_all_small_splits(
+        args)
     _, seen_val_dataloader, unseen_val_dataloader, all_keys_dataloader = load_dataloader(args)
 
     all_species, species_to_other = get_all_unique_species_from_dataloader(all_keys_dataloader)
     classnames = [name.replace("_", " ") for name in all_species]
     txt_features_of_all_species = make_txt_features(model, classnames, openai_templates)
 
-    print("For seen val: ")
-    encode_image_feature_and_calculate_accuracy(model, txt_features_of_all_species, seen_val_dataloader, all_species)
+    print("For seen test: ")
+    encode_image_feature_and_calculate_accuracy(model, txt_features_of_all_species, seen_test_dataloader, all_species)
     print()
 
-    print("For unseen val: ")
-    encode_image_feature_and_calculate_accuracy(model, txt_features_of_all_species, unseen_val_dataloader, all_species)
+    print("For unseen test: ")
+    encode_image_feature_and_calculate_accuracy(model, txt_features_of_all_species, unseen_test_dataloader, all_species)
 
 
 if __name__ == "__main__":
