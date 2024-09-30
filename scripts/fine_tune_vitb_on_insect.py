@@ -12,9 +12,13 @@ import wandb
 from omegaconf import DictConfig, OmegaConf
 from tqdm import tqdm
 import torch.nn.functional as F
-from bioscanclip.util.util import ViTWIthExtraLayer
 from bioscanclip.util.dataset_for_insect_dataset import load_insect_dataloader, load_insect_dataloader_trainval
+from bioscanclip.model.vit_with_mlp import ViTWIthExtraLayer
+from bioscanclip.model.simple_clip import load_clip_model
+from torch.optim.lr_scheduler import LambdaLR
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+
+
 
 def evaluate_epoch(model, dataloader, device, unique_species_for_seen, k_values=None):
     if k_values is None:
@@ -57,7 +61,7 @@ def label_batch_to_species_idx(label_batch, unique_species_for_seen):
 
 
 def fine_tuning_epoch(args, model, insect_train_dataloader,
-                      optimizer, criterion, unique_species_for_seen, epoch, device):
+                      optimizer, criterion, scheduler, unique_species_for_seen, epoch, device):
     pbar = tqdm(enumerate(insect_train_dataloader), total=len(insect_train_dataloader))
     epoch_loss = []
     len_loader = len(insect_train_dataloader)
@@ -71,10 +75,12 @@ def fine_tuning_epoch(args, model, insect_train_dataloader,
         loss = criterion(output, target)
         loss.backward()
         optimizer.step()
-        pbar.set_description(f"loss: {loss.item()}")
+        scheduler.step()
+        pbar.set_description(f"loss: {loss.item()}, lr: {scheduler.get_last_lr()[0]}")
         epoch_loss.append(loss.item())
         if args.activate_wandb:
-            wandb.log({"loss": loss.item(), "step": step + epoch * len_loader})
+            wandb.log({"loss": loss.item(), "lr": scheduler.get_last_lr()[0]
+                      , "step": step + epoch * len_loader})
 
     epoch_loss = sum(epoch_loss) * 1.0 / len(epoch_loss)
 
@@ -115,8 +121,8 @@ def main(args: DictConfig) -> None:
     # # Set up for debug, delete when you see it!
 
     # special set up for train on INSECT dataset
-    args.model_config.batch_size = 200
-    args.model_config.epochs = 500
+    args.model_config.batch_size = 300
+    args.model_config.epochs = 100
     args.model_config.evaluation_period = 15
 
     if args.debug_flag:
@@ -148,7 +154,14 @@ def main(args: DictConfig) -> None:
         param.requires_grad = True
 
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.AdamW(image_classifier.parameters(), lr=0.001)
+    optimizer = optim.AdamW(image_classifier.parameters(), lr=0.00015)
+
+    # Calculate total number of steps (iterations)
+    total_steps = args.model_config.epochs * len(insect_trainval_dataloader)
+
+    # Define a linear learning rate scheduler based on the step
+    lambda_lr = lambda step: 1 - step / total_steps
+    scheduler = LambdaLR(optimizer, lr_lambda=lambda_lr)
 
     if args.activate_wandb:
         wandb.init(project="Fine-tune ViT-B on INSECT dataset",
@@ -156,6 +169,8 @@ def main(args: DictConfig) -> None:
 
     folder_path = os.path.join(args.project_root_path, args.model_output_dir,
                                "Fine_tune_ViT-B_on_INSECT_dataset", formatted_datetime)
+    folder_to_save_embed = os.path.join(args.project_root_path, "embedding_from_vit_fine_tuned_on_insect",
+                                        formatted_datetime)
     os.makedirs(folder_path, exist_ok=True)
     last_ckpt_path = os.path.join(folder_path, 'last.ckpt')
     OmegaConf.save(args, os.path.join(folder_path, 'config.yaml'))
@@ -168,7 +183,7 @@ def main(args: DictConfig) -> None:
     for epoch in pbar:
         pbar.set_description(f"Epoch: {epoch}")
         epoch_loss = fine_tuning_epoch(args, image_classifier, insect_trainval_dataloader,
-                                       optimizer, criterion, unique_species_for_seen, epoch, device)
+                                       optimizer, criterion, scheduler, unique_species_for_seen, epoch, device)
 
         if epoch % args.model_config.evaluation_period == 0 or epoch - 1 == args.model_config.epochs:
             print("Eval:")
@@ -187,8 +202,6 @@ def main(args: DictConfig) -> None:
                 torch.save(image_classifier.state_dict(), last_ckpt_path)
                 print(f'Last ckpt: {last_ckpt_path}')
                 # save_image_embedding to “image_embedding_from_bioscan_clip.csv”
-                folder_to_save_embed = os.path.join(args.project_root_path, "embedding_from_vit_fine_tuned_on_insect",
-                                                    formatted_datetime)
                 os.makedirs(folder_to_save_embed, exist_ok=True)
                 image_embed_path = os.path.join(folder_to_save_embed,
                                                 "image_embedding_from_vit_fine_tuned_on_insect.csv")

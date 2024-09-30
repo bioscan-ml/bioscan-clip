@@ -179,6 +179,9 @@ def main(args: DictConfig) -> None:
 
     folder_path = os.path.join(args.project_root_path, args.model_output_dir,
                                "Fine_tune_BIOSCAN-CLIP-image-encoder_on_INSECT_dataset", formatted_datetime)
+    folder_to_save_embed = os.path.join(args.project_root_path,
+                                        "embedding_from_BIOSCAN-CLIP-image-encoder_fine_tuned_on_insect",
+                                        formatted_datetime)
     os.makedirs(folder_path, exist_ok=True)
     last_ckpt_path = os.path.join(folder_path, 'last.ckpt')
     OmegaConf.save(args, os.path.join(folder_path, 'config.yaml'))
@@ -210,8 +213,6 @@ def main(args: DictConfig) -> None:
                 torch.save(image_classifier.state_dict(), last_ckpt_path)
                 print(f'Last ckpt: {last_ckpt_path}')
                 # save_image_embedding to “image_embedding_from_bioscan_clip.csv”
-                folder_to_save_embed = os.path.join(args.project_root_path, "embedding_from_BIOSCAN-CLIP-image-encoder_fine_tuned_on_insect",
-                                                    formatted_datetime)
                 os.makedirs(folder_to_save_embed, exist_ok=True)
                 image_embed_path = os.path.join(folder_to_save_embed,
                                                 "image_embedding_from_BIOSCAN-CLIP-image-encoder_fine_tuned_on_insect.csv")
