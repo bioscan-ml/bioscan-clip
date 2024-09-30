@@ -111,14 +111,14 @@ def get_results(folder_list, idx, header, corr, macro=False, last=False):
             masked_array = np.ma.masked_array(num_list, num_list == max_val)
             index_second_lst = np.argwhere(masked_array == np.max(masked_array)).flatten().tolist()
 
-            if len(masked_array) > 0 and idx in index_second_lst:
+            if len(index_max_lst) == 1 and len(masked_array) > 0 and idx in index_second_lst:
                 return_string += "\\second{%.1f} " % masked_array[index_second_lst]
                 
             else:
                 if num_list[idx] == -1:
                     return_string += "--- "
                 elif num_idx == 2 and num_list[idx] == float(-2):
-                    return_string += "N/A "
+                    return_string += "{%.1f} " % 0
                 else:
                     return_string += "%.1f " % num_list[idx]
         
