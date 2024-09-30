@@ -11,5 +11,4 @@ html_plots
 extracted_embedding
 Fine-Grained-ZSL-with-DNA
 representation_visualization
-representation_visualization_resize
-representation_visualization_resize_rename
+representation_visualization_i2d

@@ -669,7 +669,7 @@ def inference_and_print_result(keys_dict, seen_dict, unseen_dict, args, small_sp
             acc_dict[query_feature_type][key_feature_type]["seen"] = {}
             acc_dict[query_feature_type][key_feature_type]["unseen"] = {}
 
-            if query_feature_type == "encoded_image_feature" and key_feature_type == "encoded_dna_feature":
+            if query_feature_type == "encoded_image_feature" and key_feature_type == "encoded_image_feature":
                 print_flag = True
             else:
                 print_flag = False

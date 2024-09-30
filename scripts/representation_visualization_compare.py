@@ -174,7 +174,7 @@ def main(args: DictConfig) -> None:
     seen_flag = False; seen_string = "seen" if seen_flag else "unseen"
     val_flag = True; val_string = "val" if val_flag else "test"
     # save_path = os.path.join(args.project_root_path, "representation_visualization_test/macro/seen")
-    save_path = os.path.join(args.project_root_path, f"representation_visualization_resize_rename/{seen_string}")
+    save_path = os.path.join(args.project_root_path, f"representation_visualization/{seen_string}")
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # Load some images from the hdf5 file
@@ -201,8 +201,8 @@ def main(args: DictConfig) -> None:
 
         # read csv
         level_column = 1 + l_id * 2
-        with open(os.path.join(args.project_root_path, f"logs/after_val_top1_{seen_string}_i2d_results.csv"), mode='r') as after_csvfile,\
-            open(os.path.join(args.project_root_path, f"logs/before_val_top1_{seen_string}_i2d_results.csv"), mode='r') as before_csvfile:
+        with open(os.path.join(args.project_root_path, f"logs/IDT_val_top1_{seen_string}_i2i_results.csv"), mode='r') as after_csvfile,\
+            open(os.path.join(args.project_root_path, f"logs/before_val_top1_{seen_string}_i2i_results.csv"), mode='r') as before_csvfile:
             after_reader = csv.reader(after_csvfile, delimiter=',')
             next(after_reader)
 
