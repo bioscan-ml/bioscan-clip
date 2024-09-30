@@ -103,25 +103,26 @@ def get_results(folder_list, idx, header, corr, macro=False, last=False):
 
     for num_idx, num_list in enumerate([seen_list, unseen_list, harmonic_list]):
         index_max_lst = np.argwhere(num_list == np.max(num_list)).flatten().tolist()
-        if idx in index_max_lst:
-            return_string += "\\best{%.1f} " % num_list[idx]
+
+
+        if num_list[idx] == -1:
+            return_string += "--- "
+        elif num_idx == 2 and num_list[idx] == float(-2):
+            return_string += "{%.1f} " % 0
         else:
 
-            max_val = np.max(num_list)
-            masked_array = np.ma.masked_array(num_list, num_list == max_val)
-            index_second_lst = np.argwhere(masked_array == np.max(masked_array)).flatten().tolist()
-
-            if len(index_max_lst) == 1 and len(masked_array) > 0 and idx in index_second_lst:
-                return_string += "\\second{%.1f} " % masked_array[index_second_lst]
-                
+            if idx in index_max_lst:
+                return_string += "\\best{%.1f} " % num_list[idx]
             else:
-                if num_list[idx] == -1:
-                    return_string += "--- "
-                elif num_idx == 2 and num_list[idx] == float(-2):
-                    return_string += "{%.1f} " % 0
+
+                max_val = np.max(num_list)
+                masked_array = np.ma.masked_array(num_list, num_list == max_val)
+                index_second_lst = np.argwhere(masked_array == np.max(masked_array)).flatten().tolist()
+                if len(index_max_lst) == 1 and len(masked_array) > 0 and idx in index_second_lst:
+                    return_string += "\\second{%.1f} " % masked_array[index_second_lst]
                 else:
                     return_string += "%.1f " % num_list[idx]
-        
+
         if num_idx == 2 and last:
             return_string += "\\\\ \n"
         else:
