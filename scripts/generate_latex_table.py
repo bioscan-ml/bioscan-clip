@@ -80,8 +80,8 @@ def get_result(csv, header, corr, alignment_type, macro=False):
     if row is None:
         return -1, -1, -1
     
-    seen = float(csv[row][column_list[0]]) * 100
-    unseen = float(csv[row][column_list[1]]) * 100
+    seen = round(float(csv[row][column_list[0]]) * 100, 1)
+    unseen = round(float(csv[row][column_list[1]]) * 100, 1)
     harmonic = compute_HM(seen, unseen)
 
     return seen, unseen, harmonic
@@ -104,14 +104,23 @@ def get_results(folder_list, idx, header, corr, macro=False, last=False):
     for num_idx, num_list in enumerate([seen_list, unseen_list, harmonic_list]):
         index_max_lst = np.argwhere(num_list == np.max(num_list)).flatten().tolist()
         if idx in index_max_lst:
-            return_string += "\\textbf{%.2f} " % num_list[idx]
+            return_string += "\\best{%.1f} " % num_list[idx]
         else:
-            if num_list[idx] == -1:
-                return_string += "--- "
-            elif num_idx == 2 and num_list[idx] == float(-2):
-                return_string += "N/A "
+
+            max_val = np.max(num_list)
+            masked_array = np.ma.masked_array(num_list, num_list == max_val)
+            index_second_lst = np.argwhere(masked_array == np.max(masked_array)).flatten().tolist()
+
+            if len(masked_array) > 0 and idx in index_second_lst:
+                return_string += "\\second{%.1f} " % masked_array[index_second_lst]
+                
             else:
-                return_string += "%.2f " % num_list[idx]
+                if num_list[idx] == -1:
+                    return_string += "--- "
+                elif num_idx == 2 and num_list[idx] == float(-2):
+                    return_string += "N/A "
+                else:
+                    return_string += "%.1f " % num_list[idx]
         
         if num_idx == 2 and last:
             return_string += "\\\\ \n"
@@ -160,19 +169,20 @@ def write_latex_content(args, dataset=True, alignment=True):
             latex_strings += " ccc"
         latex_strings += " rrr rrr rrr rrr rrr rrr@{}}\n"
 
-        # write first row of the header
         latex_strings += "\\toprule\n"
+        # write first row of the header
+        if args.metric == "both":
 
-        column_starter = 2
-        latex_strings += "& "
-        if dataset:
+            column_starter = 2
             latex_strings += "& "
-            column_starter += 1
-        if alignment:
-            latex_strings += "& & & "
-            column_starter += 3
-        latex_strings += "\\multicolumn{9}{c}{Micro top-1 accuracy} & \\multicolumn{9}{c}{Macro top-1 accuracy} \\\\ \n"
-        latex_strings += "\\cmidrule(l){%d-%d} \\cmidrule(l){%d-%d}\n" % (column_starter, column_starter+8, column_starter+9, column_starter+17)
+            if dataset:
+                latex_strings += "& "
+                column_starter += 1
+            if alignment:
+                latex_strings += "& & & "
+                column_starter += 3
+            latex_strings += "\\multicolumn{9}{c}{Micro top-1 accuracy} & \\multicolumn{9}{c}{Macro top-1 accuracy} \\\\ \n"
+            latex_strings += "\\cmidrule(l){%d-%d} \\cmidrule(l){%d-%d}\n" % (column_starter, column_starter+8, column_starter+9, column_starter+17)
 
         # write second row of the header
         column_starter = 2
@@ -183,13 +193,19 @@ def write_latex_content(args, dataset=True, alignment=True):
         if alignment:
             latex_strings += "\\multicolumn{3}{c}{Aligned embeddings} & "
             column_starter += 3
-        latex_strings += "\\multicolumn{3}{c}{DNA to DNA} & \\multicolumn{3}{c}{Image to Image} & \\multicolumn{3}{c}{Image to DNA} & \\multicolumn{3}{c}{DNA to DNA} & \\multicolumn{3}{c}{Image to Image} & \\multicolumn{3}{c}{Image to DNA} \\\\ \n"
+        latex_strings += "\\multicolumn{3}{c}{DNA to DNA} & \\multicolumn{3}{c}{Image to Image} & \\multicolumn{3}{c}{Image to DNA} "
+        if args.metric == "both":
+            latex_strings += "& \\multicolumn{3}{c}{DNA to DNA} & \\multicolumn{3}{c}{Image to Image} & \\multicolumn{3}{c}{Image to DNA}"
+        latex_strings += "\\\\ \n"
 
         if alignment:
             latex_strings += "\\cmidrule(){%d-%d} " % (column_starter - 3, column_starter - 1)
-        latex_strings += "\\cmidrule(l){%d-%d} \\cmidrule(l){%d-%d} \\cmidrule(l){%d-%d} \\cmidrule(l){%d-%d} \\cmidrule(l){%d-%d} \\cmidrule(l){%d-%d} \n" % \
-            (column_starter, column_starter + 2, column_starter + 3, column_starter + 5, column_starter + 6, column_starter + 8,
-             column_starter + 9, column_starter + 11, column_starter + 12, column_starter + 14, column_starter + 15, column_starter + 17)
+        latex_strings += "\\cmidrule(l){%d-%d} \\cmidrule(l){%d-%d} \\cmidrule(l){%d-%d}" % \
+            (column_starter, column_starter + 2, column_starter + 3, column_starter + 5, column_starter + 6, column_starter + 8)
+        if args.metric == "both":
+            latex_strings += " \\cmidrule(l){%d-%d} \\cmidrule(l){%d-%d} \\cmidrule(l){%d-%d}" % \
+            (column_starter + 9, column_starter + 11, column_starter + 12, column_starter + 14, column_starter + 15, column_starter + 17)
+        latex_strings += "\n"
 
         # write third row of the header
         latex_strings += "Taxon & "
@@ -197,7 +213,10 @@ def write_latex_content(args, dataset=True, alignment=True):
             latex_strings += "Trained on & "
         if alignment:
             latex_strings += "Img & DNA & Txt & "
-        latex_strings += "~~Seen & Unseen & H.M. & ~~Seen & Unseen & H.M. & ~~Seen & Unseen & H.M. & ~~Seen & Unseen & H.M. & ~~Seen & Unseen & H.M. & ~~Seen & Unseen & H.M. \\\\ \n"
+        latex_strings += "~~Seen & Unseen & H.M. & ~~Seen & Unseen & H.M. & ~~Seen & Unseen & H.M."
+        if args.metric == "both":
+            latex_strings += " & ~~Seen & Unseen & H.M. & ~~Seen & Unseen & H.M. & ~~Seen & Unseen & H.M."
+        latex_strings += "\\\\ \n"
 
     # write the content
     latex_strings += "\\midrule\n"
@@ -217,11 +236,18 @@ def write_latex_content(args, dataset=True, alignment=True):
             if alignment:
                 latex_strings += alignment_string
 
-            for macro in [False, True]:
+            if args.metric == "both":        
+                for macro in [False, True]:
+                    for corr in ["dna2dna", "img2img", "img2dna"]:
+                        latex_strings += get_results(
+                            args.result_folder, idx, header, corr, macro=macro, 
+                            last=True if corr == "img2dna" and macro is True else False)
+            else:
+                macro = False if args.metric == "micro" else True
                 for corr in ["dna2dna", "img2img", "img2dna"]:
                     latex_strings += get_results(
                         args.result_folder, idx, header, corr, macro=macro, 
-                        last=True if corr == "img2dna" and macro is True else False)
+                        last=True if corr == "img2dna" else False)
 
         latex_strings += "\\midrule\n" if header != "Species" else "\\bottomrule\n"
 
@@ -241,11 +267,6 @@ def main(args):
 
 if __name__ == "__main__":
     parser = ArgumentParser()
-    # parser.add_argument("--result_folder", type=str, nargs='+', 
-    #                     default=["outputs/2024-09-16/19-20-19", 
-    #                              "outputs/2024-09-14/19-53-31", 
-    #                              "outputs/2024-09-14/10-08-46",
-    #                              "outputs/2024-09-13/19-43-07",])
     parser.add_argument("--result_folder", type=str, nargs='+', 
                         default=["outputs/2024-09-16/19-20-19", 
                                  "outputs/2024-09-17/06-08-54", 
@@ -256,8 +277,10 @@ if __name__ == "__main__":
                         help="Write the full table, including the header and footer")
     parser.add_argument("--no_dataset", action="store_true", help="table does not contain dataset column")
     parser.add_argument("--no_alignment", action="store_true", help="table does not contain alignment column")
-    # parser.add_argument("--macro", action="store_true", help="Write macro results")
+    parser.add_argument("--metric", type=str, default="both")
 
     args = parser.parse_args()
+
+    assert args.metric in ["both", "micro", "macro"], "Invalid metric"
 
     main(args)
