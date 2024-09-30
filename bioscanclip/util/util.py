@@ -709,8 +709,9 @@ def get_features_and_label(dataloader, model, device, for_key_set=False, for_ope
     all_key_features = None
     all_key_features_label = None
     if encoded_dna_feature is not None and encoded_image_feature is not None:
-        averaged_feature = np.mean([encoded_image_feature, encoded_dna_feature], axis=0)
-        concatenated_feature = np.concatenate((encoded_image_feature, encoded_dna_feature), axis=1)
+        if len(encoded_dna_feature) != 0 and len(encoded_image_feature) != 0:
+            averaged_feature = np.mean([encoded_image_feature, encoded_dna_feature], axis=0)
+            concatenated_feature = np.concatenate((encoded_image_feature, encoded_dna_feature), axis=1)
 
     dictionary_of_split = {
         "file_name_list": file_name_list,

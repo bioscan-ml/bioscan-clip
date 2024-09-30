@@ -8,6 +8,7 @@
         "html_plots",
         "representation_visualization",
         "representation_visualization_resize",
+        "representation_visualization_resize_rename",
     ],
     // "python.analysis.autoImportCompletions": true,
     // "python.analysis.typeCheckingMode": "off",

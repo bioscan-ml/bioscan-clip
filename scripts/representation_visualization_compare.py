@@ -150,11 +150,11 @@ def get_vit_explaination(image_list, attn_rollout, transform, device, layer_idx=
     return image_with_mask_list
 
 
-def get_and_save_vit_explaination(image_list, attn_rollout, transform, device, layer_idx=None,
+def get_and_save_vit_explaination(image_list, image_id_list, attn_rollout, transform, device, layer_idx=None,
                                   folder_name="representation_visualization/before_contrastive_learning"):
     os.makedirs(folder_name, exist_ok=True)
     image_with_mask_list = []
-    for idx, image in tqdm(enumerate(image_list), total=len(image_list)):
+    for image, image_id in tqdm(zip(image_list, image_id_list), total=len(image_list)):
         with torch.no_grad():
             image_tensor = transform(image).unsqueeze(0).to(device)
             mask = attn_rollout(image_tensor, layer_idx=layer_idx)
@@ -162,7 +162,7 @@ def get_and_save_vit_explaination(image_list, attn_rollout, transform, device, l
         np_img = np.array(image)[:, :, ::-1]
         mask = cv2.resize(mask, (np_img.shape[1], np_img.shape[0]))
         image_with_mask = show_mask_on_image(np_img, mask)
-        cv2.imwrite(f"{folder_name}/vit_explaination_image_with_mask_{idx}.png", image_with_mask)
+        cv2.imwrite(f"{folder_name}/{image_id}.png", image_with_mask)
         image_with_mask_list.append(image_with_mask)
     attn_rollout.remove_hooks()
     return image_with_mask_list
@@ -174,7 +174,7 @@ def main(args: DictConfig) -> None:
     seen_flag = False; seen_string = "seen" if seen_flag else "unseen"
     val_flag = True; val_string = "val" if val_flag else "test"
     # save_path = os.path.join(args.project_root_path, "representation_visualization_test/macro/seen")
-    save_path = os.path.join(args.project_root_path, f"representation_visualization_resize/{seen_string}")
+    save_path = os.path.join(args.project_root_path, f"representation_visualization_resize_rename/{seen_string}")
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # Load some images from the hdf5 file
@@ -272,7 +272,8 @@ def main(args: DictConfig) -> None:
                 attn_rollout = VITAttentionRollout(image_encoder, discard_ratio=0.9, head_fusion="max")
                 # before_failed_image_list = get_vit_explaination(failed_image_list, attn_rollout, transform, device)
                 before_masked_image_list = get_and_save_vit_explaination(id_image_dict[level][f"{before_label}_{after_label}"]["image"], 
-                    attn_rollout, transform, device, folder_name=os.path.join(save_path, f"{level}/{before_label}_{after_label}/before_contrastive_learning"))
+                    id_image_dict[level][f"{before_label}_{after_label}"]["id"], attn_rollout, transform, device, folder_name=\
+                        os.path.join(save_path, f"{level}/{before_label}_{after_label}/before_contrastive_learning"))
 
 
                 checkpoint = torch.load(args.model_config.ckpt_path, map_location="cuda:0")
@@ -288,7 +289,8 @@ def main(args: DictConfig) -> None:
                 attn_rollout = VITAttentionRollout(image_encoder, discard_ratio=0.9, head_fusion="max")
                 # after_success_image_list = get_vit_explaination(success_image_list, attn_rollout, transform, device)
                 after_masked_image_list_idt = get_and_save_vit_explaination(id_image_dict[level][f"{before_label}_{after_label}"]["image"], 
-                    attn_rollout, transform, device, folder_name=os.path.join(save_path, f"{level}/{before_label}_{after_label}/image_dna_text"))
+                    id_image_dict[level][f"{before_label}_{after_label}"]["id"], attn_rollout, transform, device, folder_name=\
+                        os.path.join(save_path, f"{level}/{before_label}_{after_label}/image_dna_text"))
 
 
                 args.model_config = it_config 
@@ -306,7 +308,8 @@ def main(args: DictConfig) -> None:
                 attn_rollout = VITAttentionRollout(image_encoder, discard_ratio=0.9, head_fusion="max")
                 # after_success_image_list = get_vit_explaination(success_image_list, attn_rollout, transform, device)
                 after_masked_image_list_it = get_and_save_vit_explaination(id_image_dict[level][f"{before_label}_{after_label}"]["image"], 
-                    attn_rollout, transform, device, folder_name=os.path.join(save_path, f"{level}/{before_label}_{after_label}/image_text"))
+                    id_image_dict[level][f"{before_label}_{after_label}"]["id"], attn_rollout, transform, device, folder_name=\
+                        os.path.join(save_path, f"{level}/{before_label}_{after_label}/image_text"))
 
                 args.model_config = id_config 
                 model = load_clip_model(args, device)
@@ -323,7 +326,8 @@ def main(args: DictConfig) -> None:
                 attn_rollout = VITAttentionRollout(image_encoder, discard_ratio=0.9, head_fusion="max")
                 # after_success_image_list = get_vit_explaination(success_image_list, attn_rollout, transform, device)
                 after_masked_image_list_id = get_and_save_vit_explaination(id_image_dict[level][f"{before_label}_{after_label}"]["image"], 
-                    attn_rollout, transform, device, folder_name=os.path.join(save_path, f"{level}/{before_label}_{after_label}/image_dna"))
+                    id_image_dict[level][f"{before_label}_{after_label}"]["id"], attn_rollout, transform, device, folder_name=\
+                        os.path.join(save_path, f"{level}/{before_label}_{after_label}/image_dna"))
 
 
                 print(f"Merge {before_label}_{after_label} images at {level} level")
