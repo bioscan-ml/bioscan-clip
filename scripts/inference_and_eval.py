@@ -19,8 +19,13 @@ from umap import UMAP
 
 from bioscanclip.model.simple_clip import load_clip_model
 from bioscanclip.util.dataset import load_bioscan_dataloader_all_small_splits
-from bioscanclip.util.util import categorical_cmap, inference_and_print_result, get_features_and_label, \
-    make_prediction, All_TYPE_OF_FEATURES_OF_KEY
+from bioscanclip.util.util import (
+    categorical_cmap,
+    inference_and_print_result,
+    get_features_and_label,
+    make_prediction,
+    All_TYPE_OF_FEATURES_OF_KEY,
+)
 
 PLOT_FOLDER = "html_plots"
 RETRIEVAL_FOLDER = "image_retrieval"
@@ -31,9 +36,10 @@ def get_all_unique_species_from_dataloader(dataloader):
 
     for batch in dataloader:
         file_name_batch, image_input_batch, dna_batch, input_ids, token_type_ids, attention_mask, label_batch = batch
-        all_species = all_species + label_batch['species']
+        all_species = all_species + label_batch["species"]
     all_species = list(set(all_species))
     return all_species
+
 
 def save_prediction(pred_dict, gt_dict, json_path):
     data = {"gt_labels": gt_dict, "pred_labels": pred_dict}
@@ -97,7 +103,16 @@ def generate_embedding_plot(args, image_features, dna_features, language_feature
     unique_lang_features, lang_indices, inv_indices = get_language_feature_mapping(language_features)
     # compute 2D embeddings
     umap_2d = UMAP(n_components=2, init="random", random_state=0, min_dist=0.5, metric="cosine")
-    proj_2d = umap_2d.fit_transform(np.concatenate((image_features, dna_features, unique_lang_features), axis=0))
+    features = []
+    feature_names = []
+    num_samples = image_features.shape[0] if image_features is not None else dna_features.shape[0]
+    for name, feature in [("image", image_features), ("dna", dna_features), ("text", unique_lang_features)]:
+        if feature is not None:
+            features.append(feature)
+            feature_names.append(name)
+    if not features:
+        raise ValueError("No image, DNA, or language features provided.")
+    proj_2d = umap_2d.fit_transform(np.concatenate(features, axis=0))
 
     all_indices = []
     for level_idx, level in enumerate(levels):
@@ -111,7 +126,7 @@ def generate_embedding_plot(args, image_features, dna_features, language_feature
             ]
             # print(np.unique([gt_labels[i][prev_level] for i in indices]))
         else:
-            indices = [i for i in range(image_features.shape[0])]
+            indices = [i for i in range(num_samples)]
 
         all_indices.append(indices)
         # filter small classes
@@ -121,33 +136,35 @@ def generate_embedding_plot(args, image_features, dna_features, language_feature
         random.shuffle(indices)
 
         number_of_sample = len(indices)
-        full_indices = [
-            *indices,
-            *[i + number_of_sample for i in indices],
-            *(np.unique(inv_indices[indices]) + 2 * number_of_sample).tolist(),
-        ]  # for DNA and language features
-        proj_2d_selected = proj_2d[full_indices]
 
         gt_list = [gt_labels[i][level] for i in indices]
         unique_values, unique_counts = np.unique(gt_list, return_counts=True)
         idx_sorted = np.argsort(unique_counts)[::-1]
         level_order = unique_values[idx_sorted]
-        level_order = [f"{level_name}-{type_}" for level_name in level_order for type_ in ["image", "dna", "text"]]
+        level_order = [f"{level_name}-{type_}" for level_name in level_order for type_ in feature_names]
         count_unique = len(unique_values)
-        gt_list = [
-            *[f"{gt}-image" for gt in gt_list],
-            *[f"{gt}-dna" for gt in gt_list],
-            *[f"{gt_labels[i][level]}-text" for i in lang_indices[np.unique(inv_indices[indices])]],
-        ]
+
+        gt_list_full = []
+        full_indices = []
+        if image_features is not None:
+            gt_list_full.extend([f"{gt}-image" for gt in gt_list])
+            full_indices.extend(indices)
+        if dna_features is not None:
+            gt_list_full.extend([f"{gt}-dna" for gt in gt_list])
+            full_indices.extend([i + number_of_sample for i in indices])
+        if language_features is not None:
+            gt_list_full.extend([f"{gt_labels[i][level]}-text" for i in lang_indices[np.unique(inv_indices[indices])]])
+            full_indices.extend((np.unique(inv_indices[indices]) + len(full_indices)).tolist())
+        proj_2d_selected = proj_2d[full_indices]
 
         # colors = [matplotlib.colors.to_rgb(col) for col in px.colors.qualitative.Dark24][:count_unique]
-        colors = [matplotlib.colors.to_hex(col) for col in categorical_cmap(count_unique, 3).colors]
+        colors = [matplotlib.colors.to_hex(col) for col in categorical_cmap(count_unique, len(feature_names)).colors]
 
         fig_2d = px.scatter(
             proj_2d_selected,
             x=0,
             y=1,
-            color=gt_list,
+            color=gt_list_full,
             opacity=1.0,
             labels={"color": level},
             color_discrete_sequence=colors,
@@ -184,15 +201,11 @@ def generate_embedding_plot(args, image_features, dna_features, language_feature
             }
         )
 
-        folder_path = os.path.join(
-            args.project_root_path, f"{PLOT_FOLDER}/{args.model_config.model_output_name}"
-        )
+        folder_path = os.path.join(args.project_root_path, f"{PLOT_FOLDER}/{args.model_config.model_output_name}")
         os.makedirs(folder_path, exist_ok=True)
         # fig_3d.update_traces(marker_size=5)
         fig_2d.write_html(os.path.join(folder_path, f"{level}_2d.html"))
-        plotly.io.write_image(
-            fig_2d, os.path.join(folder_path, f"{level}_2d.pdf"), format="pdf", height=600, width=800
-        )
+        plotly.io.write_image(fig_2d, os.path.join(folder_path, f"{level}_2d.pdf"), format="pdf", height=600, width=800)
         print(f"Saved {level} plot in {os.path.join(folder_path, f'{level}_2d.html')}")
         # fig_3d.write_html(os.path.join(folder_path, f'{level}_3d.html'))
         fig_2d.show()
@@ -200,18 +213,18 @@ def generate_embedding_plot(args, image_features, dna_features, language_feature
 
 
 def retrieve_images(
-        args,
-        name,
-        query_dict,
-        keys_dict,
-        queries,
-        keys,
-        query_data,
-        key_data,
-        num_queries=5,
-        max_k=5,
-        taxon="order",
-        seed=None,
+    args,
+    name,
+    query_dict,
+    keys_dict,
+    queries,
+    keys,
+    query_data,
+    key_data,
+    num_queries=5,
+    max_k=5,
+    taxon="order",
+    seed=None,
 ):
     """
     for X in {image, DNA}:
@@ -288,10 +301,10 @@ def retrieve_images(
             # save out predictions
             os.makedirs(os.path.join(folder_path, f"query_{query_feature_type}_key_{key_feature_type}"), exist_ok=True)
             with open(
-                    os.path.join(
-                        folder_path, f"query_{query_feature_type}_key_{key_feature_type}", f"retrieved_images.json"
-                    ),
-                    "w",
+                os.path.join(
+                    folder_path, f"query_{query_feature_type}_key_{key_feature_type}", f"retrieved_images.json"
+                ),
+                "w",
             ) as json_file:
                 json.dump(retrieval_results, json_file, indent=4)
 
@@ -417,37 +430,33 @@ def main(args: DictConfig) -> None:
         args.model_config.ckpt_path = os.path.join(args.model_config.ckpt_path, "best.pth")
     elif os.path.exists(os.path.join(args.model_config.ckpt_path, "last.pth")):
         args.model_config.ckpt_path = os.path.join(args.model_config.ckpt_path, "last.pth")
-    folder_for_saving = os.path.join(args.project_root_path,
-                                     "extracted_embedding", args.model_config.dataset,
-                                     args.model_config.model_output_name
-                                     )
+    folder_for_saving = os.path.join(
+        args.project_root_path, "extracted_embedding", args.model_config.dataset, args.model_config.model_output_name
+    )
     os.makedirs(folder_for_saving, exist_ok=True)
     labels_path = os.path.join(folder_for_saving, f"labels_{args.inference_and_eval_setting.eval_on}.json")
     processed_id_path = os.path.join(folder_for_saving, f"processed_id_{args.inference_and_eval_setting.eval_on}.json")
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    extracted_features_path = os.path.join(folder_for_saving,
-                                           f"extracted_feature_from_{args.inference_and_eval_setting.eval_on}_split.hdf5")
+    extracted_features_path = os.path.join(
+        folder_for_saving, f"extracted_feature_from_{args.inference_and_eval_setting.eval_on}_split.hdf5"
+    )
 
     if os.path.exists(extracted_features_path) and os.path.exists(labels_path) and args.load_inference:
         print("Loading embeddings from file...")
 
-        with h5py.File(extracted_features_path, 'r') as hdf5_file:
-            seen_dict = {
-
-            }
+        with h5py.File(extracted_features_path, "r") as hdf5_file:
+            seen_dict = {}
             for type_of_feature in All_TYPE_OF_FEATURES_OF_KEY:
                 if type_of_feature in hdf5_file["seen"].keys():
                     seen_dict[type_of_feature] = hdf5_file["seen"][type_of_feature][:]
 
-            unseen_dict = {
-            }
+            unseen_dict = {}
             for type_of_feature in All_TYPE_OF_FEATURES_OF_KEY:
                 if type_of_feature in hdf5_file["unseen"].keys():
                     unseen_dict[type_of_feature] = hdf5_file["unseen"][type_of_feature][:]
-            keys_dict = {
-            }
+            keys_dict = {}
             for type_of_feature in All_TYPE_OF_FEATURES_OF_KEY:
                 if type_of_feature in hdf5_file["key"].keys():
                     keys_dict[type_of_feature] = hdf5_file["key"][type_of_feature][:]
@@ -457,15 +466,16 @@ def main(args: DictConfig) -> None:
         seen_dict["label_list"] = total_dict["seen_gt_dict"]
         unseen_dict["label_list"] = total_dict["unseen_gt_dict"]
         keys_dict["label_list"] = total_dict["key_gt_dict"]
-        keys_dict["all_key_features_label"] = total_dict["key_gt_dict"] + total_dict["key_gt_dict"] + total_dict[
-            "key_gt_dict"]
+        keys_dict["all_key_features_label"] = (
+            total_dict["key_gt_dict"] + total_dict["key_gt_dict"] + total_dict["key_gt_dict"]
+        )
 
         with open(processed_id_path, "r") as json_file:
             id_dict = json.load(json_file)
-        seen_dict["processed_id_list"] = id_dict['seen_id_list']
-        unseen_dict["processed_id_list"] = id_dict['unseen_id_list']
-        keys_dict["processed_id_list"] = id_dict['key_id_list']
-        keys_dict["all_processed_id_list"] = id_dict['key_id_list'] + id_dict['key_id_list'] + id_dict['key_id_list']
+        seen_dict["processed_id_list"] = id_dict["seen_id_list"]
+        unseen_dict["processed_id_list"] = id_dict["unseen_id_list"]
+        keys_dict["processed_id_list"] = id_dict["key_id_list"]
+        keys_dict["all_processed_id_list"] = id_dict["key_id_list"] + id_dict["key_id_list"] + id_dict["key_id_list"]
 
     else:
         # initialize model
@@ -483,20 +493,41 @@ def main(args: DictConfig) -> None:
         # args.model_config.batch_size = 24
 
         if args.inference_and_eval_setting.eval_on == "val":
-            _, seen_dataloader, unseen_dataloader, _, _, seen_keys_dataloader, val_unseen_keys_dataloader, test_unseen_keys_dataloader, all_keys_dataloader = load_bioscan_dataloader_all_small_splits(
-                args)
+            (
+                _,
+                seen_dataloader,
+                unseen_dataloader,
+                _,
+                _,
+                seen_keys_dataloader,
+                val_unseen_keys_dataloader,
+                test_unseen_keys_dataloader,
+                all_keys_dataloader,
+            ) = load_bioscan_dataloader_all_small_splits(args)
         elif args.inference_and_eval_setting.eval_on == "test":
-            _, _, _, seen_dataloader, unseen_dataloader, seen_keys_dataloader, val_unseen_keys_dataloader, test_unseen_keys_dataloader, all_keys_dataloader = load_bioscan_dataloader_all_small_splits(
-                args)
+            (
+                _,
+                _,
+                _,
+                seen_dataloader,
+                unseen_dataloader,
+                seen_keys_dataloader,
+                val_unseen_keys_dataloader,
+                test_unseen_keys_dataloader,
+                all_keys_dataloader,
+            ) = load_bioscan_dataloader_all_small_splits(args)
         else:
             raise ValueError(
-                "Invalid value for eval_on, specify by 'python inference_and_eval.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_ssl_ver_0_1_2.yaml' inference_and_eval_setting.eval_on=test/val'")
+                "Invalid value for eval_on, specify by 'python inference_and_eval.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_ssl_ver_0_1_2.yaml' inference_and_eval_setting.eval_on=test/val'"
+            )
         for_open_clip = False
 
         if hasattr(args.model_config, "for_open_clip"):
-            for_open_clip=args.model_config.for_open_clip
+            for_open_clip = args.model_config.for_open_clip
 
-        keys_dict = get_features_and_label(all_keys_dataloader, model, device, for_key_set=True, for_open_clip=for_open_clip)
+        keys_dict = get_features_and_label(
+            all_keys_dataloader, model, device, for_key_set=True, for_open_clip=for_open_clip
+        )
 
         seen_dict = get_features_and_label(seen_dataloader, model, device, for_open_clip=for_open_clip)
 
@@ -542,7 +573,9 @@ def main(args: DictConfig) -> None:
         k_list=args.inference_and_eval_setting.k_list,
     )
 
-    per_claSS_acc_path = os.path.join(folder_for_saving, f"per_class_acc_{args.inference_and_eval_setting.eval_on}.json")
+    per_claSS_acc_path = os.path.join(
+        folder_for_saving, f"per_class_acc_{args.inference_and_eval_setting.eval_on}.json"
+    )
 
     with open(per_claSS_acc_path, "w") as json_file:
         json.dump(per_class_acc, json_file, indent=4)
@@ -553,14 +586,33 @@ def main(args: DictConfig) -> None:
         test_unseen_keys_dataloader
     except:
         if args.inference_and_eval_setting.eval_on == "val":
-            _, seen_dataloader, unseen_dataloader, _, _, seen_keys_dataloader, val_unseen_keys_dataloader, test_unseen_keys_dataloader, all_keys_dataloader = load_bioscan_dataloader_all_small_splits(
-                args)
+            (
+                _,
+                seen_dataloader,
+                unseen_dataloader,
+                _,
+                _,
+                seen_keys_dataloader,
+                val_unseen_keys_dataloader,
+                test_unseen_keys_dataloader,
+                all_keys_dataloader,
+            ) = load_bioscan_dataloader_all_small_splits(args)
         elif args.inference_and_eval_setting.eval_on == "test":
-            _, _, _, seen_dataloader, unseen_dataloader, seen_keys_dataloader, val_unseen_keys_dataloader, test_unseen_keys_dataloader, all_keys_dataloader = load_bioscan_dataloader_all_small_splits(
-                args)
+            (
+                _,
+                _,
+                _,
+                seen_dataloader,
+                unseen_dataloader,
+                seen_keys_dataloader,
+                val_unseen_keys_dataloader,
+                test_unseen_keys_dataloader,
+                all_keys_dataloader,
+            ) = load_bioscan_dataloader_all_small_splits(args)
         else:
             raise ValueError(
-                "Invalid value for eval_on, specify by 'python inference_and_eval.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_ssl_ver_0_1_2.yaml' inference_and_eval_setting.eval_on=test/val'")
+                "Invalid value for eval_on, specify by 'python inference_and_eval.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_ssl_ver_0_1_2.yaml' inference_and_eval_setting.eval_on=test/val'"
+            )
 
     print(f"Per class accuracy is saved in {per_claSS_acc_path}")
 
@@ -579,9 +631,9 @@ def main(args: DictConfig) -> None:
     if args.inference_and_eval_setting.plot_embeddings:
         generate_embedding_plot(
             args,
-            seen_dict["encoded_image_feature"],
-            seen_dict["encoded_dna_feature"],
-            seen_dict["encoded_language_feature"],
+            seen_dict.get("encoded_image_feature"),
+            seen_dict.get("encoded_dna_feature"),
+            seen_dict.get("encoded_language_feature"),
             seen_dict["label_list"],
         )
 
