@@ -22,6 +22,8 @@ from bioscanclip.util.dataset import load_bioscan_dataloader_all_small_splits
 from bioscanclip.util.util import categorical_cmap, inference_and_print_result, get_features_and_label, \
     make_prediction, All_TYPE_OF_FEATURES_OF_KEY
 from tqdm import tqdm
+import pandas as pd
+
 
 PLOT_FOLDER = "html_plots"
 RETRIEVAL_FOLDER = "image_retrieval"
@@ -110,8 +112,31 @@ def get_similarity_for_different_combination_of_modalities(
                     curr_instance_with_distance_information['smallest_distance'][f"{query}_{key}"] = smallest_distance
             similarity_dict[seen_or_unseen][file_name] = curr_instance_with_distance_information
 
-    import pdb;pdb.set_trace()
+    list_of_query_info = []
 
+    for split in ['seen', 'unseen']:
+        for curr_query_file_name in similarity_dict[split].keys():
+            curr_query_instance = similarity_dict[split][curr_query_file_name]
+            curr_query_info = {}
+            curr_query_info['file_name'] = curr_query_file_name
+            curr_query_info['order'] = curr_query_instance['label_list']['order']
+            curr_query_info['family'] = curr_query_instance['label_list']['family']
+            curr_query_info['genus'] = curr_query_instance['label_list']['genus']
+            curr_query_info['species'] = curr_query_instance['label_list']['species']
+            curr_query_info['distance_for_image_to_image'] = curr_query_instance['smallest_distance'][
+                'encoded_image_feature_encoded_image_feature']
+            curr_query_info['distance_for_dna_to_dna'] = curr_query_instance['smallest_distance'][
+                'encoded_dna_feature_encoded_dna_feature']
+            curr_query_info['distance_for_image_to_dna'] = curr_query_instance['smallest_distance'][
+                'encoded_image_feature_encoded_dna_feature']
+            curr_query_info['distance_for_dna_to_image'] = curr_query_instance['smallest_distance'][
+                'encoded_dna_feature_encoded_image_feature']
+            curr_query_info['split'] = args.inference_and_eval_setting.eval_on+"_"+split
+            list_of_query_info.append(curr_query_info)
+    df = pd.DataFrame(list_of_query_info)
+    folder_path = os.path.join(args.project_root_path, "distribution_of_similarities")
+    df.to_csv(os.path.join(folder_path, f'{args.inference_and_eval_setting.eval_on}_query_info_with_distance_to_nearest_key_with_same_species.csv'), index=False)
+    print(f"Saved the query info with distance to nearest key with same species at {folder_path}")
 
 
 @hydra.main(config_path="../bioscanclip/config", config_name="global_config", version_base="1.1")
@@ -127,6 +152,7 @@ def main(args: DictConfig) -> None:
                                      args.model_config.model_output_name
                                      )
     os.makedirs(folder_for_saving, exist_ok=True)
+
     labels_path = os.path.join(folder_for_saving, f"labels_{args.inference_and_eval_setting.eval_on}.json")
     processed_id_path = os.path.join(folder_for_saving, f"processed_id_{args.inference_and_eval_setting.eval_on}.json")
 
@@ -213,7 +239,6 @@ def main(args: DictConfig) -> None:
         unseen_dict,
         args,
     )
-
 
 if __name__ == "__main__":
     main()
