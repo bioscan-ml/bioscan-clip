@@ -71,6 +71,12 @@ def get_result(csv, header, corr, alignment_type, macro=False):
             (True, True, True):[7, 10],
             (True, True, False):[7, 10],
             (True, False, True):[None, None],
+        },
+        "img2txt": {
+            (False, False, False):[13, 16],
+            (True, True, True):[13, 16],
+            (True, True, False):[None, None],
+            (True, False, True):[13, 16],
         }
     }
 
@@ -102,6 +108,7 @@ def get_results(folder_list, idx, header, corr, macro=False, last=False):
 
 
     for num_idx, num_list in enumerate([seen_list, unseen_list, harmonic_list]):
+        index_max_lst = np.argwhere(num_list == np.max(num_list)).flatten().tolist()
 
                 
         if num_list[idx] == -1:
@@ -110,7 +117,6 @@ def get_results(folder_list, idx, header, corr, macro=False, last=False):
             return_string += "{%.1f} " % 0
         else:
 
-            index_max_lst = np.argwhere(num_list == np.max(num_list)).flatten().tolist()
             if idx in index_max_lst:
                 return_string += "\\best{%.1f} " % num_list[idx]
             else:
@@ -119,7 +125,7 @@ def get_results(folder_list, idx, header, corr, macro=False, last=False):
                 masked_array = np.ma.masked_array(num_list, num_list == max_val)
                 index_second_lst = np.argwhere(masked_array == np.max(masked_array)).flatten().tolist()
                 if len(index_max_lst) == 1 and len(masked_array) > 0 and idx in index_second_lst:
-                    return_string += "\\second{%.1f} " % masked_array[idx]
+                    return_string += "\\second{%.1f} " % masked_array[index_second_lst]
                 else:
                     return_string += "%.1f " % num_list[idx]
         
@@ -194,9 +200,9 @@ def write_latex_content(args, dataset=True, alignment=True):
         if alignment:
             latex_strings += "\\multicolumn{3}{c}{Aligned embeddings} & "
             column_starter += 3
-        latex_strings += "\\multicolumn{3}{c}{DNA to DNA} & \\multicolumn{3}{c}{Image to Image} & \\multicolumn{3}{c}{Image to DNA} "
+        latex_strings += "\\multicolumn{3}{c}{Image to Image} & \\multicolumn{3}{c}{Image to DNA} & \\multicolumn{3}{c}{Image to Text} "
         if args.metric == "both":
-            latex_strings += "& \\multicolumn{3}{c}{DNA to DNA} & \\multicolumn{3}{c}{Image to Image} & \\multicolumn{3}{c}{Image to DNA}"
+            latex_strings += "& \\multicolumn{3}{c}{Image to Image} & \\multicolumn{3}{c}{Image to DNA} & \\multicolumn{3}{c}{Image to Text}"
         latex_strings += "\\\\ \n"
 
         if alignment:
@@ -239,16 +245,16 @@ def write_latex_content(args, dataset=True, alignment=True):
 
             if args.metric == "both":        
                 for macro in [False, True]:
-                    for corr in ["dna2dna", "img2img", "img2dna"]:
+                    for corr in ["img2img", "img2dna", "img2txt"]:
                         latex_strings += get_results(
                             args.result_folder, idx, header, corr, macro=macro, 
-                            last=True if corr == "img2dna" and macro is True else False)
+                            last=True if corr == "img2txt" and macro is True else False)
             else:
                 macro = False if args.metric == "micro" else True
-                for corr in ["dna2dna", "img2img", "img2dna"]:
+                for corr in ["img2img", "img2dna", "img2txt"]:
                     latex_strings += get_results(
                         args.result_folder, idx, header, corr, macro=macro, 
-                        last=True if corr == "img2dna" else False)
+                        last=True if corr == "img2txt" else False)
 
         latex_strings += "\\midrule\n" if header != "Species" else "\\bottomrule\n"
 
@@ -271,13 +277,9 @@ if __name__ == "__main__":
     parser.add_argument("--result_folder", type=str, nargs='+', 
                         default=[
                             # "outputs/2024-09-16/19-20-19", 
-                            # "outputs/2024-09-17/06-08-54", 
+                            "outputs/2024-09-17/06-08-54", 
                             # "outputs/2024-09-16/13-24-08",
-                            # "outputs/2024-09-15/17-23-29",
-                            "outputs/2024-09-30/11-42-15",
-                            "outputs/2024-09-30/11-45-44",
-                            "outputs/2024-09-30/11-49-08",
-                            "outputs/2024-09-30/11-55-42",
+                            "outputs/2024-09-15/17-23-29",
                             ])
     # parser.add_argument("--result_folder", type=str, nargs='+')
     parser.add_argument("--full_table", action="store_true",
