@@ -26,6 +26,15 @@ PLOT_FOLDER = "html_plots"
 RETRIEVAL_FOLDER = "image_retrieval"
 
 
+def get_all_unique_species_from_dataloader(dataloader):
+    all_species = []
+
+    for batch in dataloader:
+        file_name_batch, image_input_batch, dna_batch, input_ids, token_type_ids, attention_mask, label_batch = batch
+        all_species = all_species + label_batch['species']
+    all_species = list(set(all_species))
+    return all_species
+
 def save_prediction(pred_dict, gt_dict, json_path):
     data = {"gt_labels": gt_dict, "pred_labels": pred_dict}
 
@@ -184,6 +193,7 @@ def generate_embedding_plot(args, image_features, dna_features, language_feature
         plotly.io.write_image(
             fig_2d, os.path.join(folder_path, f"{level}_2d.pdf"), format="pdf", height=600, width=800
         )
+        print(f"Saved {level} plot in {os.path.join(folder_path, f'{level}_2d.html')}")
         # fig_3d.write_html(os.path.join(folder_path, f'{level}_3d.html'))
         fig_2d.show()
         # fig_3d.show()
@@ -473,7 +483,6 @@ def main(args: DictConfig) -> None:
         # args.model_config.batch_size = 24
 
         if args.inference_and_eval_setting.eval_on == "val":
-
             _, seen_dataloader, unseen_dataloader, _, _, seen_keys_dataloader, val_unseen_keys_dataloader, test_unseen_keys_dataloader, all_keys_dataloader = load_bioscan_dataloader_all_small_splits(
                 args)
         elif args.inference_and_eval_setting.eval_on == "test":
@@ -538,6 +547,21 @@ def main(args: DictConfig) -> None:
     with open(per_claSS_acc_path, "w") as json_file:
         json.dump(per_class_acc, json_file, indent=4)
 
+    try:
+        seen_keys_dataloader
+        val_unseen_keys_dataloader
+        test_unseen_keys_dataloader
+    except:
+        if args.inference_and_eval_setting.eval_on == "val":
+            _, seen_dataloader, unseen_dataloader, _, _, seen_keys_dataloader, val_unseen_keys_dataloader, test_unseen_keys_dataloader, all_keys_dataloader = load_bioscan_dataloader_all_small_splits(
+                args)
+        elif args.inference_and_eval_setting.eval_on == "test":
+            _, _, _, seen_dataloader, unseen_dataloader, seen_keys_dataloader, val_unseen_keys_dataloader, test_unseen_keys_dataloader, all_keys_dataloader = load_bioscan_dataloader_all_small_splits(
+                args)
+        else:
+            raise ValueError(
+                "Invalid value for eval_on, specify by 'python inference_and_eval.py 'model_config=lora_vit_lora_barcode_bert_lora_bert_ssl_ver_0_1_2.yaml' inference_and_eval_setting.eval_on=test/val'")
+
     print(f"Per class accuracy is saved in {per_claSS_acc_path}")
 
     # seen_final_pred = pred_dict["encoded_image_feature"]["encoded_dna_feature"]["curr_seen_pred_list"]
@@ -545,22 +569,21 @@ def main(args: DictConfig) -> None:
     # all_unique_seen_species = get_all_unique_species_from_dataloader(seen_keys_dataloader)
     # all_unique_val_unseen_species = get_all_unique_species_from_dataloader(val_unseen_keys_dataloader)
     # all_unique_test_unseen_species = get_all_unique_species_from_dataloader(test_unseen_keys_dataloader)
-    #
     # print("For seen")
     # check_for_acc_about_correct_predict_seen_or_unseen(seen_final_pred, all_unique_seen_species)
     # print("For unseen")
     # check_for_acc_about_correct_predict_seen_or_unseen(
     #     unseen_final_pred, all_unique_val_unseen_species + all_unique_test_unseen_species
     # )
-    #
-    # if args.inference_and_eval_setting.plot_embeddings:
-    #     generate_embedding_plot(
-    #         args,
-    #         seen_dict["encoded_image_feature"],
-    #         seen_dict["encoded_dna_feature"],
-    #         seen_dict["encoded_language_feature"],
-    #         seen_dict["label_list"],
-    #     )
+
+    if args.inference_and_eval_setting.plot_embeddings:
+        generate_embedding_plot(
+            args,
+            seen_dict["encoded_image_feature"],
+            seen_dict["encoded_dna_feature"],
+            seen_dict["encoded_language_feature"],
+            seen_dict["label_list"],
+        )
 
     #
     # if args.inference_and_eval_setting.retrieve_images:
