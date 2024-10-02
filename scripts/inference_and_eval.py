@@ -96,6 +96,8 @@ def get_labels(my_list):
 
 def generate_embedding_plot(args, image_features, dna_features, language_features, gt_labels, num_classifications=10):
     def get_language_feature_mapping(language_features):
+        if language_features is None:
+            return None, None, None
         return np.unique(language_features, axis=0, return_index=True, return_inverse=True)
 
     levels = ["order", "family", "genus", "species"]
@@ -217,14 +219,15 @@ def retrieve_images(
     name,
     query_dict,
     keys_dict,
-    queries,
-    keys,
+    query_keys,
     query_data,
     key_data,
     num_queries=5,
     max_k=5,
     taxon="order",
+    independent=True,
     seed=None,
+    load_cached_results=False,
 ):
     """
     for X in {image, DNA}:
@@ -234,12 +237,22 @@ def retrieve_images(
     """
 
     def load_image_from_h5(data, idx):
+        """Load image file from HDF file"""
         enc_length = data["image_mask"][idx]
         image_enc_padded = data["image"][idx].astype(np.uint8)
         image_enc = image_enc_padded[:enc_length]
         image = Image.open(io.BytesIO(image_enc))
         return image.resize((256, 256))
 
+    # drawing parameters
+    # colors = [matplotlib.colors.to_hex(col) for col in categorical_cmap(4, 1).colors]
+    colors = ["green", "greenyellow", "gold", "orange"]
+    error_color = "tab:red"
+    correct_cls_colors = {taxon: col for taxon, col in zip(["species", "genus", "family", "order"], colors)}
+    display_map = {"encoded_dna_feature": "DNA", "encoded_image_feature": "Image", "encoded_language_feature": "Text"}
+    linewidth = 6
+
+    # setup directory
     folder_path = os.path.join(
         args.project_root_path,
         RETRIEVAL_FOLDER,
@@ -249,77 +262,120 @@ def retrieve_images(
     os.makedirs(folder_path, exist_ok=True)
 
     # select queries
+    rng = np.random.default_rng(seed)
     query_indices_by_taxon = defaultdict(list)
     for i, label in enumerate(query_dict["label_list"]):
         query_indices_by_taxon[label[taxon]].append(i)
-    taxon_to_sample = np.random.choice(
+    taxon_to_sample = rng.choice(
         list(query_indices_by_taxon.keys()), size=num_queries, replace=len(query_indices_by_taxon) < num_queries
     )
-    query_indices = [
-        np.random.choice(query_indices_by_taxon[taxon], size=1, replace=False)[0] for taxon in taxon_to_sample
-    ]
+    query_indices = [rng.choice(query_indices_by_taxon[taxon], size=1, replace=False)[0] for taxon in taxon_to_sample]
 
     # retrieve with image keys
     keys_label = keys_dict["label_list"]
 
-    for query_feature_type in queries:
-        for key_feature_type in keys:
-            retrieval_results = []
-            queries_feature = query_dict[query_feature_type]
-            keys_feature = keys_dict[key_feature_type]
-
-            # select random queries
-            queries_feature = queries_feature[query_indices, :]
-            for query_index in query_indices:
-                # import pdb; pdb.set_trace()
-                retrieval_results.append(
-                    {
-                        "query": {
-                            "file_name": query_dict["file_name_list"][query_index],
-                            "taxonomy": query_dict["label_list"][query_index],
-                        },
-                    }
-                )
-
-            if keys_feature is None or queries_feature is None or keys_feature.shape[-1] != queries_feature.shape[-1]:
-                continue
-
-            _, indices_per_query = make_prediction(
-                queries_feature, keys_feature, keys_label, with_indices=True, max_k=max_k
+    # initialize retrieval results
+    retrieved_images_json_path = os.path.join(folder_path, "retrieved_images.json")
+    if load_cached_results and os.path.exists(retrieved_images_json_path):
+        with open(retrieved_images_json_path, "r") as json_file:
+            retrieval_results = json.load(json_file)
+        loaded_cached_results = True
+        print(f"Loaded cached retrieval results from {retrieved_images_json_path}")
+    else:
+        retrieval_results = []
+        for query_index in query_indices:
+            retrieval_results.append(
+                {
+                    "query": {
+                        "file_name": query_dict["processed_id_list"][query_index],
+                        "taxonomy": query_dict["label_list"][query_index],
+                    },
+                    "results": [],
+                }
             )
+        loaded_cached_results = False
 
+    # use these to reverse lookup the indices for each image file later
+    query_image_file_map = {filename.decode("utf-8"): j for j, filename in enumerate(query_data["image_file"])}
+    key_image_file_map = {filename.decode("utf-8"): j for j, filename in enumerate(key_data["image_file"])}
+
+    # making one large file: create figure upfront and add the query images to start in the first column
+    if not independent:
+        width_ratios = [1]
+        for i in range(len(query_keys)):
+            width_ratios.append(0.1)
+            width_ratios.extend([1 for _ in range(max_k)])
+        fig, axes = plt.subplots(
+            nrows=num_queries,
+            ncols=(max_k + 1) * len(query_keys) + 1,
+            figsize=(22, 13),
+            gridspec_kw={"width_ratios": width_ratios, "hspace": 0.05, "wspace": 0.05},
+        )
+        for i, pred_dict in enumerate(retrieval_results):
+            # save query
+            query_file_name = pred_dict["query"]["file_name"]
+            image_idx = query_image_file_map[query_file_name]
+            image = load_image_from_h5(query_data, image_idx)
+            axes[i, 0].imshow(image)
+            axes[i, 0].set_xticks([])
+            axes[i, 0].set_yticks([])
+            axes[i, 0].set_ylabel(
+                "\n".join(pred_dict["query"]["taxonomy"]["species"].split()),
+                rotation="horizontal",
+                ha="right",
+                fontsize=20,
+            )
+            plt.setp(axes[i, 0].spines.values(), color=None)
+
+            axes[0, 0].set_xlabel("Original", loc="left", fontsize=24, labelpad=10)
+            axes[0, 0].xaxis.set_label_position("top")
+        last_col_idx = 2
+
+    for query_key_idx, (query_feature_type, key_feature_type) in enumerate(query_keys):
+        queries_feature = query_dict[query_feature_type]
+        keys_feature = keys_dict[key_feature_type]
+
+        # select random queries
+        queries_feature = queries_feature[query_indices, :]
+
+        if keys_feature is None or queries_feature is None or keys_feature.shape[-1] != queries_feature.shape[-1]:
+            continue
+
+        # retrieve keys for each query
+        _, indices_per_query = make_prediction(
+            queries_feature, keys_feature, keys_label, with_indices=True, max_k=max_k
+        )
+
+        if not loaded_cached_results:
             for idx, indices_per_query in enumerate(indices_per_query):
-                retrieval_results[idx]["predictions"] = []
+                retrieval_results[idx]["results"].append(
+                    {"query_type": query_feature_type, "key_type": key_feature_type, "predictions": []}
+                )
                 for retrieved_index in indices_per_query:
-                    retrieval_results[idx]["predictions"].append(
+                    retrieval_results[idx]["results"][query_key_idx]["predictions"].append(
                         {
-                            "file_name": keys_dict["file_name_list"][retrieved_index],
+                            "file_name": keys_dict["processed_id_list"][retrieved_index],
                             "taxonomy": keys_dict["label_list"][retrieved_index],
                         }
                     )
 
-            # save out predictions
-            os.makedirs(os.path.join(folder_path, f"query_{query_feature_type}_key_{key_feature_type}"), exist_ok=True)
-            with open(
-                os.path.join(
-                    folder_path, f"query_{query_feature_type}_key_{key_feature_type}", f"retrieved_images.json"
-                ),
-                "w",
-            ) as json_file:
-                json.dump(retrieval_results, json_file, indent=4)
-
-            # save out images
+        # save out images
+        if independent:
             width_ratios = [1, 0.1, *[1 for _ in range(max_k)]]
             fig, axes = plt.subplots(
                 nrows=num_queries,
                 ncols=max_k + 2,
-                figsize=(22, 16),
+                figsize=(22, 14.5),
                 gridspec_kw={"width_ratios": width_ratios, "hspace": 0.05, "wspace": 0.05},
             )
-            query_image_file_map = {filename.decode("utf-8"): j for j, filename in enumerate(query_data["image_file"])}
-            key_image_file_map = {filename.decode("utf-8"): j for j, filename in enumerate(key_data["image_file"])}
-            for i, pred_dict in enumerate(retrieval_results):
-                # save query
+            axes[0, 0].set_xlabel("Original", loc="left", fontsize=24, labelpad=10)
+            axes[0, 0].xaxis.set_label_position("top")
+
+        # iterate through queries
+        for i, pred_dict in enumerate(retrieval_results):
+            # add queries to each image
+            if independent:
+                # setup figure if we are making them independently
                 query_file_name = pred_dict["query"]["file_name"]
                 image_idx = query_image_file_map[query_file_name]
                 image = load_image_from_h5(query_data, image_idx)
@@ -336,62 +392,100 @@ def retrieve_images(
 
                 axes[i, 1].axis("off")
 
-                for j, pred in enumerate(pred_dict["predictions"]):
-                    key_file_name = pred["file_name"]
-                    image_idx = key_image_file_map[key_file_name]
-                    image = load_image_from_h5(key_data, image_idx)
-                    axes[i, 2 + j].imshow(image)  # subplot in col 1 is invisible
-                    if i != 0 or j != 0:
-                        axes[i, 2 + j].axis("off")
-                    else:
-                        axes[i, 2].set_xticks([])
-                        axes[i, 2].set_yticks([])
-                        plt.setp(axes[i, 2].spines.values(), color=None)
+                last_col_idx = 2
 
-                    # species is correct
-                    if pred_dict["query"]["taxonomy"]["species"] == pred["taxonomy"]["species"]:
-                        bbox = axes[i, 2 + j].get_tightbbox(fig.canvas.get_renderer())
+            # iterate through retrieved results
+            for j, pred in enumerate(pred_dict["results"][query_key_idx]["predictions"]):
+                key_file_name = pred["file_name"]
+                image_idx = key_image_file_map[key_file_name]
+                image = load_image_from_h5(key_data, image_idx)
+                axes[i, last_col_idx + j].imshow(image)  # subplot in col 1 is invisible
+                if i != 0 or j != 0:
+                    axes[i, last_col_idx + j].axis("off")
+                else:
+                    axes[i, last_col_idx].set_xticks([])
+                    axes[i, last_col_idx].set_yticks([])
+                    plt.setp(axes[i, last_col_idx].spines.values(), color=None)
+
+                # add box around images which were correct predictions
+                for taxon in ["species", "genus", "family", "order"]:
+                    if pred_dict["query"]["taxonomy"][taxon] == pred["taxonomy"][taxon]:
+                        bbox = axes[i, last_col_idx + j].get_tightbbox(fig.canvas.get_renderer())
                         x0, y0, width, height = bbox.transformed(fig.transFigure.inverted()).bounds
                         fig.add_artist(
-                            plt.Rectangle((x0, y0), width, height, edgecolor="#4C7C32", linewidth=3, fill=False)
+                            plt.Rectangle(
+                                (x0, y0),
+                                width,
+                                height,
+                                edgecolor=correct_cls_colors[taxon],
+                                linewidth=linewidth,
+                                fill=False,
+                            )
                         )
-
-                    # genus is correct
-                    elif pred_dict["query"]["taxonomy"]["genus"] == pred["taxonomy"]["genus"]:
-                        bbox = axes[i, 2 + j].get_tightbbox(fig.canvas.get_renderer())
-                        x0, y0, width, height = bbox.transformed(fig.transFigure.inverted()).bounds
-                        fig.add_artist(
-                            plt.Rectangle((x0, y0), width, height, edgecolor="#C4D050", linewidth=3, fill=False)
+                        break
+                else:
+                    bbox = axes[i, last_col_idx + j].get_tightbbox(fig.canvas.get_renderer())
+                    x0, y0, width, height = bbox.transformed(fig.transFigure.inverted()).bounds
+                    fig.add_artist(
+                        plt.Rectangle(
+                            (x0, y0),
+                            width,
+                            height,
+                            edgecolor=error_color,
+                            linewidth=linewidth,
+                            fill=False,
                         )
+                    )
 
-            display_map = {"dna": "DNA", "image": "Image"}
-            axes[0, 0].set_xlabel(
-                f"Queries ({display_map[query_feature_type.split('_')[1]]})", loc="left", fontsize=24, labelpad=10
-            )
-            axes[0, 0].xaxis.set_label_position("top")
-            axes[0, 2].set_xlabel(
-                f"Keys ({display_map[key_feature_type.split('_')[1]]})", loc="left", fontsize=24, labelpad=10
-            )
-            axes[0, 2].xaxis.set_label_position("top")
+            axes[i, last_col_idx - 1].axis("off")
 
-            # draw line in between queries and keys
+        axes[0, last_col_idx].set_xlabel(
+            f"{display_map[query_feature_type]} to {display_map[key_feature_type]}",
+            loc="left",
+            fontsize=24,
+            labelpad=10,
+        )
+        axes[0, last_col_idx].xaxis.set_label_position("top")
+
+        # draw line in between queries and keys
+        x0, _, width, _ = (
+            axes[0, last_col_idx - 1]
+            .get_tightbbox(fig.canvas.get_renderer())
+            .transformed(fig.transFigure.inverted())
+            .bounds
+        )
+        x1, _, width, _ = (
+            axes[0, last_col_idx]
+            .get_tightbbox(fig.canvas.get_renderer())
+            .transformed(fig.transFigure.inverted())
+            .bounds
+        )
+        line_x = (x0 + x1) / 2
+        line = plt.Line2D((line_x, line_x), (0.1, 0.9), color="k", linewidth=1.5)
+        fig.add_artist(line)
+
+        last_col_idx += len(pred_dict["results"][-1]["predictions"]) + 1
+
+        if independent:
+            filename = f"retrieval-images-{name}-query-{query_feature_type}-key-{key_feature_type}.pdf"
             fig.tight_layout()
-            x0, _, width, _ = (
-                axes[0, 1].get_tightbbox(fig.canvas.get_renderer()).transformed(fig.transFigure.inverted()).bounds
-            )
-            line_x = x0 + width / 2
-            line = plt.Line2D((line_x, line_x), (0.12, 0.9), color="k", linewidth=1.5)
-            fig.add_artist(line)
-
             fig.savefig(
-                os.path.join(
-                    folder_path,
-                    f"query_{query_feature_type}_key_{key_feature_type}",
-                    f"retrieval-images-{name}-query-{query_feature_type}-key-{key_feature_type}.pdf",
-                ),
+                os.path.join(folder_path, filename),
                 transparent=True,
                 bbox_inches="tight",
             )
+            print(f"Saved retrieved images to {os.path.join(folder_path, filename)}")
+
+    # save final image if we put it all together in one
+    if not independent:
+        fig.tight_layout()
+        fig.savefig(os.path.join(folder_path, "retrieved_images.pdf"), transparent=True, bbox_inches="tight")
+        print(f"Saved retrieved images to {os.path.join(folder_path, 'retrieved_images.pdf')}")
+
+    # save retrieval results JSON
+    with open(retrieved_images_json_path, "w") as json_file:
+        json.dump(retrieval_results, json_file, indent=4)
+    print(f"Saved retrieval results to {os.path.join(folder_path, 'retrieved_images.json')}")
 
     return retrieval_results
 
@@ -637,29 +731,36 @@ def main(args: DictConfig) -> None:
             seen_dict["label_list"],
         )
 
-    #
-    # if args.inference_and_eval_setting.retrieve_images:
-    #     image_data = h5py.File(args.bioscan_data.path_to_hdf5_data, "r")
-    #     retrieve_images(
-    #         args,
-    #         f"{args.inference_and_eval_setting.eval_on}_seen",
-    #         seen_dict,
-    #         keys_dict,
-    #         queries=["encoded_image_feature", "encoded_dna_feature"],
-    #         keys=["encoded_image_feature", "encoded_dna_feature"],
-    #         query_data=image_data["val_seen"],
-    #         key_data=image_data["all_keys"],
-    #     )
-    #     retrieve_images(
-    #         args,
-    #         f"{args.inference_and_eval_setting.eval_on}_unseen",
-    #         unseen_dict,
-    #         keys_dict,
-    #         queries=["encoded_image_feature", "encoded_dna_feature"],
-    #         keys=["encoded_image_feature", "encoded_dna_feature"],
-    #         query_data=image_data["val_unseen"],
-    #         key_data=image_data["all_keys"],
-    #     )
+    if args.inference_and_eval_setting.retrieve_images:
+        image_data = h5py.File(args.bioscan_data.path_to_hdf5_data, "r")
+        retrieve_images(
+            args,
+            f"{args.inference_and_eval_setting.eval_on}_seen",
+            seen_dict,
+            keys_dict,
+            query_keys=[
+                ("encoded_dna_feature", "encoded_dna_feature"),
+                ("encoded_image_feature", "encoded_image_feature"),
+                ("encoded_image_feature", "encoded_dna_feature"),
+            ],
+            query_data=image_data["val_seen"],
+            key_data=image_data["all_keys"],
+            **args.inference_and_eval_setting.retrieve_settings,
+        )
+        retrieve_images(
+            args,
+            f"{args.inference_and_eval_setting.eval_on}_unseen",
+            unseen_dict,
+            keys_dict,
+            query_keys=[
+                ("encoded_dna_feature", "encoded_dna_feature"),
+                ("encoded_image_feature", "encoded_image_feature"),
+                ("encoded_image_feature", "encoded_dna_feature"),
+            ],
+            query_data=image_data["val_unseen"],
+            key_data=image_data["all_keys"],
+            **args.inference_and_eval_setting.retrieve_settings,
+        )
 
 
 if __name__ == "__main__":
