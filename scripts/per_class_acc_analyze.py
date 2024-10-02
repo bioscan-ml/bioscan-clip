@@ -134,7 +134,7 @@ def load_per_class_acc(per_class_acc_path):
 
 
 if __name__ == '__main__':
-    per_class_acc_path = 'extracted_embedding/bioscan_1m/image_dna_text_4gpu/per_class_acc_val.json'
+    per_class_acc_path = 'extracted_embedding/bioscan_1m/image_dna_text_4gpu/per_class_acc_test.json'
     per_class_acc_dict = load_per_class_acc(per_class_acc_path)
 
     query_feature_list = ['encoded_image_feature', 'encoded_text_feature']
@@ -155,8 +155,3 @@ if __name__ == '__main__':
 
     plot_multiple_scatterplot(per_class_acc_dict, all_keys_species, query_key_combinations,
                               seen_and_unseen, k_list, levels)
-
-
-
-
-
