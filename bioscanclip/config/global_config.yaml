@@ -36,7 +36,7 @@ current_version: 0.1
 model_output_dir: ${project_root_path}/ckpt/bioscan_clip
 
 inference_and_eval_setting:
-  plot_embeddings: true
+  plot_embeddings: false
   retrieve_images: true
   query_feature_type: image
   key_feature_type: image
@@ -46,8 +46,14 @@ inference_and_eval_setting:
     order: Diptera
     family: Sciaridae
     genus: Corynoptera
+  retrieve_settings:
+    num_queries: 5
+    max_k: 3
+    seed: 31
+    independent: false
+    load_cached_results: true
   put_all_key_together: false
-  eval_on: test
+  eval_on: val
 
 visualization:
   output_dir: ${project_root_path}/visualizations
