@@ -345,7 +345,7 @@ def create_child_from_parent(parent_instance, child_class, **child_args):
 
 
 # Below are help functions for inference and eval
-def top_k_micro_accuracy(pred_list, gt_list, k_list=None, print_flag=False, seen_flag=True, gt_id_list=None):
+def top_k_micro_accuracy(pred_list, gt_list, k_list=None, print_flag=False, seen_flag=True, gt_id_list=None, pred_id_list=None):
     total_samples = len(pred_list)
     k_micro_acc = {}
     result_dict_for_csv = {}
@@ -373,13 +373,19 @@ def top_k_micro_accuracy(pred_list, gt_list, k_list=None, print_flag=False, seen
                         "Pred": pred_labels[0]
                     }
             k_micro_acc[k][level] = correct_in_curr_level * 1.0 / total_samples
+        for gt_id, pred_id_l in zip(gt_id_list, pred_id_list):
+            if k==1 and print_flag:
+                id = gt_id.split('.')[0]
+                pred_id = pred_id_l[0].split('.')[0]
+                result_dict_for_csv[id]["pred_id"] = pred_id
 
     
     if print_flag:
-        csv_data = [["GT_id", "GT_Order", "Pred_Order", "GT_Family", "Pred_Family", 
+        csv_data = [["GT_id", "Pred_id", "GT_Order", "Pred_Order", "GT_Family", "Pred_Family", 
                     "GT_Genus", "Pred_Genus", "GT_Species", "Pred_Species"]]
         for id in result_dict_for_csv:
             curr_row = [id]
+            curr_row.append(result_dict_for_csv[id]["pred_id"])
             for level in LEVELS:
                 curr_row.append(result_dict_for_csv[id][level]["GT"])
                 curr_row.append(result_dict_for_csv[id][level]["Pred"])
@@ -511,12 +517,13 @@ def print_micro_and_macro_acc(acc_dict, k_list, args):
         OmegaConf.save(args, os.path.join(logs_folder, 'config.yaml'))
         print(f"Config saved to logs folder: {logs_folder}/config.json")
 
-def make_prediction(query_feature, keys_feature, keys_label, with_similarity=False, with_indices=False, max_k=5):
+def make_prediction(query_feature, keys_feature, keys_label, with_similarity=False, with_indices=False, keys_id=None, max_k=5):
     index = faiss.IndexFlatIP(keys_feature.shape[-1])
     keys_feature = normalize(keys_feature, norm="l2", axis=1).astype(np.float32)
     query_feature = normalize(query_feature, norm="l2", axis=1).astype(np.float32)
     index.add(keys_feature)
     pred_list = []
+    key_id_lists = []
 
     similarities, indices = index.search(query_feature, max_k)
     for key_indices in indices:
@@ -532,13 +539,19 @@ def make_prediction(query_feature, keys_feature, keys_label, with_similarity=Fal
                     exit()
         pred_list.append(k_pred_in_diff_level)
 
+        key_id_list = []
+        for i in key_indices:
+            key_id_list.append(keys_id[i])
+        key_id_lists.append(key_id_list)
+
     out = [pred_list]
 
     if with_similarity:
         out.append(similarities)
 
     if with_indices:
-        out.append(indices)
+        # out.append(indices)
+        out.append(key_id_lists)
 
     if len(out) == 1:
         return out[0]
@@ -620,6 +633,7 @@ def inference_and_print_result(keys_dict, seen_dict, unseen_dict, args, small_sp
     unseen_gt_id = unseen_dict["processed_id_list"]
 
     keys_label = keys_dict["label_list"]
+    keys_id = keys_dict["processed_id_list"]
     pred_dict = {}
 
     for query_feature_type in All_TYPE_OF_FEATURES_OF_QUERY:
@@ -654,12 +668,21 @@ def inference_and_print_result(keys_dict, seen_dict, unseen_dict, args, small_sp
             ):
                 continue
 
-            curr_seen_pred_list = make_prediction(
-                curr_seen_feature, curr_keys_feature, keys_label, with_similarity=False, max_k=max_k
+            # curr_seen_pred_list = make_prediction(
+            #     curr_seen_feature, curr_keys_feature, keys_label, with_similarity=False, max_k=max_k
+            # )
+            # curr_unseen_pred_list = make_prediction(
+            #     curr_unseen_feature, curr_keys_feature, keys_label, max_k=max_k
+            # )
+
+            curr_seen_pred_lists = make_prediction(
+                curr_seen_feature, curr_keys_feature, keys_label, with_similarity=False, max_k=max_k, with_indices=True, keys_id=keys_id
             )
-            curr_unseen_pred_list = make_prediction(
-                curr_unseen_feature, curr_keys_feature, keys_label, max_k=max_k
+            curr_seen_pred_list = curr_seen_pred_lists[0]; curr_seen_pred_id = curr_seen_pred_lists[1]
+            curr_unseen_pred_lists = make_prediction(
+                curr_unseen_feature, curr_keys_feature, keys_label, max_k=max_k, with_indices=True, keys_id=keys_id
             )
+            curr_unseen_pred_list = curr_unseen_pred_lists[0]; curr_unseen_pred_id = curr_unseen_pred_lists[1]
 
             pred_dict[query_feature_type][key_feature_type] = {
                 "curr_seen_pred_list": curr_seen_pred_list,
@@ -675,10 +698,10 @@ def inference_and_print_result(keys_dict, seen_dict, unseen_dict, args, small_sp
                 print_flag = False
 
             acc_dict[query_feature_type][key_feature_type]["seen"]["micro_acc"] = top_k_micro_accuracy(
-                curr_seen_pred_list, seen_gt_label, k_list=k_list, print_flag=print_flag, seen_flag=True, gt_id_list=seen_gt_id
+                curr_seen_pred_list, seen_gt_label, k_list=k_list, print_flag=print_flag, seen_flag=True, gt_id_list=seen_gt_id, pred_id_list=curr_seen_pred_id
             )
             acc_dict[query_feature_type][key_feature_type]["unseen"]["micro_acc"] = top_k_micro_accuracy(
-                curr_unseen_pred_list, unseen_gt_label, k_list=k_list, print_flag=print_flag, seen_flag=False, gt_id_list=unseen_gt_id
+                curr_unseen_pred_list, unseen_gt_label, k_list=k_list, print_flag=print_flag, seen_flag=False, gt_id_list=unseen_gt_id, pred_id_list=curr_unseen_pred_id
             )
 
             seen_macro_acc, seen_per_class_acc = top_k_macro_accuracy(
