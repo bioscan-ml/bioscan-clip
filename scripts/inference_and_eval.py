@@ -96,9 +96,11 @@ def get_labels(my_list):
 
 def generate_embedding_plot(args, image_features, dna_features, language_features, gt_labels, num_classifications=10):
     def get_language_feature_mapping(language_features):
+        if language_features is None:
+            return None, None, None
         return np.unique(language_features, axis=0, return_index=True, return_inverse=True)
 
-    levels = ["order", "family", "genus", "species"]
+    levels = ["order", "family",  "genus", "species"]
 
     unique_lang_features, lang_indices, inv_indices = get_language_feature_mapping(language_features)
     # compute 2D embeddings
@@ -185,20 +187,13 @@ def generate_embedding_plot(args, image_features, dna_features, language_feature
                 trace["showlegend"] = False
 
         fig_2d.update_layout(
-            {
-                "paper_bgcolor": "rgba(0, 0, 0, 0)",
-                "plot_bgcolor": "rgba(0, 0, 0, 0)",
-                "legend_title": level,
-                "yaxis": {"visible": False},
-                "xaxis": {"visible": False},
-                "margin": dict(
-                    l=5,  # left
-                    r=5,  # right
-                    t=5,  # top
-                    b=5,  # bottom
-                ),
-                "activeselection_opacity": 1.0,
-            }
+            showlegend=False,
+            paper_bgcolor="rgba(0, 0, 0, 0)",
+            plot_bgcolor="rgba(0, 0, 0, 0)",
+            yaxis={"visible": False},
+            xaxis={"visible": False},
+            margin=dict(l=5, r=5, t=5, b=5),
+            activeselection_opacity=1.0
         )
 
         folder_path = os.path.join(args.project_root_path, f"{PLOT_FOLDER}/{args.model_config.model_output_name}")
@@ -206,9 +201,11 @@ def generate_embedding_plot(args, image_features, dna_features, language_feature
         # fig_3d.update_traces(marker_size=5)
         fig_2d.write_html(os.path.join(folder_path, f"{level}_2d.html"))
         plotly.io.write_image(fig_2d, os.path.join(folder_path, f"{level}_2d.pdf"), format="pdf", height=600, width=800)
+        # plotly.io.write_image(fig_2d, os.path.join(folder_path, f"{level}_2d.pdf"), format="pdf", height=1200, width=1600)
         print(f"Saved {level} plot in {os.path.join(folder_path, f'{level}_2d.html')}")
         # fig_3d.write_html(os.path.join(folder_path, f'{level}_3d.html'))
-        fig_2d.show()
+        # fig_2d.show()
+        plotly.io.write_image(fig_2d, os.path.join(folder_path, f"{level}_2d.pdf"), format="pdf", height=600, width=800)
         # fig_3d.show()
 
 

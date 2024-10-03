@@ -23,7 +23,8 @@ from bioscanclip.util.util import categorical_cmap, inference_and_print_result, 
     make_prediction, All_TYPE_OF_FEATURES_OF_KEY
 from tqdm import tqdm
 import pandas as pd
-
+import matplotlib.pyplot as plt
+import numpy as np
 
 PLOT_FOLDER = "html_plots"
 RETRIEVAL_FOLDER = "image_retrieval"
@@ -131,17 +132,49 @@ def get_similarity_for_different_combination_of_modalities(
                 'encoded_image_feature_encoded_dna_feature']
             curr_query_info['distance_for_dna_to_image'] = curr_query_instance['smallest_distance'][
                 'encoded_dna_feature_encoded_image_feature']
-            curr_query_info['split'] = args.inference_and_eval_setting.eval_on+"_"+split
+            curr_query_info['distance_for_image_to_language'] = curr_query_instance['smallest_distance'][
+                'encoded_dna_feature_encoded_language_feature']
+            curr_query_info['split'] = args.inference_and_eval_setting.eval_on + "_" + split
             list_of_query_info.append(curr_query_info)
     df = pd.DataFrame(list_of_query_info)
     folder_path = os.path.join(args.project_root_path, "distribution_of_similarities")
-    df.to_csv(os.path.join(folder_path, f'{args.inference_and_eval_setting.eval_on}_query_info_with_distance_to_nearest_key_with_same_species.csv'), index=False)
+    df.to_csv(os.path.join(folder_path,
+                           f'{args.inference_and_eval_setting.eval_on}_query_info_with_distance_to_nearest_key_with_same_species.csv'),
+              index=False)
     print(f"Saved the query info with distance to nearest key with same species at {folder_path}")
+
+    # For df, get the column call encoded_image_feature_encoded_image_feature as a list, then find the max and min
+    distance_for_image_to_image_in_list = df['distance_for_image_to_image'].tolist()
+    distance_for_dna_to_dna_in_list = df['distance_for_dna_to_dna'].tolist()
+    distance_for_image_to_dna_in_list = df['distance_for_image_to_dna'].tolist()
+    distance_for_image_to_language_in_list = df['distance_for_image_to_language'].tolist()
+
+    bins = [0.0, 0.3, 0.6, 0.9, 1.2, 1.5]
+
+    plt.figure(figsize=(8, 4))
+
+    bin_centers = 0.5 * (np.array(bins[:-1]) + np.array(bins[1:]))
+
+    plt.hist([distance_for_image_to_image_in_list, distance_for_dna_to_dna_in_list, distance_for_image_to_dna_in_list, distance_for_image_to_language_in_list],
+             bins=bins, label=['Image-to-Image', 'DNA-to-DNA', 'Image-to-DNA', 'Image-to-Text'], alpha=0.7, rwidth=0.85)
+
+    plt.legend()
+
+    plt.title('Distance Distribution Comparison')
+    plt.xlabel('Distance')
+    plt.ylabel('Frequencies')
+
+    plt.yscale('log')
+
+    plt.xticks(bin_centers, [f"{left:.3f}~{right:.3f}" for left, right in zip(bins[:-1], bins[1:])])
+
+    plt.subplots_adjust(top=0.93, bottom=0.120, left=0.0075, right=0.950)
+
+    plt.show()
 
 
 @hydra.main(config_path="../bioscanclip/config", config_name="global_config", version_base="1.1")
 def main(args: DictConfig) -> None:
-    args.save_inference = True
     if os.path.exists(os.path.join(args.model_config.ckpt_path, "best.pth")):
         args.model_config.ckpt_path = os.path.join(args.model_config.ckpt_path, "best.pth")
     elif os.path.exists(os.path.join(args.model_config.ckpt_path, "last.pth")):
@@ -160,7 +193,7 @@ def main(args: DictConfig) -> None:
 
     extracted_features_path = os.path.join(folder_for_saving,
                                            f"extracted_feature_from_{args.inference_and_eval_setting.eval_on}_split.hdf5")
-
+    args.load_inference = True
     if os.path.exists(extracted_features_path) and os.path.exists(labels_path) and args.load_inference:
         print("Loading embeddings from file...")
 
@@ -239,6 +272,7 @@ def main(args: DictConfig) -> None:
         unseen_dict,
         args,
     )
+
 
 if __name__ == "__main__":
     main()
