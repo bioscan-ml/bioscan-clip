@@ -139,12 +139,22 @@ def load_clip_model(args, device=None):
     if hasattr(args.model_config, 'disable_lora'):
         disable_lora = args.model_config.disable_lora
 
-    if args.model_config.image.model == "lora_clip_image" and args.model_config.language.model == "lora_clip_text":
+    using_open_clip = False
+    if hasattr(args.model_config, 'using_open_clip'):
+        disable_lora = args.model_config.using_open_clip
+
+    if not hasattr(args.model_config.image, 'model'):
+        args.model_config.image.model = None
+    if not hasattr(args.model_config.language, 'model'):
+        args.model_config.language.model = None
+    if not hasattr(args.model_config.dna, 'model'):
+        args.model_config.dna.model = None
+
+    if using_open_clip or (args.model_config.image.model == "lora_clip_image" and args.model_config.language.model == "lora_clip_text") :
         open_clip_model, _, _ = open_clip.create_model_and_transforms('ViT-L/14', pretrained='commonpool_xl_laion_s13b_b90k')
         open_clip_model.to(device)
         if not disable_lora:
             open_clip_model = add_lora_layer_to_open_clip(open_clip_model, r=4, num_classes=args.model_config.output_dim)
-
     else:
         # For image part
         if args.model_config.image.input_type == "image":
@@ -180,12 +190,13 @@ def load_clip_model(args, device=None):
             else:
                 raise TypeError(f"Using {args.model_config.language.input_type} as language input is not support yet.")
 
+
     # For DNA part
     if hasattr(args.model_config, 'dna'):
         if hasattr(args.model_config.dna, 'freeze') and args.model_config.dna.freeze:
             dna_encoder = Freeze_DNA_Encoder()
         elif args.model_config.dna.input_type == "sequence":
-            if args.model_config.dna.model == "lora_barcode_bert":
+            if args.model_config.dna.model == "barcode_bert" or args.model_config.dna.model == "lora_barcode_bert":
                 pre_trained_barcode_bert = load_pre_trained_bioscan_bert(
                     bioscan_bert_checkpoint=args.bioscan_bert_checkpoint)
                 if disable_lora:

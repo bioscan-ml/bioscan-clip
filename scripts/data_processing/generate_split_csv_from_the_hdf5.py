@@ -56,7 +56,7 @@ def process_other_splits(args):
     return data_list
 
 
-@hydra.main(config_path="../bioscanclip/config", config_name="global_config", version_base="1.1")
+@hydra.main(config_path="../../bioscanclip/config", config_name="global_config", version_base="1.1")
 def main(args: DictConfig) -> None:
     args.project_root_path = os.path.dirname(os.path.dirname(os.path.dirname(os.getcwd())))
     path_to_hdf5 = args.bioscan_data.path_to_hdf5_data

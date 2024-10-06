@@ -197,7 +197,7 @@ def remove_rows_with_missing_images(metadata):
 
     return metadata
 
-@hydra.main(config_path="../bioscanclip/config", config_name="global_config", version_base="1.1")
+@hydra.main(config_path="../../bioscanclip/config", config_name="global_config", version_base="1.1")
 def main(args: DictConfig) -> None:
 
     # TODO update the hard coded part.

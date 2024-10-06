@@ -6,21 +6,17 @@ dataset: bioscan_5m
 
 image:
   input_type: image
-  model: lora_vit
+  pre_train_model: vit_base_patch16_224
 dna:
   input_type: sequence
-  model: lora_barcode_bert
+  pre_train_model: barcode_bert
 language:
   input_type: sequence
-  model: lora_bert
+  pre_train_model: prajjwal1/bert-small
 
-bioscan_bert_checkpoint: ${project_root_path}/ckpt/BarcodeBERT/5_mer/model_41.pth
-model_output_dir: ${project_root_path}/ckpt/bioscan_clip
-model_output_name: trained_with_bioscan_5m_image_dna_text
+load_ckpt: false
+model_output_name: no_align_5m
 evaluation_period: 1
-
 ckpt_path: ${project_root_path}/ckpt/bioscan_clip/trained_with_bioscan_5m/image_dna_text.pth
-
 output_dim: 768
-num_workers: 8
 port: 12316
