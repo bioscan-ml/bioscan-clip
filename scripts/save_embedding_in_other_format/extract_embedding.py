@@ -43,7 +43,7 @@ def convert_labels_to_four_list(list_of_dict):
         species_list.append(a_dict["species"])
     return order_list, family_list, genus_list, species_list
 
-@hydra.main(config_path="../bioscanclip/config", config_name="global_config", version_base="1.1")
+@hydra.main(config_path="../../bioscanclip/config", config_name="global_config", version_base="1.1")
 def main(args: DictConfig) -> None:
     args.project_root_path = os.path.dirname(os.path.dirname(os.path.dirname(os.getcwd())))
     args.save_inference = True

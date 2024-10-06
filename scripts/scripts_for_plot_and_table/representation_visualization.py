@@ -147,7 +147,7 @@ def get_and_save_vit_explaination(image_list, attn_rollout, transform, device, l
     # torch.cuda.empty_cache()
     # gc.collect()
 
-@hydra.main(config_path="../bioscanclip/config", config_name="global_config", version_base="1.1")
+@hydra.main(config_path="../../bioscanclip/config", config_name="global_config", version_base="1.1")
 def main(args: DictConfig) -> None:
     save_path = os.path.join(args.project_root_path, "representation_visualization")
 

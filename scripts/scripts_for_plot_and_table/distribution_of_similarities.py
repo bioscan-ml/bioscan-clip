@@ -173,7 +173,7 @@ def get_similarity_for_different_combination_of_modalities(
     plt.show()
 
 
-@hydra.main(config_path="../bioscanclip/config", config_name="global_config", version_base="1.1")
+@hydra.main(config_path="../../bioscanclip/config", config_name="global_config", version_base="1.1")
 def main(args: DictConfig) -> None:
     if os.path.exists(os.path.join(args.model_config.ckpt_path, "best.pth")):
         args.model_config.ckpt_path = os.path.join(args.model_config.ckpt_path, "best.pth")

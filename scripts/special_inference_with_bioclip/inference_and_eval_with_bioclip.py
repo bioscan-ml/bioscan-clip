@@ -175,7 +175,7 @@ def encode_image_feature_and_calculate_accuracy(model, txt_features, query_datal
     compute_accuracy(all_pred, all_gt)
 
 
-@hydra.main(config_path="../bioscanclip/config", config_name="global_config", version_base="1.1")
+@hydra.main(config_path="../../bioscanclip/config", config_name="global_config", version_base="1.1")
 def main(args: DictConfig) -> None:
     args.save_inference = True
     if os.path.exists(os.path.join(args.model_config.ckpt_path, "best.pth")):

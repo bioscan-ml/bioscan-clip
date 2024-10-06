@@ -19,7 +19,7 @@ from bioscanclip.util.util import EncoderWithExtraLayer, get_unique_species_for_
 from bioscanclip.util.util import get_features_and_label
 
 
-@hydra.main(config_path="../bioscanclip/config", config_name="global_config", version_base="1.1")
+@hydra.main(config_path="../../bioscanclip/config", config_name="global_config", version_base="1.1")
 def main(args: DictConfig) -> None:
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
     # world_size = torch.cuda.device_count()

@@ -197,7 +197,7 @@ def plot_heatmap_to_show_how_distribution_of_data_in_species_level(all_species_c
     plot_histogram(list_of_data, list_of_label, threshold=30)
 
 
-@hydra.main(config_path="../bioscanclip/config", config_name="global_config", version_base="1.1")
+@hydra.main(config_path="../../bioscanclip/config", config_name="global_config", version_base="1.1")
 def main(args: DictConfig) -> None:
     # Get all species list in a dict
     h5file = h5py.File(args.bioscan_data.path_to_hdf5_data, 'r')

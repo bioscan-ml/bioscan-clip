@@ -145,7 +145,7 @@ def main_process(rank: int, world_size: int, args):
     print(f"Embeddings saved to {folder_to_save_dict}")
 
 
-@hydra.main(config_path="../bioscanclip/config", config_name="global_config", version_base="1.1")
+@hydra.main(config_path="../../bioscanclip/config", config_name="global_config", version_base="1.1")
 def main(args: DictConfig) -> None:
     args.project_root_path = os.path.dirname(os.path.dirname(os.path.dirname(os.getcwd())))
     world_size = torch.cuda.device_count()

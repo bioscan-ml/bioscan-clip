@@ -113,7 +113,7 @@ def get_features(all_dataloader, image_classifier, device):
 
 
 
-@hydra.main(config_path="../bioscanclip/config", config_name="global_config", version_base="1.1")
+@hydra.main(config_path="../../bioscanclip/config", config_name="global_config", version_base="1.1")
 def main(args: DictConfig) -> None:
     args.project_root_path = os.path.dirname(os.path.dirname(os.path.dirname(os.getcwd())))
     # # Set up for debug, delete when you see it!
@@ -122,8 +122,8 @@ def main(args: DictConfig) -> None:
 
     # special set up for train on INSECT dataset
     args.model_config.batch_size = 300
-    args.model_config.epochs = 100
-    args.model_config.evaluation_period = 15
+    args.model_config.epochs = 10
+    args.model_config.evaluation_period = 5
 
     if args.debug_flag:
         args.activate_wandb = False
@@ -164,7 +164,7 @@ def main(args: DictConfig) -> None:
         param.requires_grad = True
 
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.AdamW(image_classifier.parameters(), lr=0.00015)
+    optimizer = optim.AdamW(image_classifier.parameters(), lr=0.001)
 
     # Calculate total number of steps (iterations)
     total_steps = args.model_config.epochs * len(insect_trainval_dataloader)
@@ -175,13 +175,10 @@ def main(args: DictConfig) -> None:
 
     if args.activate_wandb:
         wandb.init(project="Fine-tune BIOSCAN-CLIP image encoder on INSECT dataset",
-                   name="Fine-tune BIOSCAN-CLIP image encoder on INSECT dataset")
+                   name="Fine-tune BIOSCAN-CLIP image encoder on INSECT dataset_10_epoch")
 
     folder_path = os.path.join(args.project_root_path, args.model_output_dir,
-                               "Fine_tune_BIOSCAN-CLIP-image-encoder_on_INSECT_dataset", formatted_datetime)
-    folder_to_save_embed = os.path.join(args.project_root_path,
-                                        "embedding_from_BIOSCAN-CLIP-image-encoder_fine_tuned_on_insect",
-                                        formatted_datetime)
+                               "Fine_tune_BIOSCAN-CLIP-image-encoder_on_INSECT_dataset_10_epoch", formatted_datetime)
     os.makedirs(folder_path, exist_ok=True)
     last_ckpt_path = os.path.join(folder_path, 'last.ckpt')
     OmegaConf.save(args, os.path.join(folder_path, 'config.yaml'))
@@ -191,6 +188,9 @@ def main(args: DictConfig) -> None:
 
     print("training...")
     pbar = tqdm(range(args.model_config.epochs))
+    folder_to_save_embed = os.path.join(args.project_root_path,
+                                        "embedding_from_BIOSCAN-CLIP-image-encoder_fine_tuned_on_insect_10_epoch",
+                                        formatted_datetime)
     for epoch in pbar:
         pbar.set_description(f"Epoch: {epoch}")
         epoch_loss = fine_tuning_epoch(args, image_classifier, insect_trainval_dataloader,
@@ -213,6 +213,7 @@ def main(args: DictConfig) -> None:
                 torch.save(image_classifier.state_dict(), last_ckpt_path)
                 print(f'Last ckpt: {last_ckpt_path}')
                 # save_image_embedding to “image_embedding_from_bioscan_clip.csv”
+
                 os.makedirs(folder_to_save_embed, exist_ok=True)
                 image_embed_path = os.path.join(folder_to_save_embed,
                                                 "image_embedding_from_BIOSCAN-CLIP-image-encoder_fine_tuned_on_insect.csv")
@@ -225,8 +226,6 @@ def main(args: DictConfig) -> None:
         torch.save(image_classifier.state_dict(), last_ckpt_path)
         print(f'Last ckpt: {last_ckpt_path}')
         # save_image_embedding to “image_embedding_from_bioscan_clip.csv”
-        folder_to_save_embed = os.path.join(args.project_root_path, "embedding_from_BIOSCAN-CLIP-image-encoder_fine_tuned_on_insect",
-                                            formatted_datetime)
         os.makedirs(folder_to_save_embed, exist_ok=True)
         image_embed_path = os.path.join(folder_to_save_embed, "image_embedding_from_BIOSCAN-CLIP-image-encoder_fine_tuned_on_insect.csv")
         image_feature = get_features(all_dataloader, image_classifier, device)

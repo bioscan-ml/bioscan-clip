@@ -424,7 +424,7 @@ def check_for_acc_about_correct_predict_seen_or_unseen(final_pred_list, species_
         print(f"for k = {k}: {(correct * 1.0) / total}")
 
 
-@hydra.main(config_path="../bioscanclip/config", config_name="global_config", version_base="1.1")
+@hydra.main(config_path="../../bioscanclip/config", config_name="global_config", version_base="1.1")
 def main(args: DictConfig) -> None:
     if args.debug_flag:
         args.activate_wandb = False
