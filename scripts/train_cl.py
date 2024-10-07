@@ -309,6 +309,7 @@ def main_process(rank: int, world_size: int, args):
                 wandb.log(dict_for_wandb,
                           commit=True)
             if stop_flag and args.enable_early_stopping:
+                print(f"Early stop at epoch {epoch}")
                 break
 
 @hydra.main(config_path="../bioscanclip/config", config_name="global_config", version_base="1.1")
