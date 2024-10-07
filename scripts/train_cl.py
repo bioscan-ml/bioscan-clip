@@ -270,8 +270,7 @@ def main_process(rank: int, world_size: int, args):
                                                                  pre_train_dataloader, model, optimizer,
                                                                  criterion, rank, rank=rank, scheduler=scheduler,
                                                                  for_open_clip=for_open_clip,
-                                                                 fix_temperature=fix_temperature, scaler=scaler,
-                                                                 enable_early_stopping=args.enable_early_stopping, enable_autocast=enable_amp)
+                                                                 fix_temperature=fix_temperature, scaler=scaler, enable_autocast=enable_amp)
 
         if (epoch % args.model_config.evaluation_period == 0 or epoch == args.model_config.epochs - 1) and rank == 0 and epoch > eval_skip_epoch:
             original_model = model.module if hasattr(model, 'module') else model
