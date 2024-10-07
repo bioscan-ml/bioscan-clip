@@ -152,7 +152,7 @@ def load_clip_model(args, device=None):
         language_model = args.model_config.language.model
 
     dna_model = None
-    if hasattr(args.model_config, 'dna'):
+    if hasattr(args.model_config.dna, 'model'):
         dna_model = args.model_config.dna.model
 
     if using_open_clip or (image_model == "lora_clip_image" and language_model == "lora_clip_text") :

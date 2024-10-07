@@ -98,6 +98,9 @@ def main(args: DictConfig) -> None:
         idx_we_want_to_keep = idx_we_want_to_keep + random.sample(idx_list,
                                                                   special_round_to_avoid_zero(len(idx_list)
                                                                                               * ratio_we_want_to_keep))
+
+    print(len(idx_we_want_to_keep))
+
     # create a special split and save to a new hdf5 file based on the idx_we_want_to_keep
     tasks = [(key, idx_we_want_to_keep, path_to_5m_hdf5) for key in
              bioscan_5m_hdf5_file["no_split_and_seen_train"].keys()]
