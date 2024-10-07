@@ -403,7 +403,10 @@ def print_micro_and_macro_acc(acc_dict, k_list, args):
 
     def read_encoder(model_config, key):
         if hasattr(model_config, key):
-            return model_config[key].model
+            if hasattr(model_config[key], "model"):
+                return model_config[key].model
+            elif hasattr(model_config[key], "pre_train_model"):
+                return model_config[key].pre_train_model
         else:
             return "None"
 

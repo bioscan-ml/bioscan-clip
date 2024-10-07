@@ -75,6 +75,8 @@ def main(args: DictConfig) -> None:
 
     ratio_we_want_to_keep = len(species_list_1m) / len(species_list_5m)
 
+    print(f"BIOSCAN-1M has {len(species_list_1m)} data")
+
     del pre_train_split_1m
     del species_list_1m
     bioscan_1m_hdf5_file.close()
@@ -89,8 +91,6 @@ def main(args: DictConfig) -> None:
         else:
             species_to_their_index[species].append(idx)
 
-    idx_we_want_to_keep = []
-
     idx_we_want_to_keep = parallel_sampling(species_to_their_index, ratio_we_want_to_keep)
 
     pbar = tqdm(species_to_their_index.items(), total=len(species_to_their_index), desc="Processing species to their index")
@@ -98,8 +98,11 @@ def main(args: DictConfig) -> None:
         idx_we_want_to_keep = idx_we_want_to_keep + random.sample(idx_list,
                                                                   special_round_to_avoid_zero(len(idx_list)
                                                                                               * ratio_we_want_to_keep))
+    idx_we_want_to_keep = idx_we_want_to_keep + random.sample(idx_without_species_label,
+                                                              special_round_to_avoid_zero(len(idx_without_species_label)
+                                                                                          * ratio_we_want_to_keep))
 
-    print(len(idx_we_want_to_keep))
+    print(f"1M split for BIOSCAN-5M has {len(idx_we_want_to_keep)} data")
 
     # create a special split and save to a new hdf5 file based on the idx_we_want_to_keep
     tasks = [(key, idx_we_want_to_keep, path_to_5m_hdf5) for key in
