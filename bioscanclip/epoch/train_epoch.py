@@ -7,8 +7,7 @@ from torch.cuda.amp import autocast
 
 
 def train_epoch(activate_wandb, total_epochs, epoch, dataloader, model, optimizer, criterion, device, scaler, scheduler=None,
-                for_open_clip=False, rank=None, fix_temperature=None,
-                best_loss=None, patience_step=None, count=0, enable_early_stopping=False, enable_autocast=False):
+                for_open_clip=False, rank=None, fix_temperature=None, enable_early_stopping=False, enable_autocast=False):
     torch.autograd.set_detect_anomaly(True)
     if rank == 0:
         pbar = tqdm(enumerate(dataloader), total=len(dataloader))
@@ -79,10 +78,4 @@ def train_epoch(activate_wandb, total_epochs, epoch, dataloader, model, optimize
                 count = 0
             else:
                 count += 1
-            if count == patience_step:
-                stop_flag = True
-                break
-            stop_flag = False
     print(f'Epoch [{epoch}/{total_epochs}], Loss: {epoch_loss / len(dataloader)}')
-
-    return best_loss, count, patience_step, stop_flag

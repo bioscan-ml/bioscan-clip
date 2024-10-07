@@ -120,6 +120,26 @@ def convert_acc_dict_to_wandb_dict(acc_dict):
     return dict_for_wandb
 
 
+def compute_overall_acc(acc_dict):
+    overall_acc_list = []
+
+    for query_type in acc_dict.keys():
+        for key_type in acc_dict[query_type].keys():
+            for seen_or_unseen in acc_dict[query_type][key_type].keys():
+                for micro_and_macro in acc_dict[query_type][key_type][seen_or_unseen].keys():
+                    for k in acc_dict[query_type][key_type][seen_or_unseen][micro_and_macro].keys():
+                        if k == 3 or k == 5:
+                            # Only care about top 1 accuracy
+                            continue
+                        for level in acc_dict[query_type][key_type][seen_or_unseen][micro_and_macro][k].keys():
+                            try:
+                                curr_acc = acc_dict[query_type][key_type][seen_or_unseen][micro_and_macro][k][level]
+                                overall_acc_list.append(curr_acc)
+                            except:
+                                pass
+    overall_acc = sum(overall_acc_list) / len(overall_acc_list)
+    return overall_acc
+
 def main_process(rank: int, world_size: int, args):
     if args.debug_flag or rank != 0:
         args.activate_wandb = False
@@ -238,28 +258,20 @@ def main_process(rank: int, world_size: int, args):
 
     best_epoch = None
     best_overall_acc = None
+    stop_flag = False
     folder_path = os.path.join(args.project_root_path, args.model_output_dir,
                                args.model_config.model_output_name, formatted_datetime)
     os.makedirs(folder_path, exist_ok=True)
 
     OmegaConf.save(args, os.path.join(folder_path, 'config.yaml'))
 
-    patience_step = len(pre_train_dataloader) * args.early_stopping_patience
-    best_loss = float('inf')
-    stop_flag = False
-    count = 0
-
-    enable_early_stopping = args.enable_early_stopping
-
     for epoch in range(args.model_config.epochs):
-        best_loss, count, patience_step, stop_flag = train_epoch(args.activate_wandb, args.model_config.epochs, epoch,
+        train_epoch(args.activate_wandb, args.model_config.epochs, epoch,
                                                                  pre_train_dataloader, model, optimizer,
                                                                  criterion, rank, rank=rank, scheduler=scheduler,
                                                                  for_open_clip=for_open_clip,
                                                                  fix_temperature=fix_temperature, scaler=scaler,
-                                                                 best_loss=best_loss, patience_step=patience_step,
-                                                                 count=count,
-                                                                 enable_early_stopping=enable_early_stopping, enable_autocast=enable_amp)
+                                                                 enable_early_stopping=args.enable_early_stopping, enable_autocast=enable_amp)
 
         if (epoch % args.model_config.evaluation_period == 0 or epoch == args.model_config.epochs - 1) and rank == 0 and epoch > eval_skip_epoch:
             original_model = model.module if hasattr(model, 'module') else model
@@ -279,10 +291,9 @@ def main_process(rank: int, world_size: int, args):
 
             dict_for_wandb = convert_acc_dict_to_wandb_dict(acc_dict)
             dict_for_wandb['epoch'] = epoch
-            overall_acc = (acc_dict['encoded_image_feature']['encoded_image_feature']['seen']['micro_acc'][1][
-                               'species'] +
-                           acc_dict['encoded_image_feature']['encoded_image_feature']['unseen']['micro_acc'][1][
-                               'species']) / 2
+
+            overall_acc = compute_overall_acc(acc_dict)
+
             if best_overall_acc is None or best_overall_acc < overall_acc:
                 best_epoch = epoch
                 best_overall_acc = overall_acc
@@ -291,14 +302,15 @@ def main_process(rank: int, world_size: int, args):
 
                     torch.save(original_model.state_dict(), best_ckpt_path)
                     print(f'Best ckpt: {best_ckpt_path}')
+            else:
+                stop_flag = True
             dict_for_wandb["overall_acc"] = overall_acc
             dict_for_wandb["best_epoch"] = best_epoch
             if args.activate_wandb and rank == 0:
                 wandb.log(dict_for_wandb,
                           commit=True)
-        if stop_flag:
-            break
-
+            if stop_flag and args.enable_early_stopping:
+                break
 
 @hydra.main(config_path="../bioscanclip/config", config_name="global_config", version_base="1.1")
 def main(args: DictConfig) -> None:
