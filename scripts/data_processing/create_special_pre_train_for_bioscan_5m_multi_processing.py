@@ -26,6 +26,7 @@ from bioscanclip.util.util import (
     All_TYPE_OF_FEATURES_OF_KEY,
 )
 from tqdm import tqdm
+from multiprocessing import Pool
 
 """
 This script is using to generate a special one fifth pre-train data for the BIOSCAN-5M's pre-train split.
@@ -38,6 +39,22 @@ def special_round_to_avoid_zero(number):
         return 1
     else:
         return int(round(number))
+
+
+def sample_indices(args):
+    idx_list, ratio_we_want_to_keep = args
+    return random.sample(idx_list, special_round_to_avoid_zero(len(idx_list) * ratio_we_want_to_keep))
+
+def parallel_sampling(species_to_index, ratio_we_want_to_keep):
+    with Pool(processes=os.cpu_count()) as pool:
+        tasks = [(idxs, ratio_we_want_to_keep) for _, idxs in species_to_index.items()]
+        results = pool.map(sample_indices, tasks)
+    return [idx for sublist in results for idx in sublist]
+
+def process_key_data(args):
+    key, indices, hdf5_path = args
+    with h5py.File(hdf5_path, 'r') as f:
+        return (key, [f["no_split_and_seen_train"][key][idx] for idx in indices])
 
 
 @hydra.main(config_path="../../bioscanclip/config", config_name="global_config", version_base="1.1")
@@ -74,30 +91,31 @@ def main(args: DictConfig) -> None:
 
     idx_we_want_to_keep = []
 
-    idx_without_species_label_and_we_want_to_keep = random.sample(idx_without_species_label,
-                                              special_round_to_avoid_zero(len(idx_without_species_label)
-                                                                          * ratio_we_want_to_keep))
+    idx_we_want_to_keep = parallel_sampling(species_to_their_index, ratio_we_want_to_keep)
 
-    idx_we_want_to_keep =  idx_we_want_to_keep + idx_without_species_label_and_we_want_to_keep
     pbar = tqdm(species_to_their_index.items(), total=len(species_to_their_index), desc="Processing species to their index")
     for species, idx_list in pbar:
         idx_we_want_to_keep = idx_we_want_to_keep + random.sample(idx_list,
                                                                   special_round_to_avoid_zero(len(idx_list)
                                                                                               * ratio_we_want_to_keep))
     # create a special split and save to a new hdf5 file based on the idx_we_want_to_keep
+    tasks = [(key, idx_we_want_to_keep, path_to_5m_hdf5) for key in
+             bioscan_5m_hdf5_file["no_split_and_seen_train"].keys()]
+
+    result_dict = {}
+    with Pool(processes=os.cpu_count()) as pool:
+        for result in tqdm(pool.imap_unordered(process_key_data, tasks), total=len(tasks), desc="Processing HDF5 keys"):
+            key, data = result
+            result_dict[key] = data
+
     special_split_hdf5_path = os.path.join(args.bioscan_5m_data.dir, "special_pre_train_5m.hdf5")
-    # remove the file if it exists
     if os.path.exists(special_split_hdf5_path):
         os.remove(special_split_hdf5_path)
-    new_file = h5py.File(special_split_hdf5_path, "w")
-    new_file.create_group("no_split_and_seen_train")
-    for key in bioscan_5m_hdf5_file["no_split_and_seen_train"].keys():
-        new_data_list = []
-        pbar = tqdm(idx_we_want_to_keep, total=len(idx_we_want_to_keep), desc=f"Processing {key}")
-        for idx in pbar:
-            new_data_list.append(bioscan_5m_hdf5_file["no_split_and_seen_train"][key][idx])
-        new_file["no_split_and_seen_train"].create_dataset(key, data=new_data_list)
-    new_file.close()
+    with h5py.File(special_split_hdf5_path, "w") as new_file:
+        new_file.create_group("no_split_and_seen_train")
+        for key, data in result_dict.items():
+            new_file["no_split_and_seen_train"].create_dataset(key, data=data)
+
     bioscan_5m_hdf5_file.close()
 
 if __name__ == "__main__":
