@@ -7,7 +7,7 @@ from torch.cuda.amp import autocast
 
 
 def train_epoch(activate_wandb, total_epochs, epoch, dataloader, model, optimizer, criterion, device, scaler, scheduler=None,
-                for_open_clip=False, rank=None, fix_temperature=None, enable_early_stopping=False, enable_autocast=False):
+                for_open_clip=False, rank=None, fix_temperature=None, enable_autocast=False):
     torch.autograd.set_detect_anomaly(True)
     if rank == 0:
         pbar = tqdm(enumerate(dataloader), total=len(dataloader))
@@ -68,14 +68,4 @@ def train_epoch(activate_wandb, total_epochs, epoch, dataloader, model, optimize
 
             if activate_wandb:
                 wandb.log({"loss": loss.item(), "step": step + epoch * len(dataloader), "learning_rate": current_lr})
-
-        if enable_early_stopping:
-            loss_in_value = loss.item()
-            if best_loss is None:
-                best_loss = loss_in_value
-            elif loss_in_value < best_loss:
-                best_loss = loss_in_value
-                count = 0
-            else:
-                count += 1
     print(f'Epoch [{epoch}/{total_epochs}], Loss: {epoch_loss / len(dataloader)}')
