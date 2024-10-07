@@ -151,6 +151,10 @@ def load_clip_model(args, device=None):
     if hasattr(args.model_config.language, 'model'):
         language_model = args.model_config.language.model
 
+    dna_model = None
+    if hasattr(args.model_config, 'dna'):
+        dna_model = args.model_config.dna.model
+
     if using_open_clip or (image_model == "lora_clip_image" and language_model == "lora_clip_text") :
         open_clip_model, _, _ = open_clip.create_model_and_transforms('ViT-L/14', pretrained='commonpool_xl_laion_s13b_b90k')
         open_clip_model.to(device)
@@ -197,7 +201,7 @@ def load_clip_model(args, device=None):
         if hasattr(args.model_config.dna, 'freeze') and args.model_config.dna.freeze:
             dna_encoder = Freeze_DNA_Encoder()
         elif args.model_config.dna.input_type == "sequence":
-            if args.model_config.dna.model == "barcode_bert" or args.model_config.dna.model == "lora_barcode_bert":
+            if dna_model == "barcode_bert" or dna_model == "lora_barcode_bert":
                 pre_trained_barcode_bert = load_pre_trained_bioscan_bert(
                     bioscan_bert_checkpoint=args.bioscan_bert_checkpoint)
                 if disable_lora:
