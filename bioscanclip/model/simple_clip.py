@@ -151,7 +151,7 @@ def load_clip_model(args, device=None):
     if hasattr(args.model_config.language, 'model'):
         language_model = args.model_config.language.model
 
-    dna_model = None
+    dna_model = "barcode_bert"
     if hasattr(args.model_config.dna, 'model'):
         dna_model = args.model_config.dna.model
 
