@@ -141,6 +141,8 @@ def compute_overall_acc(acc_dict):
     return overall_acc
 
 def main_process(rank: int, world_size: int, args):
+    stop_flag = torch.tensor([0], device=rank)
+
     if args.debug_flag or rank != 0:
         args.activate_wandb = False
         args.save_inference = False
@@ -266,6 +268,10 @@ def main_process(rank: int, world_size: int, args):
     OmegaConf.save(args, os.path.join(folder_path, 'config.yaml'))
 
     for epoch in range(args.model_config.epochs):
+        dist.broadcast(stop_flag, src=0)
+        if stop_flag.item() == 1:
+            print(f"Process {rank} stopping at epoch {epoch} due to early stopping")
+            break
         train_epoch(args.activate_wandb, args.model_config.epochs, epoch,
                                                                  pre_train_dataloader, model, optimizer,
                                                                  criterion, rank, rank=rank, scheduler=scheduler,
@@ -302,15 +308,16 @@ def main_process(rank: int, world_size: int, args):
                     torch.save(original_model.state_dict(), best_ckpt_path)
                     print(f'Best ckpt: {best_ckpt_path}')
             else:
-                stop_flag = True
+                stop_flag[0] = 1
             dict_for_wandb["overall_acc"] = overall_acc
             dict_for_wandb["best_epoch"] = best_epoch
             if args.activate_wandb and rank == 0:
                 wandb.log(dict_for_wandb,
                           commit=True)
-            if stop_flag and args.enable_early_stopping:
-                print(f"Early stop at epoch {epoch}")
-                break
+        dist.broadcast(stop_flag, src=0)
+        if stop_flag.item() == 1:
+            print(f"Process {rank} stopping at epoch {epoch} due to early stopping")
+            break
 
 @hydra.main(config_path="../bioscanclip/config", config_name="global_config", version_base="1.1")
 def main(args: DictConfig) -> None:
