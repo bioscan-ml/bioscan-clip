@@ -144,16 +144,19 @@ def load_clip_model(args, device=None):
         disable_lora = args.model_config.using_open_clip
 
     image_model = None
-    if hasattr(args.model_config.image, 'model'):
-        image_model = args.model_config.image.model
+    if hasattr(args.model_config, 'image'):
+        if hasattr(args.model_config.image, 'model'):
+            image_model = args.model_config.image.model
 
     language_model = None
-    if hasattr(args.model_config.language, 'model'):
-        language_model = args.model_config.language.model
+    if hasattr(args.model_config, 'language'):
+        if hasattr(args.model_config.language, 'model'):
+            language_model = args.model_config.language.model
 
     dna_model = "barcode_bert"
-    if hasattr(args.model_config.dna, 'model'):
-        dna_model = args.model_config.dna.model
+    if hasattr(args.model_config, 'dna'):
+        if hasattr(args.model_config.dna, 'model'):
+            dna_model = args.model_config.dna.model
 
     if using_open_clip or (image_model == "lora_clip_image" and language_model == "lora_clip_text") :
         open_clip_model, _, _ = open_clip.create_model_and_transforms('ViT-L/14', pretrained='commonpool_xl_laion_s13b_b90k')
