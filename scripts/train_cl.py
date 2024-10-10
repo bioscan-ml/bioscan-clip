@@ -260,7 +260,6 @@ def main_process(rank: int, world_size: int, args):
 
     best_epoch = None
     best_overall_acc = None
-    stop_flag = False
     folder_path = os.path.join(args.project_root_path, args.model_output_dir,
                                args.model_config.model_output_name, formatted_datetime)
     os.makedirs(folder_path, exist_ok=True)
