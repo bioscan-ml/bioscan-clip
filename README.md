@@ -1,6 +1,6 @@
 # BIOSCAN-CLIP
 This is the official implementation for "BIOSCAN-CLIP: Bridging Vision and Genomics for Biodiversity Monitoring at Scale".
-Links: [website](https://3dlg-hcvc.github.io/bioscan-clip/) | [paper](https://arxiv.org/abs/2405.17537)
+Links: [website](https://bioscan-ml.github.io/bioscan-clip/) | [paper](https://arxiv.org/abs/2405.17537)
 
 # Overview
 ![Teaser](./docs/static/images/method.png)
@@ -86,7 +86,7 @@ mkdir -p data/BIOSCAN_5M/split_data
 cd data/BIOSCAN_5M
 wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/BIOSCAN_5M.hdf5
 ```
-For more information about the hdf5 files, please check [Link](https://github.com/3dlg-hcvc/bioscan-clip/blob/main/DATA.md)
+For more information about the hdf5 files, please check [Link](https://github.com/bioscan-ml/bioscan-clip/blob/main/DATA.md)
 
 ### Download data for generating hdf5 files
 
