@@ -230,7 +230,7 @@ python scripts/flattenCsv.pya -i PATH_TO_RESULTS_CSV -o PATH_TO_FLATTEN_CSV
 
 # Citing BIOSCAN-CLIP
 If you use BIOSCAN-CLIP in your research, please cite:
-```
+```bibtex
 @article{gong2024bioscan,
   title={BIOSCAN-CLIP: Bridging Vision and Genomics for Biodiversity Monitoring at Scale},
   author={Gong, ZeMing and Wang, Austin T and Haurum, Joakim Bruslund and Lowe, Scott C and Taylor, Graham W and Chang, Angel X},
