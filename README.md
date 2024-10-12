@@ -86,7 +86,7 @@ mkdir -p data/BIOSCAN_5M/split_data
 cd data/BIOSCAN_5M
 wget https://aspis.cmpt.sfu.ca/projects/bioscan/BIOSCAN_CLIP_for_downloading/BIOSCAN_5M.hdf5
 ```
-For more information about the hdf5 files, please check [Link](https://github.com/bioscan-ml/bioscan-clip/blob/main/DATA.md)
+For more information about the hdf5 files, please check [DATA.md](DATA.md).
 
 ### Download data for generating hdf5 files
 
