@@ -47,7 +47,7 @@ def process_key(key, bioscan_5m_hdf5_file, key_to_index_we_want, splits):
     return key, data
 
 
-def create_new_hdf5_file_with_1m_pre_train_split(new_path, key_to_index_we_want, bioscan_5m_hdf5_file, num_processes=4):
+def create_new_hdf5_file_with_1m_pre_train_split(new_path, key_to_index_we_want, bioscan_5m_hdf5_file, num_threads=4):
     if os.path.exists(new_path):
         os.remove(new_path)
 
@@ -55,17 +55,19 @@ def create_new_hdf5_file_with_1m_pre_train_split(new_path, key_to_index_we_want,
     splits = list(key_to_index_we_want.keys())
     new_split = new_hdf5_file.create_group('no_split_and_seen_train')
 
-    with Pool(processes=num_processes) as pool:
-        keys_to_process = list(KEYS_OF_DATA_WE_WANT_TO_KEEP)
+    keys_to_process = list(KEYS_OF_DATA_WE_WANT_TO_KEEP)
 
-        results = []
-        for key in tqdm(keys_to_process, desc="Submitting tasks"):
-            result = pool.apply_async(process_key, args=(key, bioscan_5m_hdf5_file, key_to_index_we_want, splits))
-            results.append(result)
+    # 使用线程池来并行处理
+    with ThreadPoolExecutor(max_workers=num_threads) as executor:
+        futures = {executor.submit(process_key, key, bioscan_5m_hdf5_file, key_to_index_we_want, splits): key for key in tqdm(keys_to_process, desc="Submitting tasks")}
 
-        for result in tqdm(results, desc="Processing results"):
-            key, data = result.get()
-            new_split.create_dataset(key, data=data)
+        for future in tqdm(as_completed(futures), total=len(futures), desc="Processing results"):
+            key = futures[future]
+            try:
+                key, data = future.result()
+                new_split.create_dataset(key, data=data)
+            except Exception as e:
+                print(f"Error processing {key}: {e}")
 
     new_hdf5_file.close()
 
