@@ -109,7 +109,10 @@ class Dataset_for_CL(Dataset):
             for_open_clip=False,
     ):
         if hasattr(args.model_config, "dataset") and args.model_config.dataset == "bioscan_5m":
-            self.hdf5_inputs_path = args.bioscan_5m_data.path_to_hdf5_data
+            if hasattr(args.model_config, "train_with_small_subset") and args.model_config.train_with_small_subset:
+                self.hdf5_inputs_path = args.bioscan_5m_data.path_to_smaller_hdf5_data
+            else:
+                self.hdf5_inputs_path = args.bioscan_5m_data.path_to_hdf5_data
             self.dataset = "bioscan_5m"
         else:
             self.hdf5_inputs_path = args.bioscan_data.path_to_hdf5_data
@@ -286,9 +289,16 @@ class Dataset_for_CL(Dataset):
 def get_len_dict(args):
     length_dict = {}
     if hasattr(args.model_config, 'dataset') and args.model_config.dataset == "bioscan_5m":
-        with h5py.File(args.bioscan_5m_data.path_to_hdf5_data, "r") as h5file:
-            for split in list(h5file.keys()):
-                length_dict[split] = len(h5file[split]["image"])
+        if hasattr(args.model_config, "train_with_small_subset") and args.model_config.train_with_small_subset:
+            with h5py.File(args.bioscan_5m_data.path_to_smaller_hdf5_data, "r") as h5file:
+                for split in list(h5file.keys()):
+                    length_dict[split] = len(h5file[split]["image"])
+        else:
+            with h5py.File(args.bioscan_5m_data.path_to_hdf5_data, "r") as h5file:
+                for split in list(h5file.keys()):
+                    length_dict[split] = len(h5file[split]["image"])
+
+
     else:
         with h5py.File(args.bioscan_data.path_to_hdf5_data, "r") as h5file:
             for split in list(h5file.keys()):
@@ -325,7 +335,10 @@ def construct_dataloader(
     if dna_type == "sequence":
 
         if args.model_config.dataset == "bioscan_5m":
-            hdf5_file = h5py.File(args.bioscan_5m_data.path_to_hdf5_data, "r", libver="latest")
+            if hasattr(args.model_config, "train_with_small_subset") and args.model_config.train_with_small_subset:
+                hdf5_file = h5py.File(args.bioscan_5m_data.path_to_smaller_hdf5_data, "r", libver="latest")
+            else:
+                hdf5_file = h5py.File(args.bioscan_5m_data.path_to_hdf5_data, "r", libver="latest")
         else:
             hdf5_file = h5py.File(args.bioscan_data.path_to_hdf5_data, "r", libver="latest")
 
