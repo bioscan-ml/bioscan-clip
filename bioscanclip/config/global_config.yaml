@@ -36,7 +36,7 @@ model_output_dir: ${project_root_path}/ckpt/bioscan_clip
 
 inference_and_eval_setting:
   plot_embeddings: false
-  retrieve_images: true
+  retrieve_images: false
   query_feature_type: image
   key_feature_type: image
   k_list: [1, 3, 5]
@@ -52,7 +52,7 @@ inference_and_eval_setting:
     independent: false
     load_cached_results: true
   put_all_key_together: false
-  eval_on: val
+  eval_on: test
 
 visualization:
   output_dir: ${project_root_path}/visualizations

@@ -77,8 +77,8 @@ def main(args: DictConfig) -> None:
     path_to_5m_hdf5 = args.bioscan_5m_data.path_to_hdf5_data
     bioscan_5m_hdf5_file = h5py.File(path_to_5m_hdf5, "r")
 
-    path_to_1m_hdf5 = args.bioscan_data.path_to_hdf5_data
-    bioscan_1m_hdf5_file = h5py.File(path_to_1m_hdf5, "r")
+    path_to_special_1m_hdf5 = "data/BIOSCAN_1M/special_1m_with_updated_label/BioScan_data_in_splits.hdf5"
+    bioscan_1m_hdf5_file = h5py.File(path_to_special_1m_hdf5, "r")
     pre_train_split_1m = bioscan_1m_hdf5_file["no_split_and_seen_train"]
 
     sample_id_from_1m_pre_train_split = pre_train_split_1m['sampleid'][:]

@@ -123,6 +123,7 @@ class Dataset_for_CL(Dataset):
         self.return_language = return_language
         self.for_training = for_training
         self.for_open_clip = for_open_clip
+        self.pre_train_with_small_set = args.model_config.train_with_small_subset
         if self.for_open_clip:
             # self.tokenizer = open_clip.get_tokenizer('ViT-B-32')
             self.tokenizer = None

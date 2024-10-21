@@ -180,7 +180,7 @@ class MultiColorsHandler:
 # Plot distribution of labels to number of records as color bar
 def plot_count_in_splits_as_colors(rows, ranges, expand=False, color_tags=None, 
                                    xlabel='Number of species', title='Distribution of species',
-                                   filename=None):
+                                   filename=None, hide_legend=False):
     # make copy
     ranges = copy.deepcopy(ranges)
     for i,r in enumerate(ranges):
@@ -271,8 +271,8 @@ def plot_count_in_splits_as_colors(rows, ranges, expand=False, color_tags=None,
         range_label = li['label']
         ax.barh(row_names, counts, left=bottom, color=li['color'], label=range_label)
         bottom += np.array(counts)
-
-    ax.set_xlabel(xlabel, fontsize=32)
+    if not hide_legend:
+        ax.set_xlabel(xlabel, fontsize=32)
     ax.set_title(title, fontsize=32)
     plt.tick_params(axis='x', labelsize=28)
     plt.tick_params(axis='y', labelsize=28)
@@ -288,16 +288,17 @@ def plot_count_in_splits_as_colors(rows, ranges, expand=False, color_tags=None,
             legend_elements.append(Patch(facecolor=color, edgecolor=color, label=color_tags[color_name]))
             #cmap = cmaps[color_name]
             #legend_elements.append(MultiColors([cmap(i) for i in range(cmap.N)], label=color_tags[color_name]))
-        color_legend = plt.legend(handles=legend_elements,
-                                  handler_map=legend_handler_map,
-                                  loc='upper center', 
-                                  bbox_to_anchor=(1.0, -0.15),
-                                  fontsize=24, ncols=len(color_tags),
-                                  handletextpad=0.4,
-                                  columnspacing=1.0,
-                                  borderpad=0.2,
-                                  frameon=True)
-        ax.add_artist(color_legend)
+        if not hide_legend:
+            color_legend = plt.legend(handles=legend_elements,
+                                      handler_map=legend_handler_map,
+                                      loc='upper center',
+                                      bbox_to_anchor=(1.0, -0.15),
+                                      fontsize=24, ncols=len(color_tags),
+                                      handletextpad=0.4,
+                                      columnspacing=1.0,
+                                      borderpad=0.2,
+                                      frameon=True)
+            ax.add_artist(color_legend)
 
     # create custom legend elements
     legend_elements = []
@@ -324,15 +325,19 @@ def plot_count_in_splits_as_colors(rows, ranges, expand=False, color_tags=None,
             range_label = range_def['label']
             range_label = range_label.replace('max', f'{max_value}')
             legend_labels.append(range_label)
-
-    plt.legend(legend_elements, legend_labels, 
-               handler_map=legend_handler_map,
-               handletextpad=0.4,
-               labelspacing=0.3,
-               loc='center left', bbox_to_anchor=(1, 0.5), fontsize=24)
+    if not hide_legend:
+        plt.legend(legend_elements, legend_labels,
+                   handler_map=legend_handler_map,
+                   handletextpad=0.4,
+                   labelspacing=0.3,
+                   loc='center left', bbox_to_anchor=(1, 0.5), fontsize=24)
 
     plt.tight_layout()
-
+    if hide_legend:
+        fig.subplots_adjust(left=0.14, right=0.83, wspace=0, hspace=0)
+    else:
+        fig.subplots_adjust(left=0.14, wspace=0, hspace=0)
+    print('Saving to', filename)
     if filename is not None:
         plt.savefig(filename)
         plt.close()
@@ -442,7 +447,7 @@ def plot_count_in_splits_as_histogram(rows, ranges, expand=False, color_tags=Non
 
     fig.subplots_adjust(wspace=0, hspace=0)
     plt.tight_layout()
-
+    print('Saving to', filename)
     if filename is not None:
         plt.savefig(filename)
         plt.close()
@@ -629,7 +634,7 @@ valtest_seenunseen_split_map = {
 
 def main():
     parser = argparse.ArgumentParser(description="Create visualization of distribution of species count")
-    parser.add_argument('-i', '--input', type=str, help='Input split file', default=f'bioscan_1m_with_split.csv')
+    parser.add_argument('-i', '--input', type=str, help='Input split file', default=f'data/BIOSCAN_1M/bioscan_1m_with_split.csv')
     parser.add_argument('-c', '--counts', type=str, help='Counts file', default=f'raw_split_counts.csv')
     args = parser.parse_args()
 
@@ -657,31 +662,34 @@ def main():
 
     counts = get_dist(querykey_level_counts)
     print_average_num_records(counts, levels)
+
+    plot_folder = 'output_plots'
+    os.makedirs(plot_folder, exist_ok=True)
     for level in levels:
         plot_count_in_splits_as_colors( [ NamedCounts('Train', [ counts['train'][level]], ['blue']),
                                 NamedCounts('Val', [ counts['val_seen_query'][level], counts['val_unseen_query'][level] ], ['blue', 'orange']),
-                                NamedCounts('Test', [ counts['test_seen_query'][level], counts['test_unseen_query'][level] ], ['blue', 'orange']) ], 
+                                NamedCounts('Test', [ counts['test_seen_query'][level], counts['test_unseen_query'][level] ], ['blue', 'orange']) ],
                                 ranges, expand=True,
                                 color_tags={ 'blue': 'seen', 'orange': 'unseen' },
                                 xlabel=f'Number of {level}', title=f'Distribution of {level} (train and query)',
-                                filename=f'train_query_{level}_colorbar.pdf')
+                                filename=os.path.join(plot_folder, f'train_query_{level}_colorbar.pdf'), hide_legend=True)
         plot_count_in_splits_as_colors( [ NamedCounts('Seen', [ counts['seen_keys'][level] ], ['blue']),
                                 NamedCounts('Val unseen', [ counts['val_unseen_keys'][level] ], ['orange']),
                                 NamedCounts('Test unseen', [ counts['test_unseen_keys'][level] ], ['orange'])], 
                                 ranges, expand=True,
                                 color_tags={ 'blue': 'seen', 'orange': 'unseen' },
                                 xlabel=f'Number of {level}', title=f'Distribution of {level} (keys)',
-                                filename=f'key_{level}_colorbar.pdf')
+                                filename=os.path.join(plot_folder, f'key_{level}_colorbar.pdf'))
 
         plot_count_in_splits_as_histogram( [ NamedCounts('Train', [ counts['train'][level]], ['blue']),
-                                NamedCounts('Val', [ counts['val_seen_query'][level], counts['val_unseen_query'][level] ], ['blue', 'orange']),
-                                NamedCounts('Test', [ counts['test_seen_query'][level], counts['test_unseen_query'][level] ], ['blue', 'orange']) ], 
+                                NamedCounts('Val seen&unseen', [ counts['val_seen_query'][level], counts['val_unseen_query'][level] ], ['blue', 'orange']),
+                                NamedCounts('Test seen&unseen', [ counts['test_seen_query'][level], counts['test_unseen_query'][level] ], ['blue', 'orange']) ],
                                 ranges, expand=True,
                                 color_tags={ 'blue': 'seen', 'orange': 'unseen' },
                                 ylabel=f'Number of {level}',
                                 xlabel=f'Number of records', 
                                 title=f'Distribution of {level} (train and query)',
-                                filename=f'train_query_{level}_dist.pdf')
+                                filename=os.path.join(plot_folder, f'train_query_{level}_dist.pdf'))
         plot_count_in_splits_as_histogram( [ NamedCounts('Seen', [ counts['seen_keys'][level] ], ['blue']),
                                 NamedCounts('Val unseen', [ counts['val_unseen_keys'][level] ], ['orange']),
                                 NamedCounts('Test unseen', [ counts['test_unseen_keys'][level] ], ['orange'])], 
@@ -690,7 +698,7 @@ def main():
                                 ylabel=f'Number of {level}',
                                 xlabel=f'Number of records', 
                                 title=f'Distribution of {level} (keys)',
-                                filename=f'key_{level}_dist.pdf')
+                                filename=os.path.join(plot_folder, f'key_{level}_dist.pdf'))
 
     counts = get_dist(trainval_level_counts)
     for level in levels:
@@ -700,7 +708,7 @@ def main():
                                 ranges_colorbar, expand=True,
                                 xlabel=f'Number of {level}', 
                                 title=f'Distribution of {level}',
-                                filename=f'trainvaltest_total_{level}_colorbar.pdf')
+                                filename=os.path.join(plot_folder, f'trainvaltest_total_{level}_colorbar.pdf'))
 
         plot_count_in_splits_as_histogram( [ NamedCounts('Train', [ counts['train'][level]], ['green']),
                                 NamedCounts('Val', [ counts['val'][level] ], ['green']),
@@ -709,7 +717,7 @@ def main():
                                 ylabel=f'Number of {level}',
                                 xlabel=f'Number of records', 
                                 title=f'Distribution of {level}',
-                                filename=f'trainvaltest_total_{level}_dist.pdf')
+                                filename=os.path.join(plot_folder, f'trainvaltest_total_{level}_dist.pdf'))
 
 if __name__ == "__main__":
     main()
