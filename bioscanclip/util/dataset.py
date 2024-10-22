@@ -129,6 +129,8 @@ class Dataset_for_CL(Dataset):
         self.pre_train_with_small_set = False
         if hasattr(args.model_config, "train_with_small_subset"):
             self.pre_train_with_small_set = args.model_config.train_with_small_subset
+        language_model_name = "prajjwal1/bert-small"
+        self.tokenizer, _ = load_pre_trained_bert(language_model_name)
 
         if self.for_open_clip:
             # self.tokenizer = open_clip.get_tokenizer('ViT-B-32')
