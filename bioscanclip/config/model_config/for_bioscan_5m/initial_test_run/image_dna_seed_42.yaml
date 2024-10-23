@@ -12,7 +12,7 @@ dna:
   input_type: sequence
   pre_train_model: barcode_bert
 
-model_output_name: image_dna_text_4gpu-test-run
+model_output_name: image_dna_4gpu
 evaluation_period: 1
 ckpt_path: ${project_root_path}/ckpt/bioscan_clip/new_5M_training/trained_with_5M_image_dna/best.pth
 output_dim: 768
