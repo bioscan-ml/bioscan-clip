@@ -672,9 +672,12 @@ def main(args: DictConfig) -> None:
     per_claSS_acc_path = os.path.join(
         folder_for_saving, f"per_class_acc_{args.inference_and_eval_setting.eval_on}.json"
     )
-
     with open(per_claSS_acc_path, "w") as json_file:
         json.dump(per_class_acc, json_file, indent=4)
+
+    acc_dict_path = os.path.join(folder_for_saving, f"acc_dict_{args.inference_and_eval_setting.eval_on}.json")
+    with open(acc_dict_path, "w") as json_file:
+        json.dump(acc_dict, json_file, indent=4)
 
     try:
         seen_keys_dataloader
