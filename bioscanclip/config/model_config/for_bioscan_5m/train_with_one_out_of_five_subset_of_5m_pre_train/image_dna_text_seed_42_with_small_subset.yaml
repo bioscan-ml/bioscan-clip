@@ -18,7 +18,7 @@ language:
 
 model_output_name: image_dna_text_4gpu-small-pre-train
 evaluation_period: 1
-ckpt_path: ${project_root_path}/ckpt/bioscan_clip/image_dna_text_4gpu-small-pre-train/best.pth
+ckpt_path: ${project_root_path}/ckpt/bioscan_clip/new_5M_training/train_with_5M_small_pre_train/best.pth
 output_dim: 768
 port: 29531
 
