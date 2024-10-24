@@ -16,7 +16,7 @@ language:
   pre_train_model: prajjwal1/bert-small
 
 load_ckpt: false
-model_output_name: image_dna_text_4gpu
+model_output_name: no_alignment_baseline
 evaluation_period: 1
 ckpt_path: ${project_root_path}/ckpt/bioscan_clip/new_5M_training/trained_with_5M_image_dna_text/best.pth
 output_dim: 768
